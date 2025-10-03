@@ -4,8 +4,13 @@ function UserCard({ name, age, profession, experience }) {
       style={{
         fontSize: "25px",
         border: "20px solid gray",
-        padding: "5%",
-        margin: "5%",
+        padding: "20px",
+        margin: "10px",
+        backgroundColor: "Teal",
+        color: " white",
+        textAlign: "center",
+        borderRadius: "12px",
+        flex: "1 1 250px",
       }}
     >
       <h3>{name}</h3>
