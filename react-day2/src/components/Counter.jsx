@@ -1,24 +1,31 @@
 import { useState } from "react";
-function Counter({ initial = 0 }) {
+function Counter({ initial = 0, max = 50 }) {
   const [count, setCount] = useState(0);
-  return (
-    <div
-      style={{
-        width: "100%",
-        textAlign: "center",
-        fontSize: "25px",
-        padding: "20px",
-      }}
-    >
-      <p>Count : {count} </p>
-      <button onClick={() => setCount(count + 1)}>Increment</button>
-      <br />
-      <button onClick={() => setCount(initial)}>Reset</button>
-      <br />
 
-      <button onClick={() => setCount(Math.max(0, count - 1))}>
+  // Check is count have reached max
+  const isMaxReached = count >= max;
+  return (
+    <div className="counter">
+      <p>Count : {count} </p>
+      {/* 🚀 Increment Button (disabled at max) */}
+
+      <button
+        onClick={() => !isMaxReached && setCount(count + 5)}
+        disabled={isMaxReached}
+      >
+        Increment
+      </button>
+      {/* 🔄 Reset Button */}
+
+      <button onClick={() => setCount(initial)}>Reset</button>
+      {/* ⬇️ Decrement Button (no negatives) */}
+
+      <button onClick={() => setCount(Math.max(0, count - 5))}>
         Decrement
       </button>
+      {/* 👀 Optional status message */}
+
+      {isMaxReached && <p style={{ color: "red" }}>max limit reached!</p>}
     </div>
   );
 }

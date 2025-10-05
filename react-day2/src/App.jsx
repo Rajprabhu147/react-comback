@@ -1,66 +1,57 @@
-import Welcome from "./components/welcome";
-import UserCard from "./components/UserCard";
+import { useState } from "react";
+import Welcome from "./components/Welcome";
+import UserList from "./components/UserList";
+// import UserCard from "./components/UserCard";
 import Counter from "./components/Counter";
+import "./App.css";
+console.log("App rendering...");
 
 function App() {
+  const [users] = useState([
+    {
+      name: "Raj",
+      age: 34,
+      bio: "FrontEnd Developer",
+      exp: "10 Years",
+    },
+    {
+      name: "Ram",
+      age: 29,
+      bio: "Backend Developer",
+      exp: "5 Years",
+    },
+    {
+      name: "Rakesh",
+      age: 42,
+      bio: "Senior Developer",
+      exp: "15 Years",
+    },
+    {
+      name: "Ranveer",
+      age: 26,
+      bio: "UI Developer",
+      exp: "3 Years",
+    },
+  ]);
+  const [search, setSearch] = useState("");
+
+  const filteredUsers = users.filter((user) =>
+    user.name.toLowerCase().includes(search.toLowerCase())
+  );
   return (
-    <div>
-      <h1
-        style={{
-          width: "100%",
-          padding: "10px",
-          justifyContent: "center",
-          textAlign: "center",
-        }}
-      >
-        Day 2: React Fundamental
-      </h1>
+    <div className="app-container">
+      <h1 className="app-title">Day 2: React Fundamental</h1>
       <Welcome name="Raj" />
-      <Welcome name="Ram" />
-      <div
-        style={{
-          display: "flex",
-          flexWrap: "wrap",
-          gap: "20px",
-          justifyContent: "center",
-        }}
-      >
-        <UserCard
-          name="Raj"
-          age={34}
-          profession="FrontEnd Developer"
-          experience="10 Years"
-        />
-        <UserCard
-          name="Ram"
-          age={28}
-          profession="Backend Developer"
-          experience={"5 Years"}
-        />
-        <UserCard
-          name="Rakesh"
-          age={39}
-          profession="Senior Developer"
-          experience="18 Years"
-        />
-        <UserCard
-          name="Ranveer"
-          age={22}
-          profession="UI Developer"
-          experience={"2 Years"}
-        />
-      </div>
-      <div
-        style={{
-          width: "100%",
-          padding: "10px",
-          justifyContent: "center",
-          textAlign: "center",
-          fontSize: "30px",
-        }}
-      >
-        <Counter />
-      </div>
+      <input
+        type="text"
+        placeholder="Search by name..."
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+        className="search-input"
+      />
+
+      <UserList users={filteredUsers} />
+      <Counter max={50} />
     </div>
   );
 }
