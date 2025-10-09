@@ -1,52 +1,123 @@
-// import section
-import { useState } from "react"; // React Hook is used for the updating data inside the state or else app would not remenber it
+// ------------------------------
+// Import Section
+// ------------------------------
+import { useState, useEffect } from "react";
 import "./App.css";
 
+// ------------------------------
+// Main Component
+// ------------------------------
 function App() {
-  // state initialization
-  const [task, setTask] = useState(""); // to store what user types in the field
-  const [tasks, setTasks] = useState([]); // to store all todo list items in an Array [each item has (text, completed status)]
+  // ------------------------------
+  // State Initialization
+  // ------------------------------
+  const [task, setTask] = useState(""); // Tracks user input
+  const [tasks, setTasks] = useState([]); // Stores all todo items [{ text, completed }]
 
-  // Every Dynamic app uses some kind of state management for chat -> messages , cart -> items, todolist -> tasks
-  // As we need an Array logic to store all values in order to perform tasks
+  // Every dynamic app uses some kind of state management:
+  // chat → messages, cart → items, todo → tasks
+  // Arrays help us store multiple values for managing tasks efficiently.
 
-  // addTask function - checks input, adds new task object to the existing array and resets the input field after adding
+  // ------------------------------
+  // ✅ Load tasks from localStorage (once, on first render)
+  // ------------------------------
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem("tasks");
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed)) {
+          setTasks(parsed);
+        }
+      }
+    } catch (error) {
+      console.error("Failed to load from localStorage:", error);
+    }
+  }, []);
+
+  // ------------------------------
+  // ✅ Save tasks to localStorage whenever they change
+  // ------------------------------
+  useEffect(() => {
+    try {
+      // Only save if there’s at least one task or a cleared list
+      localStorage.setItem("tasks", JSON.stringify(tasks));
+      console.log("🟢 Saved tasks:", tasks);
+    } catch (error) {
+      console.error("Failed to save to localStorage:", error);
+    }
+  }, [tasks]); // ------------------------------
+  // Add Task
+  // ------------------------------
   function addTask() {
-    if (task.trim() === "") return;
-    setTasks([...tasks, { text: task, completed: false }]);
-    setTask("");
-  } // the pattern of validating input, updating list and resetting form are used in countless real world apps
-  // like submitting comments on a post, adding new contact or product or updating cart order
-  // sending or receiving chat messages
+    if (task.trim() === "") return; // Ignore empty input
+    setTasks([...tasks, { text: task, completed: false }]); // Add new task
+    setTask(""); // Clear input
+  }
 
-  // Removes a specific Task from an array
+  // Pattern used in real-world apps:
+  // - Submitting comments
+  // - Adding contacts/products
+  // - Sending messages or posts
+
+  // ------------------------------
+  // Delete Task
+  // ------------------------------
   function deleteTask(index) {
     const updatedTasks = tasks.filter((_, i) => i !== index);
     setTasks(updatedTasks);
-  } //  In real world you do delete items from cart, delete messages or remove files or users
+  }
 
-  // Toggle task completed status - striked through as done
+  // Used in real-world for:
+  // - Deleting messages, files, cart items, or users
 
+  // ------------------------------
+  // Toggle Completion
+  // ------------------------------
   function toggleDone(index) {
     const updated = tasks.map((t, i) =>
       i === index ? { ...t, completed: !t.completed } : t
     );
     setTasks(updated);
-  } // this how the app tracks all the state changes of the individual items
-  // mark an email as read, mark a product as favorite or wishlist and toggle dark or light mode
+  }
 
+  // Similar to:
+  // - Mark email as read/unread
+  // - Favorite/unfavorite a product
+  // - Toggle dark/light mode
+
+  // ------------------------------
+  // Clear All Tasks
+  // ------------------------------
+  function clearAll() {
+    if (window.confirm("Are you sure you want to clear all tasks?")) {
+      setTasks([]);
+    }
+  }
+
+  // ------------------------------
+  // JSX Return Block
+  // ------------------------------
   return (
     <div className="container">
       <h1 className="heading">📝 Todo App</h1>
+
+      {/* Input Field */}
       <input
         type="text"
-        placeholder="Enter a text"
+        placeholder="Enter a task"
         value={task}
         onChange={(e) => setTask(e.target.value)}
         onKeyDown={(e) => e.key === "Enter" && addTask()}
       />
+
+      {/* Add Task Button */}
       <button onClick={addTask}>Add Task</button>
-      <p>Current Input: {task} </p>
+
+      {/* Display Current Input */}
+      <p>Current Input: {task || "—"} </p>
+
+      {/* Task List */}
       <ul>
         {tasks.length === 0 ? (
           <p>No tasks yet. Add one above!</p>
@@ -66,13 +137,27 @@ function App() {
           ))
         )}
       </ul>
+
+      {/* Conditional Clear All Button */}
       {tasks.length > 0 && (
-        <button className="clear" onClick={() => setTasks([])}>
+        <button className="clear" onClick={clearAll}>
           Clear All
         </button>
       )}
-    </div> // clear all button to wipe all of them- is called conditional rendering means shows or hides state
-    // which makes UI very clean and readable eg - buy now will not be visible until items in cart
+    </div>
   );
-} // So Totally the CRUD management - Create Read Update and Delete
+}
+
+// ------------------------------
+// Export Component
+// ------------------------------
 export default App;
+
+// ------------------------------
+// Notes:
+// - "Clear All" is an example of Conditional Rendering.
+//   It only shows when tasks exist — just like "Buy Now"
+//   appears only when items are in your cart.
+// - Together this app demonstrates full CRUD:
+//   Create (add), Read (display), Update (toggle), Delete (remove).
+// ------------------------------
