@@ -2,6 +2,9 @@
 // Import Section
 // ------------------------------
 import { useState, useEffect } from "react";
+import Header from "./components/Header";
+import TeamList from "./components/TeamList";
+import Footer from "./components/Footer";
 import "./App.css";
 
 // ------------------------------
@@ -11,6 +14,11 @@ function App() {
   // ------------------------------
   // State Initialization
   // ------------------------------
+  const [team, setTeam] = useState([
+    { id: 1, name: "Raj Prabhu", role: "Frontend Developer", available: true },
+    { id: 2, name: "Sana", role: "UI Designer", available: false },
+    { id: 3, name: "Vikram", role: "Backend Developer", available: true },
+  ]);
   const [task, setTask] = useState(""); // Tracks user input
   const [tasks, setTasks] = useState([]); // Stores all todo items [{ text, completed }]
 
@@ -95,6 +103,14 @@ function App() {
     }
   }
 
+  const toggleAvailability = (id) => {
+    setTeam(
+      team.map((member) =>
+        member.id === id ? { ...member, available: !member.available } : member
+      )
+    );
+  };
+
   // ------------------------------
   // JSX Return Block
   // ------------------------------
@@ -137,6 +153,11 @@ function App() {
           ))
         )}
       </ul>
+      <div style={{ fontFamily: "sans-serif", padding: "20px" }}>
+        <Header />
+        <TeamList team={team} onToggle={toggleAvailability} />
+        <Footer />
+      </div>
 
       {/* Conditional Clear All Button */}
       {tasks.length > 0 && (
