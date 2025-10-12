@@ -2,7 +2,7 @@ import TeamMember from "./TeamMember";
 
 function TeamList({ team, onToggle }) {
   return (
-    <div>
+    <div className="teamList">
       {team.map((member) => (
         <TeamMember key={member.id} member={member} onToggle={onToggle} />
       ))}

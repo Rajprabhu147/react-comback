@@ -116,55 +116,59 @@ function App() {
   // ------------------------------
   return (
     <div className="container">
-      <h1 className="heading">📝 Todo App</h1>
-
-      {/* Input Field */}
-      <input
-        type="text"
-        placeholder="Enter a task"
-        value={task}
-        onChange={(e) => setTask(e.target.value)}
-        onKeyDown={(e) => e.key === "Enter" && addTask()}
-      />
-
-      {/* Add Task Button */}
-      <button onClick={addTask}>Add Task</button>
-
-      {/* Display Current Input */}
-      <p>Current Input: {task || "—"} </p>
-
-      {/* Task List */}
-      <ul>
-        {tasks.length === 0 ? (
-          <p>No tasks yet. Add one above!</p>
-        ) : (
-          tasks.map((t, index) => (
-            <li
-              key={index}
-              style={{
-                textDecoration: t.completed ? "line-through" : "none",
-                opacity: t.completed ? 0.6 : 1,
-              }}
-            >
-              {t.text}
-              <button onClick={() => toggleDone(index)}>✅</button>
-              <button onClick={() => deleteTask(index)}>❌</button>
-            </li>
-          ))
-        )}
-      </ul>
-      <div style={{ fontFamily: "sans-serif", padding: "20px" }}>
+      <div className="dashBoard">
         <Header />
         <TeamList team={team} onToggle={toggleAvailability} />
         <Footer />
       </div>
+      <div className="todoList">
+        <h1 className="heading">📝 Todo App</h1>
+        {/* Input Field */}
+        <input
+          type="text"
+          placeholder="Enter a task"
+          value={task}
+          onChange={(e) => setTask(e.target.value)}
+          onKeyDown={(e) => e.key === "Enter" && addTask()}
+        />
 
-      {/* Conditional Clear All Button */}
-      {tasks.length > 0 && (
-        <button className="clear" onClick={clearAll}>
-          Clear All
-        </button>
-      )}
+        {/* Add Task Button */}
+        <button onClick={addTask}>Add Task</button>
+
+        {/* Display Current Input */}
+        <p>Current Input: {task || "—"} </p>
+
+        {/* Task List */}
+        <div className="list">
+          <ul>
+            {tasks.length === 0 ? (
+              <p>No tasks yet. Add one above!</p>
+            ) : (
+              tasks.map((t, index) => (
+                <li
+                  key={index}
+                  style={{
+                    textDecoration: t.completed ? "line-through" : "none",
+                    opacity: t.completed ? 0.6 : 1,
+                    marginRight: "20px",
+                  }}
+                >
+                  <button onClick={() => deleteTask(index)}> ❌ </button>
+                  <button onClick={() => toggleDone(index)}> ✅ </button>
+                  <span>{t.text}</span>
+                </li>
+              ))
+            )}
+          </ul>
+        </div>
+
+        {/* Conditional Clear All Button */}
+        {tasks.length > 0 && (
+          <button className="clear" onClick={clearAll}>
+            Clear All
+          </button>
+        )}
+      </div>
     </div>
   );
 }

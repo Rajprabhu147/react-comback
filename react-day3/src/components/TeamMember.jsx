@@ -8,7 +8,7 @@ function TeamMember({ member, onToggle }) {
         marginBottom: "10px",
         padding: "10px",
         borderRadius: "8px",
-        background: available ? "#e0ffe0" : "#ffe0e0",
+        background: available ? "#79f779ff" : "rgba(250, 113, 113, 1)",
       }}
     >
       <h3>{name}</h3>
