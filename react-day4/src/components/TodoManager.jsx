@@ -22,7 +22,8 @@ export default function TodoManager() {
     try {
       localStorage.setItem(SAMPLE_KEY, JSON.stringify(todos));
     } catch (err) {
-      // ignore for now
+      // surfacing error message
+      console.error("Failed writing to localStorage", err);
     }
   }, [todos]);
 
