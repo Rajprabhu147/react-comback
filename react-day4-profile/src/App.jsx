@@ -37,12 +37,9 @@ export default function App() {
 
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/profiles" element={<Profiles profiles={profiles} />} />
-        <Route path="/add" element={<AddProfile setProfiles={setProfiles} />} />
-        <Route
-          path="/profiles/:id"
-          element={<ViewProfile profiles={profiles} />}
-        />
+        <Route path="/profiles" element={<Profiles />} />
+        <Route path="/add" element={<AddProfile />} />
+        <Route path="/profiles/:id" element={<ViewProfile />} />
       </Routes>
     </div>
   );

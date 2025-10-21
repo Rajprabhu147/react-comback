@@ -1,9 +1,16 @@
 import React from "react";
 import { useParams, Link } from "react-router-dom";
+import { useProfiles } from "./ProfilesContext";
 
-export default function ViewProfile({ profiles }) {
+/**
+ * renderProfile — find profile by id param and render.
+ * If not found, show a friendly message and link back.
+ */
+
+export default function ViewProfile() {
   const { id } = useParams();
-  const profile = profiles.find((p) => p.id === Number(id));
+  const { profiles } = useProfiles();
+  const profile = profiles.find((p) => p.id === id || p.id === Number(id));
 
   if (!profile) {
     return (
