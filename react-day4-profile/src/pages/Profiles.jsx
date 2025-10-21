@@ -1,7 +1,9 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { useProfiles } from "./ProfilesContext";
 
-export default function Profiles({ profiles }) {
+export default function Profiles() {
+  const { profiles } = useProfiles();
   return (
     <div>
       <h2>Profiles</h2>

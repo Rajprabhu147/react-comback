@@ -1,32 +1,50 @@
-import React from "react";
+// import React from "react";
 import { useState } from "react";
+import { useProfiles } from "./ProfilesContext";
 import { useNavigate } from "react-router-dom";
+import { generateId } from "../utils/id";
 
-export default function AddProfile({ setProfiles }) {
+export default function AddProfile() {
+  const { addProfile } = useProfiles();
+  const navigate = useNavigate();
   const [form, setForm] = useState({ name: "", email: "", bio: "" });
   const [error, setError] = useState("");
-  const navigate = useNavigate();
 
-  // const handleChange = (e) => {
-  //   setForm({ ...form, [e.target.name]: e.target.value });
-  // };
+  const isValidEmail = (email) => {
+    // simple but practical regex - good enough for demo (not RFC full)
+    return /^\S+@\S+\.\S+$/.test(email);
+  };
+
+  /** handleChange - updates form state and clears error */
   const handleChange = (e) => {
-    setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+    const { name, value } = e.target;
+    setForm((prev) => ({ ...prev, [name]: value }));
     if (error) setError("");
   };
+
+  /** handleSubmit - validate and add profile */
   const handleSubmit = (e) => {
     e.preventDefault();
-    //validation of the form
-    if (!form.name.trim() || !form.email.trim()) {
-      setError("Both fields are required.");
+    const name = form.name.trim();
+    const email = form.email.trim();
+    if (!name || !email) {
+      setError("Name and email are required.");
+      return;
+    }
+    if (!isValidEmail(email)) {
+      setError("Please enter a valid email address.");
       return;
     }
     // creating new profile
-    const newProfile = { id: Date.now(), ...form };
-    setProfiles((prev) => [...prev, newProfile]);
-    // this helps to list
+    const id = generateId();
+    addProfile({ id, name, email, bio: form.bio.trim() });
+    //navigate to list
     navigate("/profiles");
   };
+
+  const isSubmitDisabled =
+    !form.name.trim() || !form.email.trim() || !isValidEmail;
+
   return (
     <div>
       <h2>Add a New Profile</h2>
@@ -45,6 +63,7 @@ export default function AddProfile({ setProfiles }) {
           value={form.name}
           onChange={handleChange}
           aria-label="Name"
+          autoComplete="name"
         />
         <input
           name="email"
@@ -53,17 +72,30 @@ export default function AddProfile({ setProfiles }) {
           value={form.email}
           onChange={handleChange}
           aria-label="Email"
+          autoComplete="email"
         />
-        <textarea
-          name="bio"
-          value={form.bio}
-          onChange={handleChange}
-          placeholder="Short bio (optional)"
-          rows={3}
-        />
-        {error && <p style={{ color: "red" }}>{error}</p>}
+        <label>
+          <textarea
+            name="bio"
+            value={form.bio}
+            onChange={handleChange}
+            placeholder="Short bio (optional)"
+            rows={3}
+          />
+        </label>
+        {error && (
+          <div role="alert" style={{ color: "red" }}>
+            {error}
+          </div>
+        )}
         <div style={{ display: "flex", gap: 8 }}>
-          <button type="submit">Add Profiles</button>
+          <button
+            type="submit"
+            disabled={isSubmitDisabled}
+            aria-disabled={isSubmitDisabled}
+          >
+            Add Profiles
+          </button>
         </div>
       </form>
     </div>
