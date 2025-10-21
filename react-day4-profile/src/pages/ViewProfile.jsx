@@ -1,6 +1,6 @@
 import React from "react";
 import { useParams, Link } from "react-router-dom";
-import { useProfiles } from "./ProfilesContext";
+import { useProfiles } from "../context/ProfilesContext";
 
 /**
  * renderProfile — find profile by id param and render.

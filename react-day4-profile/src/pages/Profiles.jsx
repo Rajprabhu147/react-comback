@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { useProfiles } from "./ProfilesContext";
+import { useProfiles } from "../context/ProfilesContext";
 
 export default function Profiles() {
   const { profiles } = useProfiles();

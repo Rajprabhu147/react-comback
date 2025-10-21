@@ -1,6 +1,6 @@
-// import React from "react";
+import React from "react";
 import { useState } from "react";
-import { useProfiles } from "./ProfilesContext";
+import { useProfiles } from "../context/ProfilesContext";
 import { useNavigate } from "react-router-dom";
 import { generateId } from "../utils/id";
 
