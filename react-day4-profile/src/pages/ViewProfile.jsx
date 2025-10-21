@@ -25,7 +25,7 @@ export default function ViewProfile({ profiles }) {
           {profile.bio}
         </p>
       )}
-      <Link to="/profiles">Back to list</Link>
+      <Link to="/profiles">Back to Profiles list</Link>
     </div>
   );
 }
