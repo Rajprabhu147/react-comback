@@ -6,9 +6,9 @@ import "./index.css";
 import { ProfilesProvider } from "./ProfilesContext";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  // <BrowserRouter>
-  <ProfilesProvider>
-    <App />
-  </ProfilesProvider>
-  // </BrowserRouter>
+  <BrowserRouter>
+    <ProfilesProvider>
+      <App />
+    </ProfilesProvider>
+  </BrowserRouter>
 );
