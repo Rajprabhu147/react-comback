@@ -3,21 +3,28 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 export default function AddProfile({ setProfiles }) {
-  const [form, setForm] = useState({ name: "", email: "" });
+  const [form, setForm] = useState({ name: "", email: "", bio: "" });
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
+  // const handleChange = (e) => {
+  //   setForm({ ...form, [e.target.name]: e.target.value });
+  // };
   const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+    if (error) setError("");
   };
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!form.name || !form.email) {
-      setError("Both fields are required");
+    //validation of the form
+    if (!form.name.trim() || !form.email.trim()) {
+      setError("Both fields are required.");
       return;
     }
+    // creating new profile
     const newProfile = { id: Date.now(), ...form };
     setProfiles((prev) => [...prev, newProfile]);
+    // this helps to list
     navigate("/profiles");
   };
   return (
@@ -25,24 +32,39 @@ export default function AddProfile({ setProfiles }) {
       <h2>Add a New Profile</h2>
       <form
         onSubmit={handleSubmit}
-        style={{ display: "flex", flexDirection: "column", gap: 8 }}
+        style={{
+          display: "grid",
+          flexDirection: "column",
+          gap: 8,
+          maxWidth: 480,
+        }}
       >
         <input
-          type="text"
           name="name"
-          placeholder="Enter name"
+          placeholder="Enter Full name"
           value={form.name}
           onChange={handleChange}
+          aria-label="Name"
         />
         <input
-          type="email"
           name="email"
+          type="email"
           placeholder="Enter email"
           value={form.email}
           onChange={handleChange}
+          aria-label="Email"
+        />
+        <textarea
+          name="bio"
+          value={form.bio}
+          onChange={handleChange}
+          placeholder="Short bio (optional)"
+          rows={3}
         />
         {error && <p style={{ color: "red" }}>{error}</p>}
-        <button type="submit">Add Profiles</button>
+        <div style={{ display: "flex", gap: 8 }}>
+          <button type="submit">Add Profiles</button>
+        </div>
       </form>
     </div>
   );

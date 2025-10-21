@@ -9,12 +9,30 @@ import ViewProfile from "./pages/ViewProfile";
 export default function App() {
   const [profiles, setProfiles] = useState([]);
   return (
-    <div style={{ padding: 20 }}>
-      <nav style={{ display: "flex", gap: 20 }}>
-        <Link to="/">Home</Link>
-        <Link to="/profiles">Profiles</Link>
-        <Link to="/add">Add Profile</Link>
-      </nav>
+    <div style={{ padding: 20 }} className="app">
+      <header>
+        <nav style={{ display: "flex", gap: 20 }} className="nav">
+          <Link
+            to="/"
+            end
+            className={({ isActive }) => (isActive ? "active" : "")}
+          >
+            Home
+          </Link>
+          <Link
+            to="/profiles"
+            className={({ isActive }) => (isActive ? "active" : "")}
+          >
+            Profiles
+          </Link>
+          <Link
+            to="/add"
+            className={({ isActive }) => (isActive ? "active" : "")}
+          >
+            Add Profile
+          </Link>
+        </nav>
+      </header>
       <hr />
 
       <Routes>
