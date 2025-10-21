@@ -1,3 +1,5 @@
+/* eslint-disable react-refresh/only-export-components */
+import React from "react";
 import { createContext, useContext, useState } from "react";
 
 //1. create context
@@ -35,7 +37,7 @@ export function ProfilesProvider({ children }) {
 export function useProfiles() {
   const context = useContext(ProfilesContext);
   if (!context) {
-    throw new Error("useProfiles must be used with in a ProfileProvider");
+    throw new Error("useProfiles must be used within a ProfileProvider");
   }
   return context;
 }
