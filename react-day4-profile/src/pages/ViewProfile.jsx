@@ -16,7 +16,15 @@ export default function ViewProfile({ profiles }) {
   return (
     <div>
       <h2>{profile.name}</h2>
-      <p>Email: {profile.email}</p>
+      <p>
+        <strong>Email:</strong> {profile.email}
+      </p>
+      {profile.bio && (
+        <p>
+          <strong>Bio: </strong>
+          {profile.bio}
+        </p>
+      )}
       <Link to="/profiles">Back to list</Link>
     </div>
   );
