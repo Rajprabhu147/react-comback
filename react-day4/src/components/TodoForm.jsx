@@ -1,32 +1,37 @@
 import React, { useState } from "react";
+import { useTodos } from "../context/TodosContext";
 
-export default function TodoForm({ onAdd, inputRef }) {
-  const [value, setValue] = useState("");
+export default function TodoForm() {
+  const { addTodo, inputRef } = useTodos();
+  const [text, setText] = useState("");
   const [error, setError] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const trimmed = value.trim();
-    if (!trimmed) {
-      setError("Please enter a task.");
+    if (text.trim() === "") {
+      setError("Task cannot be empty!");
       return;
     }
-    onAdd(trimmed);
-    setValue("");
+    addTodo(text);
+    setText("");
     setError("");
   };
 
   return (
-    <form onSubmit={handleSubmit} style={{ display: "flex", gap: 8 }}>
+    <form
+      onSubmit={handleSubmit}
+      style={{ display: "flex", gap: 8, alignItems: "center" }}
+    >
       <input
         ref={inputRef}
-        value={value}
-        onChange={(e) => setValue(e.target.value)}
-        placeholder="Write a task..."
-        aria-label="Task"
+        type="text"
+        value={text}
+        onChange={(e) => setText(e.target.value)}
+        placeholder="Add a task..."
+        style={{ flex: 1 }}
       />
       <button type="submit">Add</button>
-      {error && <div style={{ color: "red" }}>{error}</div>}
+      {error && <div style={{ color: "red", marginTop: 6 }}>{error}</div>}
     </form>
   );
 }

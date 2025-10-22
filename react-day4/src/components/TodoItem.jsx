@@ -5,30 +5,39 @@ export default function TodoItem({ todo, onToggle, onDelete }) {
     <li
       style={{
         display: "flex",
-        gap: 12,
         alignItems: "center",
-        padding: "8px 0",
-        borderBottom: "1px solid #eee",
+        gap: 12,
+        padding: 8,
+        borderBottom: "1px solid #f0f0f0",
       }}
     >
+      <input
+        type="checkbox"
+        checked={todo.completed}
+        onChange={() => onToggle(todo.id)}
+      />
       <span
-        onClick={onToggle}
-        role="button"
-        tabIndex={0}
-        onKeyDown={(e) => {
-          if (e.key === "Enter") onToggle();
-        }}
+        onClick={() => onToggle(todo.id)}
         style={{
           textDecoration: todo.completed ? "line-through" : "none",
           cursor: "pointer",
           flex: 1,
         }}
-        aria-pressed={todo.completed}
       >
         {todo.text}
       </span>
-      <button onClick={onDelete} aria-label={`Delete ${todo.text}`}>
-        Delete
+      <button
+        onClick={() => onDelete(todo.id)}
+        aria-label={`Delete ${todo.text}`}
+        style={{
+          background: "transparent",
+          border: "none",
+          cursor: "pointer",
+          fontSize: 16,
+          color: "#333",
+        }}
+      >
+        ❌
       </button>
     </li>
   );
