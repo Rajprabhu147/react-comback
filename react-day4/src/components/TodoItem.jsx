@@ -1,44 +1,47 @@
 import React from "react";
+import PropTypes from "prop-types";
 
 export default function TodoItem({ todo, onToggle, onDelete }) {
   return (
-    <li
-      style={{
-        display: "flex",
-        alignItems: "center",
-        gap: 12,
-        padding: 8,
-        borderBottom: "1px solid #f0f0f0",
-      }}
-    >
+    <li className="todo-item" role="listitem">
       <input
+        id={`chk-${todo.id}`}
         type="checkbox"
-        checked={todo.completed}
+        checked={!!todo.completed}
         onChange={() => onToggle(todo.id)}
+        aria-label={
+          todo.completed
+            ? `Mark "${todo.text}" as incomplete`
+            : `Mark "${todo.text}" as complete`
+        }
       />
-      <span
-        onClick={() => onToggle(todo.id)}
-        style={{
-          textDecoration: todo.completed ? "line-through" : "none",
-          cursor: "pointer",
-          flex: 1,
-        }}
+      <div
+        className={`text ${todo.completed ? "completed" : ""}`}
+        aria-hidden={todo.completed ? "true" : "false"}
       >
-        {todo.text}
-      </span>
-      <button
-        onClick={() => onDelete(todo.id)}
-        aria-label={`Delete ${todo.text}`}
-        style={{
-          background: "transparent",
-          border: "none",
-          cursor: "pointer",
-          fontSize: 16,
-          color: "#333",
-        }}
-      >
-        ❌
-      </button>
+        <label htmlFor={`chk-${todo.id}`} style={{ cursor: "pointer" }}>
+          {todo.text}
+        </label>
+      </div>
+      <div style={{ display: "flex", gap: 8 }}>
+        <button
+          type="button"
+          onClick={() => onDelete(todo.id)}
+          aria-label={`Delete ${todo.text}`}
+        >
+          Delete
+        </button>
+      </div>
     </li>
   );
 }
+
+TodoItem.propTypes = {
+  todo: PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    text: PropTypes.string.isRequired,
+    completed: PropTypes.bool,
+  }).isRequired,
+  onToggle: PropTypes.func.isRequired,
+  onDelete: PropTypes.func.isRequired,
+};

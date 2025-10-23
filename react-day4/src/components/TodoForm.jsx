@@ -1,37 +1,53 @@
-import React, { useState } from "react";
-import { useTodos } from "../context/TodosContext";
+import React, { useState, useRef } from "react";
+import PropTypes from "prop-types";
 
-export default function TodoForm() {
-  const { addTodo, inputRef } = useTodos();
-  const [text, setText] = useState("");
-  const [error, setError] = useState("");
+export default function TodoForm({ onAdd }) {
+  const [value, setValue] = useState("");
+  const inputRef = useRef(null);
 
-  const handleSubmit = (e) => {
+  function handleSubmit(e) {
     e.preventDefault();
-    if (text.trim() === "") {
-      setError("Task cannot be empty!");
-      return;
-    }
-    addTodo(text);
-    setText("");
-    setError("");
-  };
+    const text = value.trim();
+    if (!text) return;
+    onAdd(text);
+    setValue("");
+    // focus back
+    inputRef.current?.focus();
+  }
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      style={{ display: "flex", gap: 8, alignItems: "center" }}
-    >
+    <form className="todo-form" onSubmit={handleSubmit} aria-label="Add todo">
+      <label
+        htmlFor="todo-input"
+        style={{ position: "absolute", left: "-9999px" }}
+      >
+        Add todo
+      </label>
       <input
+        id="todo-input"
         ref={inputRef}
         type="text"
-        value={text}
-        onChange={(e) => setText(e.target.value)}
-        placeholder="Add a task..."
-        style={{ flex: 1 }}
+        value={value}
+        onChange={(e) => setValue(e.target.value)}
+        placeholder="What needs to be done?"
+        autoComplete="off"
       />
       <button type="submit">Add</button>
-      {error && <div style={{ color: "red", marginTop: 6 }}>{error}</div>}
+      <button
+        type="button"
+        className="secondary"
+        onClick={() => {
+          setValue("");
+          inputRef.current?.focus();
+        }}
+        aria-label="Clear input"
+      >
+        Clear
+      </button>
     </form>
   );
 }
+
+TodoForm.propTypes = {
+  onAdd: PropTypes.func.isRequired,
+};

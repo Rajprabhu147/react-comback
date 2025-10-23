@@ -1,10 +1,14 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 export default function Home() {
   return (
     <div>
-      <h1>Welcome to Your Todo Manager</h1>
-      <p>Use this app to track your daily goals efficiently.</p>
+      <h2>Welcome</h2>
+      <p>
+        Simple Todo app to manage your tasks. Go to{" "}
+        <Link to="/todos">Todos</Link> to see the app.
+      </p>
     </div>
   );
 }
