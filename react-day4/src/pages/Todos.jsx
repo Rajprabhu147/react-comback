@@ -10,12 +10,12 @@ export default function Todos() {
     toggleTodo,
     removeTodo,
     clearCompleted,
-    count,
-    completedCount,
+    clearAll,
+    counts,
   } = useTodos();
 
   return (
-    <section className="todo-root" aria-labelled="todos-heading">
+    <section className="todo-root" aria-labelledby="todos-heading">
       <h2 id="todos-heading">Todos</h2>
 
       <div
@@ -23,22 +23,24 @@ export default function Todos() {
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
-          gap: 12,
+          gap: 8,
         }}
       >
-        <div>
-          <span className="counter" aria-live="polite">
-            {completedCount} / {count} completed
-          </span>
+        <div className="counter" aria-live="polite">
+          {counts.completed} / {counts.total} completed
         </div>
-        <div>
+
+        <div className="controls" style={{ display: "flex", gap: 8 }}>
+          <button type="button" className="secondary" onClick={clearCompleted}>
+            Clear Completed
+          </button>
           <button
             type="button"
             className="secondary"
-            onClick={clearCompleted}
-            aria-label="Clear completed todos"
+            style={{ backgroundColor: "#dc2626", color: "#fff" }}
+            onClick={clearAll}
           >
-            Clear completed
+            Delete All
           </button>
         </div>
       </div>

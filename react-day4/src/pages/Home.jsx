@@ -6,8 +6,8 @@ export default function Home() {
     <div>
       <h2>Welcome</h2>
       <p>
-        Simple Todo app to manage your tasks. Go to{" "}
-        <Link to="/todos">Todos</Link> to see the app.
+        This is a small Todo demo. Go to <Link to="/todos">Todos</Link> to
+        manage tasks.
       </p>
     </div>
   );

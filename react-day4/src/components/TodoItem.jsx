@@ -1,5 +1,4 @@
 import React from "react";
-import PropTypes from "prop-types";
 
 export default function TodoItem({ todo, onToggle, onDelete }) {
   return (
@@ -11,14 +10,11 @@ export default function TodoItem({ todo, onToggle, onDelete }) {
         onChange={() => onToggle(todo.id)}
         aria-label={
           todo.completed
-            ? `Mark "${todo.text}" as incomplete`
-            : `Mark "${todo.text}" as complete`
+            ? `Mark ${todo.text} as incomplete`
+            : `Mark ${todo.text} as complete`
         }
       />
-      <div
-        className={`text ${todo.completed ? "completed" : ""}`}
-        aria-hidden={todo.completed ? "true" : "false"}
-      >
+      <div className={`text ${todo.completed ? "completed" : ""}`}>
         <label htmlFor={`chk-${todo.id}`} style={{ cursor: "pointer" }}>
           {todo.text}
         </label>
@@ -35,13 +31,3 @@ export default function TodoItem({ todo, onToggle, onDelete }) {
     </li>
   );
 }
-
-TodoItem.propTypes = {
-  todo: PropTypes.shape({
-    id: PropTypes.string.isRequired,
-    text: PropTypes.string.isRequired,
-    completed: PropTypes.bool,
-  }).isRequired,
-  onToggle: PropTypes.func.isRequired,
-  onDelete: PropTypes.func.isRequired,
-};

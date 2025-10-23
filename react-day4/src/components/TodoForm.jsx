@@ -1,5 +1,4 @@
 import React, { useState, useRef } from "react";
-import PropTypes from "prop-types";
 
 export default function TodoForm({ onAdd }) {
   const [value, setValue] = useState("");
@@ -11,12 +10,11 @@ export default function TodoForm({ onAdd }) {
     if (!text) return;
     onAdd(text);
     setValue("");
-    // focus back
     inputRef.current?.focus();
   }
 
   return (
-    <form className="todo-form" onSubmit={handleSubmit} aria-label="Add todo">
+    <form className="todo-form" onSubmit={handleSubmit} aria-label="Add a todo">
       <label
         htmlFor="todo-input"
         style={{ position: "absolute", left: "-9999px" }}
@@ -26,11 +24,11 @@ export default function TodoForm({ onAdd }) {
       <input
         id="todo-input"
         ref={inputRef}
-        type="text"
         value={value}
         onChange={(e) => setValue(e.target.value)}
         placeholder="What needs to be done?"
         autoComplete="off"
+        type="text"
       />
       <button type="submit">Add</button>
       <button
@@ -47,7 +45,3 @@ export default function TodoForm({ onAdd }) {
     </form>
   );
 }
-
-TodoForm.propTypes = {
-  onAdd: PropTypes.func.isRequired,
-};

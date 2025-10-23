@@ -1,4 +1,3 @@
-/* eslint-disable react-refresh/only-export-components */
 import React, {
   createContext,
   useContext,
@@ -8,27 +7,22 @@ import React, {
   useEffect,
 } from "react";
 
-const STORAGE_KEY = "react_day_todos_v1";
+const STORAGE_KEY = "todos_app_v1";
 const TodosContext = createContext(null);
 
-function safeReadLocalStorage(key) {
+function safeRead(key) {
   try {
-    if (typeof window === "undefined" || !window.localStorage) return null;
-    const raw = window.localStorage.getItem(key);
-    return raw ? JSON.parse(raw) : null;
-  } catch (e) {
-    console.error("Failed to read localStorage", e);
-    return null;
+    const raw = localStorage.getItem(key);
+    return raw ? JSON.parse(raw) : [];
+  } catch {
+    return [];
   }
 }
 
-function safeWriteLocalStorage(key, value) {
+function safeWrite(key, value) {
   try {
-    if (typeof window === "undefined" || !window.localStorage) return;
-    window.localStorage.setItem(key, JSON.stringify(value));
-  } catch (e) {
-    console.error("Failed to write localStorage", e);
-  }
+    localStorage.setItem(key, JSON.stringify(value));
+  } catch {}
 }
 
 function makeTodo(text) {
@@ -40,46 +34,56 @@ function makeTodo(text) {
 }
 
 export function TodosProvider({ children }) {
-  const [todos, setTodos] = useState(() => {
-    const saved = safeReadLocalStorage(STORAGE_KEY);
-    return Array.isArray(saved) ? saved : [];
-  });
+  const [todos, setTodos] = useState(() => safeRead(STORAGE_KEY));
 
-  // persist
+  // persist to localStorage
   useEffect(() => {
-    safeWriteLocalStorage(STORAGE_KEY, todos);
+    safeWrite(STORAGE_KEY, todos);
   }, [todos]);
 
   const addTodo = useCallback((text) => {
-    if (!text || !text.trim()) return;
+    if (!text.trim()) return;
     setTodos((prev) => [...prev, makeTodo(text)]);
   }, []);
 
-  const removeTodo = useCallback((id) => {
-    setTodos((prev) => prev.filter((t) => t.id !== id));
-  }, []);
+  const toggleTodo = useCallback(
+    (id) =>
+      setTodos((prev) =>
+        prev.map((t) => (t.id === id ? { ...t, completed: !t.completed } : t))
+      ),
+    []
+  );
 
-  const toggleTodo = useCallback((id) => {
-    setTodos((prev) =>
-      prev.map((t) => (t.id === id ? { ...t, completed: !t.completed } : t))
-    );
-  }, []);
+  const removeTodo = useCallback(
+    (id) => setTodos((prev) => prev.filter((t) => t.id !== id)),
+    []
+  );
 
   const clearCompleted = useCallback(() => {
     setTodos((prev) => prev.filter((t) => !t.completed));
+  }, []);
+
+  // 🧨 NEW — clear all todos
+  const clearAll = useCallback(() => {
+    if (window.confirm("Are you sure you want to delete all todos?")) {
+      setTodos([]);
+    }
   }, []);
 
   const value = useMemo(
     () => ({
       todos,
       addTodo,
-      removeTodo,
       toggleTodo,
+      removeTodo,
       clearCompleted,
-      count: todos.length,
-      completedCount: todos.filter((t) => t.completed).length,
+      clearAll,
+      counts: {
+        total: todos.length,
+        completed: todos.filter((t) => t.completed).length,
+      },
     }),
-    [todos, addTodo, removeTodo, toggleTodo, clearCompleted]
+    [todos, addTodo, toggleTodo, removeTodo, clearCompleted, clearAll]
   );
 
   return (
@@ -89,6 +93,6 @@ export function TodosProvider({ children }) {
 
 export function useTodos() {
   const ctx = useContext(TodosContext);
-  if (!ctx) throw new Error("useTodos must be used within TodosProvider");
+  if (!ctx) throw new Error("useTodos must be used inside TodosProvider");
   return ctx;
 }
