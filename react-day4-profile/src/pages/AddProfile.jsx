@@ -22,7 +22,7 @@ export default function AddProfile() {
     if (error) setError("");
   };
 
-  /** handleSubmit - validate and add profile */
+  /** handleSubmit - validate and add profile */ npm;
   const handleSubmit = (e) => {
     e.preventDefault();
     const name = form.name.trim();
