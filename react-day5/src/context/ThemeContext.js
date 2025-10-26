@@ -12,8 +12,10 @@ export function ThemeProvider({ children }) {
   // this is the function that toggles the theme between light and dark
   const toggleTheme = () => setTheme((t) => (t === "light" ? "dark" : "light"));
   return (
-    //by using the providerw which belongs to the context which takes prop as value
-    //
+    //by using the provider which belongs to the context which takes prop as value
+    //which you want ot share globally so passing theme and toggle theme so child can access it
+    //nesting children means all nested components will be rendered inside the provider
+
     <ThemeContext.Provider value={{ theme, toggleTheme }}>
       {children}
     </ThemeContext.Provider>
