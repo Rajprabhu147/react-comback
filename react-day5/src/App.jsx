@@ -1,35 +1,46 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React from "react";
+//routing all elements from the react dom
+import { Routes, Route, NavLink } from "react-router-dom";
+//importing all pages needed
+import Home from "./pages/Tickets";
+import About from "./pages/About";
+//Styling
+import "./App.css";
+//Api channeling
+import { useTheme } from "./context/ThemeContext";
 
-function App() {
-  const [count, setCount] = useState(0)
+//Default app function
+export default function App() {
+  //useTheme hook for theme change using Context Api
+  const { theme, toggleTheme } = useTheme();
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
-}
+    <div className={`app ${theme}`}>
+      <header className="header">
+        <h1>Ticket Tracker</h1>
 
-export default App
+        <nav>
+          {/*Navigation Link Routing using Navlink in ReactDom */}
+          <NavLink to="/" end>
+            Home
+          </NavLink>
+          <NavLink to="/tickets">Tickets</NavLink>
+          <NavLink to="/about">About</NavLink>
+        </nav>
+        {/*button for changing the color theme for the whole app */}
+        <button onClick={toggleTheme} className="theme-btn">
+          {theme === "light" ? "Dark" : "Light"} mode
+        </button>
+      </header>
+      {/**Main Section */}
+      <main className="main">
+        <Routes>
+          {/**Routing section  */}
+          <Route path="/" element={<Home />} />
+          <Route path="/tickets" element={<TicketsPage />} />
+          <Route path="/about" element={<About />} />
+        </Routes>
+      </main>
+    </div>
+  );
+}
