@@ -4,7 +4,7 @@ import { BrowserRouter } from "react-router-dom"; //for Routing all the pages
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"; //for react query option
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools"; //for debugging and future use
 import App from "./App";
-import { ThemeProvider } from "./useContext/ThemeContext"; // Context Api
+import { ThemeProvider } from "./context/ThemeContext"; // Context Api
 import "./index.css";
 
 //Query Client declaration

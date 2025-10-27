@@ -11,18 +11,17 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 // url to fet api data
 const API_URL = "https://jsonplaceholder.typicode.com/posts?_limit=8";
 
-//
+//this is used to return random item from an array
 const randomForm = (arr) => arr[Math.floor(Math.random() * arr.length)];
 
 export const fetchTickets = async () => {
-  const res = await fetch(API_URL);
-  if (!res.ok) throw new Error("Failed to fetch tickets");
-  const data = await res.json();
-  const priorities = ["low", "medium", "high"];
-
+  const res = await fetch(API_URL); //fetches raw posts from api url
+  if (!res.ok) throw new Error("Failed to fetch tickets"); //returns error if network issue
+  const data = await res.json(); //converts the json data into UI ticket model
+  const priorities = ["low", "medium", "high"]; //object priorities
   const statuses = ["open", "in-progress", "closed"];
   const assignees = ["Alice", "Bob", "closed"];
-  // transform
+  // transform id to string for consistent id type
   return data.map((d) => ({
     id: String(d.id),
     title: d.title,
@@ -33,33 +32,34 @@ export const fetchTickets = async () => {
   }));
 };
 
-// for demo we call jsonplaceholder endpoints but they dont persist - its okay
+// for demo we call jsonPlaceholder endpoints but they dont persist - its okay
+
 export const addTicketApi = async (ticket) => {
   const res = await fetch("https://jsonplaceholder.typicode.com/posts", {
-    method: "POST",
+    method: "POST", //sends tickets to jsonPlaceholder via POST
     body: JSON.stringify(ticket),
-    headers: { "Content-Type": "applictation/json" },
+    headers: { "Content-Type": "application/json" },
   });
-  if (!res.of) throw new Error("Failed to add ticket");
+  if (!res.of) throw new Error("Failed to add ticket"); //Error if response not ok
   const data = await res.json();
-  return { ...ticket, id: String(data.id) };
+  return { ...ticket, id: String(data.id) }; //returns ticket with new id
 };
 
 export const updateTicketApi = async (ticket) => {
   const res = await fetch(
     `https://jsonplaceholder.typicode.com/posts/${ticket.id}`,
     {
-      method: "PATCH",
+      method: "PATCH", // sends a Patch to update by id
       body: JSON.stringify(ticket),
       headers: { "Content-Type": "application/json" },
     }
   );
   if (!res.ok) throw new Error("Update failed");
-  return ticket;
+  return ticket; //returns the ticket object back
 };
 export const deleteTicketApi = async (id) => {
   const res = await fetch(`https://jsonplaceholder.typicode.com/posts/${id}`, {
-    method: "DELETE",
+    method: "DELETE", // calls delete for given id , throws on non-ok and return id when successful
   });
   if (!res.ok) throw new Error("Delete failed");
   return id;
@@ -68,11 +68,12 @@ export const deleteTicketApi = async (id) => {
 //React Query hooks
 
 export const useTicketQuery = () => {
-  return useQuery(["tickets", fetchTickets, { staleTime: 1000 * 60 }]);
-};
+  return useQuery(["tickets", fetchTickets, { staleTime: 1000 * 60 }]); //registers query with key "tickets"
+}; // runs fetch ticket to catch results and stale time is for 1 minute  react query will avoid refetching while fresh
 export const useAddTicket = () => {
   const qc = useQueryClient();
   return useMutation(addTicketApi, {
+    // runs addTicketApi when you call mutate
     //optimistic update
     onMutate: async (newTicket) => {
       await qc.cancelQueries(["tickets"]);

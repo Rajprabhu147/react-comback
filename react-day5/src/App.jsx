@@ -20,7 +20,7 @@ export default function App() {
         <h1>Ticket Tracker</h1>
 
         <nav>
-          {/*Navigation Link Routing using Navlink in ReactDom */}
+          {/*Navigation Link Routing using NavLink in ReactDom */}
           <NavLink to="/" end>
             Home
           </NavLink>
