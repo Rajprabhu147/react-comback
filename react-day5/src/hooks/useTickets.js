@@ -1,10 +1,10 @@
 // useQuery - to fetch/read data and cache it
 //useMutation - to perform CRUD like POST/PATCH/DELETE
-//useQueryClient - gives acess to QueryClient instance so you read/write/invalidate
+//useQueryClient - gives access to QueryClient instance so you read/write/invalidate
 
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 /**
- * Adapter: get posts from jsonplaceholder and convert into ticket model:
+ * Adapter: get posts from jsonPlaceholder and convert into ticket model:
  * { id, title, description, priority, status, assignee }
  * We simulate priority/status/assignee locally.
  */
@@ -76,19 +76,63 @@ export const useAddTicket = () => {
     // runs addTicketApi when you call mutate
     //optimistic update
     onMutate: async (newTicket) => {
-      await qc.cancelQueries(["tickets"]);
-      const previous = qc.getQueryData(["tickets"]) || [];
+      await qc.cancelQueries(["tickets"]); //stop any infight fetch for "tickets" so we dont fight opt update
+      const previous = qc.getQueryData(["tickets"]) || []; // read current cached tickets so if error we can rollback
       qc.setQueryData(["tickets"], (old = []) => [{ ...newTicket }, ...old]);
+      //immediately add the new ticket->top of cached list so UI reflects instantly with tempId
       return { previous };
+      //returned object becomes context in onError so you can restore state
     },
+    //restore previous cache from context if mutation failed
     onError: (err, newTicket, context) => {
+      //onError - restores previous cache from context if mutation failed
       qc.setQueryData(["tickets"], context.previous);
     },
     onSettled: () => qc.invalidateQueries(["tickets"]),
+    //after success or error, invalidate ["tickets"]so react query refetches
+    //authoritative data from server
   });
 };
 
 export const useUpdateTicket = () => {
   const qc = useQueryClient();
-  return useMutation();
+  return useMutation(updateTicketApi, {
+    onMutate: async (updated) => {
+      await qc.cancelQueries(["tickets"]); // cancel inflight ticket queries
+      const previous = qc.getQueryData(["tickets"]); // save previous - rollback
+      qc.setQueryData(
+        ["tickets"],
+        (old = []) => old.map((t) => (t.id === updated.i ? updated : t))
+        //replace the object with updated obj
+      );
+      return { previous };
+    },
+    onError: (err, vars, context) => {
+      //on error restore precious cache
+      qc.setQueryData(["tickets"], context.previous);
+    },
+    onSettled: () => qc.invalidateQueries(["tickets"]),
+    //this invalidate to ensure server state is refetched
+  });
+};
+
+export const useDeleteTicket = () => {
+  const qc = useQueryClient();
+  return useMutation(deleteTicketApi, {
+    onMutate: async (id) => {
+      await qc.cancelQueries(["tickets"]);
+      const previous = qc.getQueryData(["tickets"]);
+      qc.setQueryData(
+        ["tickets"],
+        (old = []) => old.filter((t) => t.id !== id)
+        //filter out deleted tickets, rollback on error & refetched when settled
+        // this makes delete feel instant in UI
+      );
+      return { previous };
+    },
+    onError: (err, id, context) => {
+      qc.setQueryData(["tickets"], context.previous);
+    },
+    onSettled: () => qc.invalidateQueries(["tickets"]),
+  });
 };
