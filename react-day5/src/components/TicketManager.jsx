@@ -6,40 +6,55 @@ import {
   useDeleteTicket, //delete a ticket(DELETE)
 } from "../hooks/useTickets"; // useQuery/useMutation used to handle optimistic updates
 
-import TicketList from "./TicketList";
-import TicketForm from "./TicketForm";
-import TicketFilters from "./TicketFilters";
+import TicketList from "./TicketList"; // displays all tickets
+import TicketForm from "./TicketForm"; // allows adding a new ticket
+import TicketFilters from "./TicketFilters"; // allows filtering/searching tickets by text, status or priority
 
 export default function TicketManager() {
   const { data: tickets = [], isLoading, isError, error } = useTicketsQuery();
-  const addMutation = useAddTicket();
-  const updateMutation = useUpdateTicket();
-  const deleteMutation = useDeleteTicket();
+  // calls the hook to fetch tickets data[tickets] array of the tickets, isLoading-true, isError-techError
+  //initializes mutations for CRUD
+  const addMutation = useAddTicket(); //triggers a POST (add)
+  const updateMutation = useUpdateTicket(); //triggers a PATCH
+  const deleteMutation = useDeleteTicket(); //triggers a DELETE
 
   const [filter, setFilter] = useState({
-    q: "",
-    status: "all",
-    priority: "all",
+    q: "", //search text(query)
+    status: "all", //show all tickets by default without status filtering
+    priority: "all", //show all tickets by default (no priority filtering)
   });
+  //setFilter is the setter function to update this state passed to TicketFilters
   const handleAdd = (payload) => {
+    //is the event handler is called when user submits a new ticket
     // create id locally for optimistic update (string)
     addMutation.mutate({ ...payload, id: `temp-${Date.now()}` });
+    // add a temp id so the optimistic update can display the new ticket before the server responds
+    //.mutate will trigger the add API call POST via react query
   };
 
   const handleUpdate = (t) => updateMutation.mutate(t);
+  // by calling mutate willUpdate existing ticket
   const handleDelete = (id) => deleteMutation.mutate(id);
+  //deletes a ticket by ID using the delete mutation
+  // these functions are passed down to TicketList so the child components can trigger these actions
 
+  // this is a local in memory filter applied to all tickets
   const filtered = tickets.filter((t) => {
+    //loops through each ticket to decide if it should be shown
     const q = filter.q.toLowerCase().trim();
+    //normalize the search text
     if (
       q &&
       !`${t.title} ${t.description} ${t.assignee}`.toLowerCase().includes(q)
     )
+      //if search query exist only include tickets with title,desc,assign
       return false;
     if (filter.status !== "all && t.status !== filter.status") return false;
+    //only if matches
     if (filter.priority !== "all" && t.priority !== filter.priority)
+      //return false-same for priority filter
       return false;
-    return true;
+    return true; //if all checks pass include the ticket in the filtered list
   });
 
   return (
