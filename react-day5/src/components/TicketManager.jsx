@@ -72,12 +72,14 @@ export default function TicketManager() {
       </div>
 
       {isLoading && <p>Loading tickets...</p>}
+      {/*shows loading tickets
+      shows error message in red */}
       {isError && <p style={{ color: "red" }}>Error: {error.message}</p>}
 
       <TicketList
-        tickets={filtered}
-        onUpdate={handleUpdate}
-        onDelete={handleDelete}
+        tickets={filtered} //filtered array
+        onUpdate={handleUpdate} //function to edit a ticket
+        onDelete={handleDelete} //function to delete a ticket
       />
     </section>
   );
