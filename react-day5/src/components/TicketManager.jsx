@@ -49,7 +49,7 @@ export default function TicketManager() {
     )
       //if search query exist only include tickets with title,desc,assign
       return false;
-    if (filter.status !== "all && t.status !== filter.status") return false;
+    if (filter.status !== "all" && t.status !== filter.status) return false;
     //only if matches
     if (filter.priority !== "all" && t.priority !== filter.priority)
       //return false-same for priority filter

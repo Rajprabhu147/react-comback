@@ -1,27 +1,30 @@
 // useQuery - to fetch/read data and cache it
-//useMutation - to perform CRUD like POST/PATCH/DELETE
-//useQueryClient - gives access to QueryClient instance so you read/write/invalidate
+// useMutation - to perform CRUD like POST/PATCH/DELETE
+// useQueryClient - gives access to QueryClient instance so you can read/write/invalidate cache
 
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+
 /**
- * Adapter: get posts from jsonPlaceholder and convert into ticket model:
+ * Adapter: Get posts from jsonPlaceholder and convert into ticket model:
  * { id, title, description, priority, status, assignee }
  * We simulate priority/status/assignee locally.
  */
-// url to fet api data
+
+// URL for mock API
 const API_URL = "https://jsonplaceholder.typicode.com/posts?_limit=8";
 
-//this is used to return random item from an array
+// Utility: returns random item from array
 const randomForm = (arr) => arr[Math.floor(Math.random() * arr.length)];
 
 export const fetchTickets = async () => {
-  const res = await fetch(API_URL); //fetches raw posts from api url
-  if (!res.ok) throw new Error("Failed to fetch tickets"); //returns error if network issue
-  const data = await res.json(); //converts the json data into UI ticket model
-  const priorities = ["low", "medium", "high"]; //object priorities
+  const res = await fetch(API_URL);
+  if (!res.ok) throw new Error("Failed to fetch tickets");
+  const data = await res.json();
+
+  const priorities = ["low", "medium", "high"];
   const statuses = ["open", "in-progress", "closed"];
-  const assignees = ["Alice", "Bob", "closed"];
-  // transform id to string for consistent id type
+  const assignees = ["Alice", "Bob", "Charlie"];
+
   return data.map((d) => ({
     id: String(d.id),
     title: d.title,
@@ -32,107 +35,143 @@ export const fetchTickets = async () => {
   }));
 };
 
-// for demo we call jsonPlaceholder endpoints but they dont persist - its okay
+// ---- CRUD API functions ----
 
+// Create
 export const addTicketApi = async (ticket) => {
   const res = await fetch("https://jsonplaceholder.typicode.com/posts", {
-    method: "POST", //sends tickets to jsonPlaceholder via POST
+    method: "POST",
     body: JSON.stringify(ticket),
     headers: { "Content-Type": "application/json" },
   });
-  if (!res.of) throw new Error("Failed to add ticket"); //Error if response not ok
+  if (!res.ok) throw new Error("Failed to add ticket");
   const data = await res.json();
-  return { ...ticket, id: String(data.id) }; //returns ticket with new id
+  return { ...ticket, id: String(data.id) };
 };
 
+// Update
 export const updateTicketApi = async (ticket) => {
   const res = await fetch(
     `https://jsonplaceholder.typicode.com/posts/${ticket.id}`,
     {
-      method: "PATCH", // sends a Patch to update by id
+      method: "PATCH",
       body: JSON.stringify(ticket),
       headers: { "Content-Type": "application/json" },
     }
   );
   if (!res.ok) throw new Error("Update failed");
-  return ticket; //returns the ticket object back
+  return ticket;
 };
+
+// Delete
 export const deleteTicketApi = async (id) => {
   const res = await fetch(`https://jsonplaceholder.typicode.com/posts/${id}`, {
-    method: "DELETE", // calls delete for given id , throws on non-ok and return id when successful
+    method: "DELETE",
   });
   if (!res.ok) throw new Error("Delete failed");
   return id;
 };
 
-//React Query hooks
+//
+// ─── REACT QUERY HOOKS ─────────────────────────────────────────────
+//
 
+// ✅ 1️⃣ Read / Fetch tickets
 export const useTicketsQuery = () => {
-  return useQuery(["tickets", fetchTickets, { staleTime: 1000 * 60 }]); //registers query with key "tickets"
-}; // runs fetch ticket to catch results and stale time is for 1 minute  react query will avoid refetching while fresh
+  return useQuery({
+    queryKey: ["tickets"], // unique cache key
+    queryFn: fetchTickets, // function that fetches data
+    staleTime: 1000 * 60, // 1 minute: data considered fresh
+  });
+};
+
+// ✅ 2️⃣ Add ticket (Create)
 export const useAddTicket = () => {
   const qc = useQueryClient();
-  return useMutation(addTicketApi, {
-    // runs addTicketApi when you call mutate
-    //optimistic update
+
+  return useMutation({
+    mutationFn: addTicketApi, // function that performs POST
+
+    // Optimistic Update Pattern
     onMutate: async (newTicket) => {
-      await qc.cancelQueries(["tickets"]); //stop any infight fetch for "tickets" so we dont fight opt update
-      const previous = qc.getQueryData(["tickets"]) || []; // read current cached tickets so if error we can rollback
-      qc.setQueryData(["tickets"], (old = []) => [{ ...newTicket }, ...old]);
-      //immediately add the new ticket->top of cached list so UI reflects instantly with tempId
+      await qc.cancelQueries({ queryKey: ["tickets"] });
+      const previous = qc.getQueryData(["tickets"]) || [];
+
+      // Immediate UI feedback
+      qc.setQueryData(["tickets"], (old = []) => [
+        { ...newTicket, id: "temp-" + Date.now() },
+        ...old,
+      ]);
+
       return { previous };
-      //returned object becomes context in onError so you can restore state
     },
-    //restore previous cache from context if mutation failed
+
     onError: (err, newTicket, context) => {
-      //onError - restores previous cache from context if mutation failed
+      // Rollback to previous state if fails
       qc.setQueryData(["tickets"], context.previous);
     },
-    onSettled: () => qc.invalidateQueries(["tickets"]),
-    //after success or error, invalidate ["tickets"]so react query refetches
-    //authoritative data from server
+
+    onSettled: () => {
+      // Refetch to sync with server
+      qc.invalidateQueries({ queryKey: ["tickets"] });
+    },
   });
 };
 
+// ✅ 3️⃣ Update ticket
 export const useUpdateTicket = () => {
   const qc = useQueryClient();
-  return useMutation(updateTicketApi, {
+
+  return useMutation({
+    mutationFn: updateTicketApi,
+
     onMutate: async (updated) => {
-      await qc.cancelQueries(["tickets"]); // cancel inflight ticket queries
-      const previous = qc.getQueryData(["tickets"]); // save previous - rollback
-      qc.setQueryData(
-        ["tickets"],
-        (old = []) => old.map((t) => (t.id === updated.i ? updated : t))
-        //replace the object with updated obj
+      await qc.cancelQueries({ queryKey: ["tickets"] });
+      const previous = qc.getQueryData(["tickets"]);
+
+      // Optimistically update cache
+      qc.setQueryData(["tickets"], (old = []) =>
+        old.map((t) => (t.id === updated.id ? updated : t))
       );
+
       return { previous };
     },
+
     onError: (err, vars, context) => {
-      //on error restore precious cache
       qc.setQueryData(["tickets"], context.previous);
     },
-    onSettled: () => qc.invalidateQueries(["tickets"]),
-    //this invalidate to ensure server state is refetched
+
+    onSettled: () => {
+      qc.invalidateQueries({ queryKey: ["tickets"] });
+    },
   });
 };
 
+// ✅ 4️⃣ Delete ticket
 export const useDeleteTicket = () => {
   const qc = useQueryClient();
-  return useMutation(deleteTicketApi, {
+
+  return useMutation({
+    mutationFn: deleteTicketApi,
+
     onMutate: async (id) => {
-      await qc.cancelQueries(["tickets"]);
+      await qc.cancelQueries({ queryKey: ["tickets"] });
       const previous = qc.getQueryData(["tickets"]);
-      qc.setQueryData(
-        ["tickets"],
-        (old = []) => old.filter((t) => t.id !== id)
-        //filter out deleted tickets, rollback on error & refetched when settled
-        // this makes delete feel instant in UI
+
+      // Optimistic removal
+      qc.setQueryData(["tickets"], (old = []) =>
+        old.filter((t) => t.id !== id)
       );
+
       return { previous };
     },
+
     onError: (err, id, context) => {
       qc.setQueryData(["tickets"], context.previous);
     },
-    onSettled: () => qc.invalidateQueries(["tickets"]),
+
+    onSettled: () => {
+      qc.invalidateQueries({ queryKey: ["tickets"] });
+    },
   });
 };
