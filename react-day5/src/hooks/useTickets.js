@@ -67,7 +67,7 @@ export const deleteTicketApi = async (id) => {
 
 //React Query hooks
 
-export const useTicketQuery = () => {
+export const useTicketsQuery = () => {
   return useQuery(["tickets", fetchTickets, { staleTime: 1000 * 60 }]); //registers query with key "tickets"
 }; // runs fetch ticket to catch results and stale time is for 1 minute  react query will avoid refetching while fresh
 export const useAddTicket = () => {

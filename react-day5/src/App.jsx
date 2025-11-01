@@ -2,12 +2,13 @@ import React from "react";
 //routing all elements from the react dom
 import { Routes, Route, NavLink } from "react-router-dom";
 //importing all pages needed
-import Home from "./pages/Tickets";
+import Home from "./pages/Home";
 import About from "./pages/About";
 //Styling
 import "./App.css";
 //Api channeling
 import { useTheme } from "./context/ThemeContext";
+import TicketsPage from "./pages/Tickets";
 
 //Default app function
 export default function App() {
