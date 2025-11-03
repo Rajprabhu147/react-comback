@@ -7,7 +7,7 @@ const ThemeContext = createContext();
 
 // React provide component which wraps children props like a parent
 export function ThemeProvider({ children }) {
-  //creating state variable and a fucntion to update with useState hook
+  //creating state variable and a function to update with useState hook
   const [theme, setTheme] = useState("light");
   // this is the function that toggles the theme between light and dark
   const toggleTheme = () => setTheme((t) => (t === "light" ? "dark" : "light"));
