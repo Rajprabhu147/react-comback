@@ -90,7 +90,7 @@ export default function Home() {
           <li>⚡ Vite for fast development</li>
         </ul>
       </section>
-
+      <br />
       <footer className="home-footer">
         <p>
           Built by <strong>Raj Prabhu Rajasekaran</strong> as part of a

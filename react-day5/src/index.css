@@ -44,15 +44,15 @@ h4,
 h5,
 h6 {
   font-weight: 600;
-  line-height: 1.25;
-  margin-bottom: 0.75rem;
+  /* margin-bottom: 0.75rem; */
+  padding: 1rem;
   color: inherit;
 }
 
 p {
   margin-bottom: 1rem;
   color: inherit;
-  max-width: 65ch;
+  /* max-width: 65ch; */
 }
 
 /* =========================================
@@ -133,14 +133,14 @@ textarea:focus {
    ========================================= */
 
 .container {
-  width: 90%;
-  max-width: 1100px;
+  width: 100%;
   margin: 0 auto;
-  padding: 2rem 0;
+  padding: 2rem;
 }
 
 .flex {
   display: flex;
+  padding: 2rem;
   align-items: center;
 }
 
