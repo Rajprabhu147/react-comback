@@ -210,3 +210,9 @@ textarea:focus {
 ::-webkit-scrollbar-thumb:hover {
   background: #6b7280;
 }
+
+/* Optional: Toast theming */
+:root {
+  --toast-bg: #1f2937;
+  --toast-text: #fff;
+}

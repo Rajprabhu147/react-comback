@@ -5,7 +5,7 @@ import {
   useUpdateTicket, //edit existing ticket(PATCH)
   useDeleteTicket, //delete a ticket(DELETE)
 } from "../hooks/useTickets"; // useQuery/useMutation used to handle optimistic updates
-
+import toast from "react-hot-toast"; // import toast from hot toast
 import TicketList from "./TicketList"; // displays all tickets
 import TicketForm from "./TicketForm"; // allows adding a new ticket
 import TicketFilters from "./TicketFilters"; // allows filtering/searching tickets by text, status or priority
@@ -27,14 +27,28 @@ export default function TicketManager() {
   const handleAdd = (payload) => {
     //is the event handler is called when user submits a new ticket
     // create id locally for optimistic update (string)
-    addMutation.mutate({ ...payload, id: `temp-${Date.now()}` });
-    // add a temp id so the optimistic update can display the new ticket before the server responds
-    //.mutate will trigger the add API call POST via react query
+    addMutation.mutate({ ...payload, id: `temp-${Date.now()}` }),
+      // add a temp id so the optimistic update can display the new ticket before the server responds
+      //.mutate will trigger the add API call POST via react query
+      {
+        onSuccess: () => toast.success(" 🎟️ Ticket added successfully!"),
+        onError: () =>
+          toast.error(" ❌ Failed to add Ticket. please try again"),
+      };
   };
 
-  const handleUpdate = (t) => updateMutation.mutate(t);
+  const handleUpdate = (t) =>
+    updateMutation.mutate(t, {
+      onSuccess: () => toast.success(" 📝 Ticket update!"),
+      onError: () => toast.error(" ⚠️ Update failed"),
+    });
   // by calling mutate willUpdate existing ticket
-  const handleDelete = (id) => deleteMutation.mutate(id);
+  const handleDelete = (id) => {
+    deleteMutation.mutate(id, {
+      onSuccess: () => toast.success("🗑️ Ticket deleted!"),
+      onError: () => toast.error("❌ Failed to delete ticket."),
+    });
+  };
   //deletes a ticket by ID using the delete mutation
   // these functions are passed down to TicketList so the child components can trigger these actions
 

@@ -1,6 +1,8 @@
 import React from "react";
 //routing all elements from the react dom
 import { Routes, Route, NavLink } from "react-router-dom";
+//import toaster
+import { Toaster } from "react-hot-toast";
 //importing all pages needed
 import Home from "./pages/Home";
 import About from "./pages/About";
@@ -17,6 +19,7 @@ export default function App() {
 
   return (
     <div className={`app ${theme}`}>
+      <Toaster position="top-tight" reverseOrder={false} />
       <header className="header">
         <h1>Ticket Tracker</h1>
 
