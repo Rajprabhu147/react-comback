@@ -15,7 +15,7 @@ export default function App() {
         {!user ? (
           <NavLink to="/auth">Login</NavLink>
         ) : (
-          <button onClick={logout}>logout</button>
+          <button onClick={logout}>Logout</button>
         )}
       </nav>
 
