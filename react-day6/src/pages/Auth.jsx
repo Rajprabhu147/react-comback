@@ -23,7 +23,7 @@ export default function Auth() {
 
   return (
     <div className="auth">
-      <h2>{isSignup ? "Sign Up" : "Login"}</h2>
+      <h2 className="login">{isSignup ? "Sign Up" : "Login"}</h2>
       <form onSubmit={handleSubmit}>
         <input
           type="email"
