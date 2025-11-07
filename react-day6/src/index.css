@@ -83,7 +83,7 @@ button:hover {
 
 /* Links */
 nav {
-  width: 100%;
+  width: 80%;
   display: flex;
   justify-content:flex-end;
   border-radius: 20px;
