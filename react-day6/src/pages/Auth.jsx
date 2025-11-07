@@ -4,11 +4,7 @@ import { useUser } from "../context/UserContext";
 export default function Auth() {
   const { login, signup } = useUser();
   const [isSignup, setIsSignup] = useState(false);
-  const [form, setForm] = useState({
-    email: "",
-    password: "",
-    remember: false,
-  });
+  const [form, setForm] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
 
   const handleChange = (e) =>
@@ -28,7 +24,6 @@ export default function Auth() {
   return (
     <div className="auth">
       <h2>{isSignup ? "Sign Up" : "Login"}</h2>
-
       <form onSubmit={handleSubmit}>
         <input
           type="email"
@@ -36,7 +31,6 @@ export default function Auth() {
           placeholder="Email"
           value={form.email}
           onChange={handleChange}
-          required
         />
         <input
           type="password"
@@ -44,57 +38,15 @@ export default function Auth() {
           placeholder="Password"
           value={form.password}
           onChange={handleChange}
-          required
         />
-
-        <div className="remember">
-          <input
-            type="checkbox"
-            name="remember"
-            checked={form.remember}
-            onChange={(e) => setForm({ ...form, remember: e.target.checked })}
-          />
-          <label>Remember me</label>
-        </div>
-
-        <button type="submit">{isSignup ? "Sign Up" : "Login"}</button>
-
-        {error && <p style={{ color: "red", fontSize: "0.9rem" }}>{error}</p>}
+        <button className="submit-btn" type="submit">
+          {isSignup ? "Sign Up" : "Login"}
+        </button>
+        {error && <p style={{ color: "red" }}>{error}</p>}
       </form>
-
-      <div className="divider">Or login with</div>
-
-      <div className="social-login">
-        <button>
-          <img
-            src="https://cdn-icons-png.flaticon.com/512/124/124010.png"
-            alt="fb"
-            width="18"
-          />{" "}
-          Facebook
-        </button>
-        <button>
-          <img
-            src="https://cdn-icons-png.flaticon.com/512/2991/2991148.png"
-            alt="google"
-            width="18"
-          />{" "}
-          Google
-        </button>
-      </div>
-
-      <div className="footer">
-        {isSignup ? (
-          <p>
-            Already a member?{" "}
-            <a onClick={() => setIsSignup(false)}>Login now</a>
-          </p>
-        ) : (
-          <p>
-            Not a member? <a onClick={() => setIsSignup(true)}>Sign up now</a>
-          </p>
-        )}
-      </div>
+      <button onClick={() => setIsSignup(!isSignup)}>
+        {isSignup ? "Have an account? Login" : "Need an account? Sign up"}
+      </button>
     </div>
   );
 }

@@ -11,17 +11,17 @@ export default function App() {
     <div className="app">
       <nav className="nav">
         <NavLink to="/">Dashboard</NavLink>
-        <NavLink to="/about">About</NavLink>
         {!user ? (
           <NavLink to="/auth">Login</NavLink>
         ) : (
           <button onClick={logout}>Logout</button>
         )}
+        <NavLink to="/about">About</NavLink>
       </nav>
 
       <Routes>
-        <Route path="/" element={user ? <Dashboard /> : <Auth />} />
         <Route path="/auth" element={<Auth />} />
+        <Route path="/" element={user ? <Dashboard /> : <Auth />} />
         <Route path="/about" element={<About />} />
       </Routes>
     </div>
