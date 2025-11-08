@@ -240,3 +240,188 @@ li {
   .about > h2 { margin-bottom: 0.5rem; text-align: left; }
   .about .meta { order: 3; }
 }
+/* src/styles/dashboard.css */
+
+/* Basic page layout */
+.dashboard {
+  max-width: 1100px;
+  margin: 28px auto;
+  padding: 20px;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  color: #0f172a;
+}
+
+/* Header */
+.dash-header {
+  display: flex;
+  gap: 24px;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 18px;
+}
+
+.dash-title {
+  margin: 0;
+  font-size: 28px;
+  letter-spacing: -0.3px;
+}
+
+.dash-sub {
+  margin: 4px 0 0 0;
+  color: #475569;
+  font-size: 14px;
+}
+
+/* Form area */
+.skill-form {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  background: #ffffff;
+  padding: 10px;
+  border-radius: 12px;
+  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.06);
+}
+
+.sf-input {
+  min-width: 260px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid #e6eef8;
+  outline: none;
+  font-size: 14px;
+}
+.sf-input:focus {
+  border-color: #60a5fa;
+  box-shadow: 0 0 0 4px rgba(96,165,250,0.08);
+}
+
+/* level control */
+.sf-level {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 180px;
+}
+.sf-label {
+  font-size: 13px;
+  color: #64748b;
+}
+.sf-range {
+  width: 120px;
+}
+.sf-level-num {
+  background: #f1f5f9;
+  padding: 6px 8px;
+  border-radius: 8px;
+  font-weight: 600;
+}
+
+/* button */
+.sf-btn {
+  padding: 8px 12px;
+  background: linear-gradient(90deg,#2563eb,#7c3aed);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: transform .12s ease, box-shadow .12s ease;
+}
+.sf-btn:active { transform: translateY(1px); }
+.sf-btn:disabled { opacity: .6; cursor: not-allowed; }
+
+/* Main grid */
+.dash-main {
+  margin-top: 18px;
+}
+
+/* Empty state card */
+.dash-empty-card {
+  border: 1px dashed #c7d2fe;
+  padding: 28px;
+  border-radius: 12px;
+  background: linear-gradient(180deg, rgba(124,58,237,0.03), rgba(237,242,255,0.01));
+  color: #374151;
+  text-align: center;
+}
+
+/* Skill grid */
+.skill-grid {
+  display: grid;
+  gap: 14px;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* Skill card */
+.skill-card {
+  background: linear-gradient(180deg, #fff, #fbfdff);
+  padding: 14px;
+  border-radius: 12px;
+  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.04);
+  border: 1px solid rgba(2,6,23,0.04);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  transition: transform .14s ease, box-shadow .14s ease;
+}
+.skill-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 30px rgba(2,6,23,0.08);
+}
+
+.skill-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.skill-name {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.skill-delete {
+  border: none;
+  background: transparent;
+  color: #ef4444;
+  cursor: pointer;
+  font-size: 16px;
+  padding: 6px;
+  border-radius: 8px;
+}
+.skill-delete:hover { background: rgba(239,68,68,0.08); }
+
+/* progress */
+.skill-progress {
+  background: #eef2ff;
+  height: 10px;
+  border-radius: 999px;
+  overflow: hidden;
+}
+.skill-progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #60a5fa, #7c3aed);
+  transition: width 400ms cubic-bezier(.2,.9,.3,1);
+}
+
+/* meta */
+.skill-meta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: #6b7280;
+  align-items: center;
+}
+
+/* small responsive tweaks */
+@media (max-width: 720px) {
+  .dash-header { flex-direction: column; align-items: stretch; gap: 12px; }
+  .skill-form { width: 100%; flex-wrap: wrap; }
+  .sf-input { min-width: 100%; }
+  .sf-level { min-width: auto; }
+}
