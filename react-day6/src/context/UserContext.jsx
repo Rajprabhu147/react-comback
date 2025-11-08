@@ -1,45 +1,113 @@
-// inside UserContext.jsx (where logout is defined)
-import { useNavigate } from "react-router-dom";
-// ... in component
-const navigate = useNavigate();
+// src/context/UserContext.jsx
+import React, { createContext, useContext, useEffect, useState } from "react";
+import { supabase } from "../lib/supabaseClient";
 
-const logout = async () => {
-  try {
-    // Try to sign out. This may throw if there is no active session.
-    const { error } = await supabase.auth.signOut();
-    if (error) {
-      // The SDK can return an error object for known situations.
-      // Ignore the 'AuthSessionMissingError' (no active session) and surface others.
-      if (
-        error.name === "AuthSessionMissingError" ||
-        error.message?.includes("Auth session missing")
-      ) {
-        console.warn("No active session when signing out — ignoring.");
-      } else {
-        console.error("signOut error:", error);
+const UserContext = createContext();
+
+export function UserProvider({ children }) {
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    let mounted = true;
+
+    (async () => {
+      try {
+        const { data, error } = await supabase.auth.getSession();
+        if (error) console.warn("getSession error:", error);
+        if (mounted) setUser(data?.session?.user ?? null);
+      } catch (err) {
+        console.error("getSession threw:", err);
+      } finally {
+        if (mounted) setLoading(false);
       }
-    }
-  } catch (err) {
-    // In case the SDK throws instead of returning an error object,
-    // ignore AuthSessionMissingError and log other errors.
-    if (
-      err?.name === "AuthSessionMissingError" ||
-      String(err).includes("Auth session missing")
-    ) {
-      console.warn("signOut threw AuthSessionMissingError — ignoring.");
-    } else {
-      console.error("Unexpected signOut error:", err);
-    }
-  } finally {
-    // Always clear local user state and send user to auth page
-    setUser(null);
-    // optional: navigate to auth screen so UI is consistent
+    })();
+
+    const { data: listener } = supabase.auth.onAuthStateChange(
+      (_event, session) => {
+        setUser(session?.user ?? null);
+      }
+    );
+
+    return () => {
+      mounted = false;
+      try {
+        listener.subscription.unsubscribe();
+      } catch (e) {}
+    };
+  }, []);
+
+  const login = async (email, password) => {
     try {
-      navigate("/auth", { replace: true });
-    } catch (e) {
-      // navigate may not exist depending on where UserContext is used — ignore if so
-      // (If you want, ensure UserProvider is inside BrowserRouter)
-      console.warn("navigate unavailable (logout).");
+      const response = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
+      console.log("signInWithPassword response:", response);
+      return response;
+    } catch (err) {
+      console.error("login threw:", err);
+      return { error: err };
     }
-  }
+  };
+
+  const signup = async (email, password) => {
+    try {
+      const { data, error } = await supabase.auth.signUp({ email, password });
+      if (error) return { data: null, error };
+      const userId = data?.user?.id;
+      if (userId) {
+        await supabase
+          .from("profiles")
+          .insert({ id: userId, email: data.user.email })
+          .select()
+          .maybeSingle();
+      }
+      return { data, error: null };
+    } catch (err) {
+      console.error("signup threw:", err);
+      return { error: err };
+    }
+  };
+
+  // logout without useNavigate — just clear session safely
+  const logout = async () => {
+    try {
+      const { error } = await supabase.auth.signOut();
+      if (error) {
+        if (
+          error.name === "AuthSessionMissingError" ||
+          (error.message && error.message.includes("Auth session missing"))
+        ) {
+          console.warn("No active session when signing out — ignoring.");
+        } else {
+          console.error("signOut error:", error);
+        }
+      }
+    } catch (err) {
+      if (
+        err?.name === "AuthSessionMissingError" ||
+        String(err).includes("Auth session missing")
+      ) {
+        console.warn("signOut threw AuthSessionMissingError — ignoring.");
+      } else {
+        console.error("Unexpected signOut error:", err);
+      }
+    } finally {
+      setUser(null);
+      // do NOT call navigate here because this provider may be outside Router
+    }
+  };
+
+  return (
+    <UserContext.Provider value={{ user, loading, login, signup, logout }}>
+      {children}
+    </UserContext.Provider>
+  );
+}
+
+export const useUser = () => {
+  const ctx = useContext(UserContext);
+  if (!ctx) throw new Error("useUser must be used within UserProvider");
+  return ctx;
 };
