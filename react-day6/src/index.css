@@ -64,7 +64,7 @@ input:focus, select:focus, textarea:focus {
 
 /* Buttons */
 button {
-  width: 20%;
+  width:400px;
   background: var(--accent);
   color: white;
   font-weight: 700;
@@ -84,8 +84,6 @@ button:hover {
 /* Links */
 nav {
   width: 80%;
-  display: flex;
-  justify-content:flex-end;
   border-radius: 20px;
 }
 a {
