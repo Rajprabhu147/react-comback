@@ -1,15 +1,20 @@
 /* src/index.css
-   Minimal, clean base for SkillSync
-   - Tailwind directives (keep if using Tailwind)
-   - Small set of base styles for layout, nav, cards, forms, buttons
+   Unified Tailwind + app styles for SkillSync
+   - Includes Tailwind directives (base/components/utilities)
+   - Consolidated variables and component styles
+   - Clean, minimal, responsive theme for dashboard, auth, forms, lists
 */
 
-/* Tailwind entry (keep if you've installed/configured Tailwind) */
+/* -------------------------
+   Tailwind entry (required)
+   ------------------------- */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* --- Base / Reset --- */
+/* -------------------------
+   CSS Variables & Reset
+   ------------------------- */
 :root {
   --bg: #f8fafc;
   --card: #ffffff;
@@ -21,10 +26,8 @@
   --shadow-soft: 0 6px 18px rgba(2,6,23,0.06);
 }
 
-html, body, #root {
-  height: 100%;
-}
-
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body, #root { height: 100%; }
 body {
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI",
     Roboto, "Helvetica Neue", Arial, sans-serif;
@@ -33,17 +36,36 @@ body {
   line-height: 1.4;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  margin: 0;
 }
 
-/* --- App container --- */
+/* Subtle custom scrollbar */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 6px; }
+::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+/* -------------------------
+   App container / Layout
+   ------------------------- */
 .app {
   max-width: 1100px;
-  margin: 28px auto;
-  padding: 18px;
+  margin: 2rem auto;
+  padding: 2rem;
+}
+.header {
+  padding: 1rem;
 }
 
-/* --- Navigation --- */
+/* -------------------------
+   Navigation
+   ------------------------- */
+   nav {
+    margin: auto;
+    
+   }
+   nav a {
+    padding: 1rem;
+   }
+
 .nav {
   display: flex;
   gap: 12px;
@@ -53,6 +75,7 @@ body {
   padding: 10px 14px;
   border-radius: 10px;
   box-shadow: var(--shadow-soft);
+  border: 1px solid rgba(2,6,23,0.03);
 }
 
 .nav a {
@@ -60,11 +83,35 @@ body {
   text-decoration: none;
   font-weight: 600;
 }
-.nav a.active {
-  color: var(--accent-start);
+.nav a:hover { color: var(--accent-start); }
+.nav a.active { color: var(--accent-start); }
+
+.nav button {
+  background: linear-gradient(90deg, var(--accent-start), var(--accent-end));
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity .12s ease, transform .08s ease;
+}
+.nav button:active { transform: translateY(1px); }
+
+/* -------------------------
+   Card Component
+   ------------------------- */
+.card {
+  background: var(--card);
+  border-radius: 12px;
+  padding: 14px;
+  box-shadow: var(--shadow-soft);
+  border: 1px solid rgba(2,6,23,0.03);
 }
 
-/* --- Auth card --- */
+/* -------------------------
+   Auth Form
+   ------------------------- */
 .auth {
   max-width: 420px;
   margin: 48px auto;
@@ -74,12 +121,9 @@ body {
   box-shadow: var(--shadow-soft);
 }
 
-.auth h2 {
-  margin-bottom: 14px;
-  font-size: 1.25rem;
-}
+.auth h2 { margin-bottom: 14px; font-size: 1.25rem; text-align: center; }
 
-/* Inputs (default styling used by forms) */
+/* Inputs */
 input[type="email"],
 input[type="password"],
 input[type="text"],
@@ -94,16 +138,15 @@ textarea {
   color: var(--text);
   box-sizing: border-box;
 }
-
-input:focus,
-select:focus,
-textarea:focus {
+input:focus, select:focus, textarea:focus {
   outline: none;
   box-shadow: 0 0 0 4px rgba(37,99,235,0.08);
   border-color: var(--accent-start);
 }
 
-/* --- Buttons --- */
+/* -------------------------
+   Buttons
+   ------------------------- */
 .btn {
   display: inline-flex;
   align-items: center;
@@ -120,28 +163,52 @@ textarea:focus {
 .btn:active { transform: translateY(1px); }
 .btn:disabled { opacity: 0.6; cursor: not-allowed; }
 
-/* Secondary button */
 .btn-ghost {
   background: transparent;
   border: 1px solid rgba(2,6,23,0.06);
   color: var(--text);
+  padding: 6px 10px;
+  border-radius: 8px;
 }
 
-/* --- Cards & Lists --- */
-.card {
-  background: var(--card);
-  border-radius: 12px;
-  padding: 14px;
-  box-shadow: var(--shadow-soft);
-  border: 1px solid rgba(2,6,23,0.03);
+/* -------------------------
+   Skill Form (compact)
+   ------------------------- */
+.skill-form {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+  align-items: end;
 }
+.form-row {
+  display: flex;
+  flex-direction: column;
+  min-width: 180px;
+  flex: 1 1 220px;
+}
+.form-label { font-size: 0.85rem; color: var(--muted); margin-bottom: 6px; }
+.form-input, .form-select {
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid #e6eef8;
+  background: white;
+  font-size: 0.95rem;
+  outline: none;
+}
+.form-input:focus, .form-select:focus {
+  box-shadow: 0 0 0 4px rgba(37,99,235,0.08);
+  border-color: var(--accent-start);
+}
+.form-actions { flex: 0 0 auto; align-self: center; }
 
-/* Skill list basics */
+/* -------------------------
+   Skill List / Cards
+   ------------------------- */
 .skill-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
   gap: 12px;
-  margin: 0;
+  margin: 12px 0 0 0;
   padding: 0;
   list-style: none;
 }
@@ -149,17 +216,23 @@ textarea:focus {
 .skill-card {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 10px;
   padding: 12px;
   border-radius: 10px;
   background: var(--card);
   box-shadow: var(--shadow-soft);
+  border: 1px solid rgba(2,6,23,0.03);
 }
 
-/* progress bar */
+.skill-top { display: flex; justify-content: space-between; align-items:flex-start; gap: 12px; }
+.skill-top h4 { margin: 0; font-size: 1rem; }
+.delete-btn { border: none; background: transparent; color: #ef4444; font-weight: 700; padding: 6px; border-radius: 8px; cursor: pointer; }
+.delete-btn:hover { background: rgba(239,68,68,0.06); }
+
+/* progress bars */
 .progress {
   background: #eef2ff;
-  height: 9px;
+  height: 10px;
   border-radius: 999px;
   overflow: hidden;
 }
@@ -170,21 +243,31 @@ textarea:focus {
   transition: width 320ms ease;
 }
 
-/* meta text */
-.small-muted {
-  font-size: 0.85rem;
-  color: var(--muted);
-}
+/* meta */
+.skill-meta { display:flex; justify-content:space-between; font-size: 0.85rem; color: var(--muted); }
 
-/* --- Utilities --- */
-.flex { display:inline-block; }
-.space-between { justify-content: space-between; }
-.center { align-items: center; }
+/* -------------------------
+   Utility classes
+   ------------------------- */
+.small-muted { font-size: 0.85rem; color: var(--muted); }
+.loading { text-align:center; color: var(--muted); padding: 18px; }
+.error { color: #dc2626; padding: 12px; }
+
+/* Layout utilities */
 .mt-2 { margin-top: 8px; }
 .mb-2 { margin-bottom: 8px; }
+.footer {
+  padding: 1rem;
+  font-size: small;
+  font-style: italic;
+}
 
-/* responsive tweaks */
+/* -------------------------
+   Responsive adjustments
+   ------------------------- */
 @media (max-width: 720px) {
   .app { padding: 12px; margin: 12px auto; }
   .skill-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); }
+  .skill-form { flex-direction: column; align-items: stretch; }
+  .form-actions { align-self: stretch; }
 }

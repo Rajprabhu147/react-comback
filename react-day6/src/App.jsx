@@ -1,5 +1,5 @@
 // src/App.jsx
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import {
   Routes,
   Route,
@@ -17,44 +17,115 @@ export default function App() {
   const navigate = useNavigate();
   const location = useLocation();
 
+  // avoid navigation loops by only acting when user id actually changes
+  const prevUserIdRef = useRef(null);
+
   useEffect(() => {
-    // When user becomes signed in, ensure they're sent to the dashboard/root.
-    // When they sign out, send them to the auth page.
-    // We guard to avoid unnecessary redirects (e.g. if already on /about).
-    if (user) {
-      // If user is on /auth or rootless page, send to '/'
+    const prevId = prevUserIdRef.current;
+    const curId = user?.id ?? null;
+
+    // nothing changed -> do nothing
+    if (prevId === curId) return;
+
+    // store new value for next run
+    prevUserIdRef.current = curId;
+
+    // User just signed in -> if on auth or root, send to dashboard
+    if (curId) {
       if (location.pathname === "/auth" || location.pathname === "/") {
-        navigate("/", { replace: true });
+        navigate("/dashboard", { replace: true });
       }
-      // if you want to always push to dashboard after login uncomment:
-      // navigate("/", { replace: true });
-    } else {
-      // if no user, and not already on /auth or /about - send to /auth
+      return;
+    }
+
+    // User signed out -> send to auth unless already there or on public About
+    if (!curId) {
       if (location.pathname !== "/auth" && location.pathname !== "/about") {
         navigate("/auth", { replace: true });
       }
     }
-    // add navigate and location to deps to keep effect up-to-date
-  }, [user, navigate, location]);
+  }, [user, location.pathname, navigate]);
+
+  // helper for NavLink active styling
+  const linkClass = ({ isActive }) =>
+    `px-3 py-2 rounded-md text-sm font-medium ${
+      isActive
+        ? "text-white bg-gradient-to-r from-indigo-600 to-violet-600"
+        : "text-slate-700 hover:text-indigo-600"
+    }`;
+
+  // derive a short display name from email (falls back to "Guest")
+  const displayName =
+    user?.user_metadata?.full_name ||
+    user?.email?.split?.("@")?.[0] ||
+    (user ? "User" : "Guest");
 
   return (
     <div className="app">
-      <nav className="nav">
-        <NavLink to="/about">About</NavLink>
-        <NavLink to="/">Dashboard</NavLink>
-        {!user ? (
-          <NavLink to="/auth">Login</NavLink>
-        ) : (
-          <button onClick={logout}>Logout</button>
-        )}
-      </nav>
+      <header className="nav flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <div className="text-xl font-bold text-indigo-600">
+            <h1 className="header">SkillSync</h1>
+          </div>
+          <nav className="hidden sm:flex items-center gap-2 ml-4">
+            <NavLink to="/about" className={linkClass}>
+              About
+            </NavLink>
+            <NavLink to="/dashboard" className={linkClass}>
+              Dashboard
+            </NavLink>
+          </nav>
+        </div>
 
-      <Routes>
-        <Route path="/about" element={<About />} />
-        <Route path="/auth" element={<Auth />} />
-        {/* Root route: if user present show Dashboard, otherwise show Auth */}
-        <Route path="/" element={user ? <Dashboard /> : <Auth />} />
-      </Routes>
+        <div className="flex items-center gap-3">
+          {/* small responsive nav for mobile */}
+          <div className="sm:hidden">
+            <NavLink
+              to="/dashboard"
+              className="text-sm text-slate-700 hover:text-indigo-600 px-2"
+            >
+              Dashboard
+            </NavLink>
+            <NavLink
+              to="/about"
+              className="text-sm text-slate-700 hover:text-indigo-600 px-2"
+            >
+              About
+            </NavLink>
+          </div>
+
+          {user ? (
+            <>
+              <div className="hidden sm:flex flex-col text-right mr-2">
+                <span className="text-sm font-semibold">{displayName}</span>
+                <span className="text-xs text-slate-500">Welcome back</span>
+              </div>
+
+              <button
+                onClick={logout}
+                className="btn"
+                title="Logout"
+                aria-label="Logout"
+              >
+                Logout
+              </button>
+            </>
+          ) : (
+            <NavLink to="/auth" className="btn-ghost">
+              Login
+            </NavLink>
+          )}
+        </div>
+      </header>
+
+      <main className="mt-6">
+        <Routes>
+          <Route path="/about" element={<About />} />
+          <Route path="/auth" element={<Auth />} />
+          <Route path="/dashboard" element={user ? <Dashboard /> : <Auth />} />
+          <Route path="/" element={user ? <Dashboard /> : <Auth />} />
+        </Routes>
+      </main>
     </div>
   );
 }

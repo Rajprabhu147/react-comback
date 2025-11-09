@@ -1,5 +1,5 @@
 // src/pages/Auth.jsx
-import { useState } from "react";
+import React, { useState } from "react";
 import { useUser } from "../context/UserContext";
 import { useNavigate } from "react-router-dom";
 
@@ -11,6 +11,7 @@ export default function Auth() {
   const [form, setForm] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
+  const [notice, setNotice] = useState("");
 
   const handleChange = (e) =>
     setForm((f) => ({ ...f, [e.target.name]: e.target.value }));
@@ -18,20 +19,19 @@ export default function Auth() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
+    setNotice("");
     setBusy(true);
 
     try {
-      // call context functions; they typically return { data, error }
       const result = isSignup
         ? await signup(form.email, form.password)
         : await login(form.email, form.password);
 
       console.log("Auth result:", result);
 
-      // If SDK returned an error object, surface it
+      // If an error object is returned by the SDK
       if (result?.error) {
         const err = result.error;
-        // special-case: helpful message when email not confirmed
         if (
           err?.code === "email_not_confirmed" ||
           err?.message?.includes("Email not confirmed")
@@ -46,39 +46,26 @@ export default function Auth() {
         return;
       }
 
-      // On success some flows return data.session (signIn)
+      // Successful sign in: SDK usually returns data.session
       if (result?.data?.session) {
-        // successful login — navigate to dashboard
         navigate("/dashboard");
         return;
       }
 
-      // Signup case: often requires email confirmation — show friendly note
+      // Signup success (often requires email confirmation)
       if (isSignup) {
-        setError(
+        setNotice(
           "Sign-up successful. Please check your email for a confirmation link before logging in."
         );
-      } else {
-        // No session & no error — fallback for unexpected SDK shapes
-        console.warn("Login completed but no session was returned:", result);
-        // try to confirm session exists and then navigate
-        // (this helps if your UserContext onAuthStateChange will update shortly)
-        // final fallback: navigate after small delay if auth state shows signed in
-        setTimeout(async () => {
-          try {
-            // optionally check session from supabase direct if you have it globally available
-            // const { data } = await supabase.auth.getSession();
-            // if (data?.session) navigate('/dashboard');
-            // For now, just log and inform user
-            console.log("No session detected immediately after login.");
-          } catch (err) {
-            console.error(err);
-          }
-        }, 500);
-        setError(
-          "Login processed. If you're not automatically redirected check the console."
-        );
+        setForm({ email: "", password: "" });
+        setBusy(false);
+        return;
       }
+
+      // Fallback: no error and no session
+      setNotice(
+        "Processed. If you're not redirected automatically, check the console or try refreshing."
+      );
     } catch (err) {
       console.error("Auth.handleSubmit threw:", err);
       setError(err?.message || "Unexpected error during authentication");
@@ -88,44 +75,98 @@ export default function Auth() {
   };
 
   return (
-    <div className="auth">
-      <h2 className="login">{isSignup ? "Sign Up" : "Login"}</h2>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-50 via-white to-violet-50 p-6">
+      <div className="w-full max-w-md">
+        <div className="card p-6">
+          <h2 className="text-2xl font-bold text-center text-indigo-600 mb-2">
+            {isSignup ? "Create an account" : "Welcome back"}
+          </h2>
+          <p className="text-center text-sm text-slate-500 mb-4">
+            {isSignup
+              ? "Sign up to start tracking your skills."
+              : "Login to view and manage your skills."}
+          </p>
 
-      <form onSubmit={handleSubmit}>
-        <input
-          type="email"
-          name="email"
-          placeholder="Email"
-          value={form.email}
-          onChange={handleChange}
-          required
-        />
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <label className="block">
+              <span className="text-sm text-slate-600">Email</span>
+              <input
+                name="email"
+                type="email"
+                required
+                autoComplete="email"
+                value={form.email}
+                onChange={handleChange}
+                className="form-input mt-1"
+                placeholder="you@company.com"
+              />
+            </label>
 
-        <input
-          type="password"
-          name="password"
-          placeholder="Password"
-          value={form.password}
-          onChange={handleChange}
-          required
-        />
+            <label className="block">
+              <span className="text-sm text-slate-600">Password</span>
+              <input
+                name="password"
+                type="password"
+                required
+                autoComplete={isSignup ? "new-password" : "current-password"}
+                value={form.password}
+                onChange={handleChange}
+                className="form-input mt-1"
+                placeholder="Enter a secure password"
+                minLength={6}
+              />
+            </label>
 
-        <button className="submit-btn" type="submit" disabled={busy}>
-          {busy
-            ? isSignup
-              ? "Signing up..."
-              : "Logging in..."
-            : isSignup
-            ? "Sign Up"
-            : "Login"}
-        </button>
+            <div className="flex items-center justify-between gap-3">
+              <button
+                type="submit"
+                className="btn flex-1"
+                disabled={busy}
+                aria-disabled={busy}
+              >
+                {busy
+                  ? isSignup
+                    ? "Signing up..."
+                    : "Logging in..."
+                  : isSignup
+                  ? "Sign Up"
+                  : "Login"}
+              </button>
 
-        {error && <p style={{ color: "red" }}>{error}</p>}
-      </form>
+              <button
+                type="button"
+                className="btn-ghost"
+                onClick={() => {
+                  setIsSignup((s) => !s);
+                  setError("");
+                  setNotice("");
+                }}
+              >
+                {isSignup
+                  ? "Have an account? Login"
+                  : "Need an account? Sign up"}
+              </button>
+            </div>
 
-      <button onClick={() => setIsSignup((s) => !s)}>
-        {isSignup ? "Have an account? Login" : "Need an account? Sign up"}
-      </button>
+            {error && (
+              <p className="error" role="alert">
+                {error}
+              </p>
+            )}
+            {notice && (
+              <p className="small-muted" role="status">
+                {notice}
+              </p>
+            )}
+          </form>
+        </div>
+        <div className="footer">
+          <p className="text-center text-xs text-slate-400 mt-3">
+            By continuing you agree to the SkillSync terms and privacy.
+          </p>
+          <span>© 2025 KingLord Corp. All Rights Reserved.</span>
+        </div>
+      </div>
     </div>
   );
 }
