@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 // src/App.jsx
 import { useEffect, useRef } from "react";
 import {
@@ -11,6 +12,7 @@ import Auth from "./pages/Auth.jsx";
 import Dashboard from "./pages/Dashboard.jsx";
 import About from "./pages/About.jsx";
 import { useUser } from "./context/UserContext.jsx";
+import logo from "./assets/logo.png";
 
 export default function App() {
   const { user, logout } = useUser();
@@ -64,10 +66,15 @@ export default function App() {
         <header className="mb-6">
           <nav className="nav">
             <div className="flex items-center gap-4">
-              <h1 className="text-xl font-bold bg-gradient-to-r from-indigo-600 to-violet-600 bg-clip-text text-transparent">
+              <header to="/" className="logo">
+                <NavLink to="/" className="logo-link">
+                  <img src={logo} alt="SkillSync Logo" className="logo" />
+                </NavLink>
+              </header>
+              {/* <h1 className="text-xl font-bold bg-gradient-to-r from-indigo-600 to-violet-600 bg-clip-text text-transparent">
                 SkillSync
               </h1>
-
+ */}
               <div className="hidden sm:flex items-center gap-2">
                 <NavLink to="/about" className={linkClass}>
                   About
