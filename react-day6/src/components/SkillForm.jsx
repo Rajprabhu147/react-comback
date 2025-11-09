@@ -22,6 +22,7 @@ export default function SkillForm({ onAdd }) {
         <label className="block text-sm font-medium text-slate-600 mb-1">
           Skill Name
         </label>
+        <br />
         <input
           value={name}
           onChange={(e) => setName(e.target.value)}
@@ -35,6 +36,7 @@ export default function SkillForm({ onAdd }) {
         <label className="block text-sm font-medium text-slate-600 mb-1">
           Skill Level
         </label>
+        <br />
         <select
           value={level}
           onChange={(e) => setLevel(e.target.value)}

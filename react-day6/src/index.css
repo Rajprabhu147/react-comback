@@ -177,7 +177,7 @@ textarea:focus {
 }
 
 /* --- Utilities --- */
-.flex { display:flex; }
+.flex { display:inline-block; }
 .space-between { justify-content: space-between; }
 .center { align-items: center; }
 .mt-2 { margin-top: 8px; }
