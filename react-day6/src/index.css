@@ -17,8 +17,8 @@
 
 /* Reset & base layout */
 body {
-  margin: 0;
-  height: 100vh;
+  margin: 0 auto;
+  padding: 20px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -67,7 +67,6 @@ input:focus, select:focus, textarea:focus {
 
 /* Buttons */
 button {
-  width:400px;
   background: var(--accent);
   color: white;
   font-weight: 700;

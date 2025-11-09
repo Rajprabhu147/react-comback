@@ -17,7 +17,10 @@ export default function Dashboard() {
   return (
     <div>
       <h2>Your Skills</h2>
-      <SkillForm onAdd={(name, level) => addSkill.mutate({ name, level })} />
+      <section className="max-w-3xl mx-auto my-6 bg-slate-50 p-6 rounded-2xl shadow-inner">
+        <SkillForm onAdd={(name, level) => addSkill.mutate({ name, level })} />
+      </section>
+
       <SkillList skills={skills} onDelete={(id) => deleteSkill.mutate(id)} />
     </div>
   );
