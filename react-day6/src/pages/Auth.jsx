@@ -101,6 +101,7 @@ export default function Auth() {
                 placeholder="you@company.com"
               />
             </label>
+            <br />
 
             <label className="block">
               <span className="text-sm text-slate-600">Password</span>
@@ -116,6 +117,7 @@ export default function Auth() {
                 minLength={6}
               />
             </label>
+            <br />
 
             <div className="flex items-center justify-between gap-3">
               <button
