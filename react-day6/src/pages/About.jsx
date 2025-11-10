@@ -66,7 +66,7 @@ export default function About() {
 
         <h1
           style={{
-            fontSize: "2.5rem",
+            fontSize: "2.25rem",
             fontWeight: "bold",
             background:
               "linear-gradient(90deg, var(--accent-start), var(--accent-end))",
@@ -109,7 +109,7 @@ export default function About() {
         <div
           style={{
             display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
+            gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))",
             gap: "1.5rem",
           }}
         >
