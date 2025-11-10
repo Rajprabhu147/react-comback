@@ -76,12 +76,6 @@ body {
 /* -------------------------
    Navigation
    ------------------------- */
-   .logo {
-  height: 40px;
-  width: auto;
-  margin-right: 10px;
-  vertical-align: middle;
-}
 .nav {
   display: flex;
   align-items: center;
