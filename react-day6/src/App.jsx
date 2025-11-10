@@ -71,11 +71,13 @@ export default function App() {
                   <img src={logo} alt="SkillSync Logo" className="logo" />
                 </NavLink>
               </header> */}
-              <h1 className="text-xl font-bold bg-gradient-to-r from-indigo-600 to-violet-600 bg-clip-text text-transparent">
-                <NavLink to="/">SkillSync</NavLink>
-              </h1>
 
               <div className="hidden sm:flex items-center gap-2">
+                <h1 className="text-xl font-bold bg-gradient-to-r from-indigo-600 to-violet-600 bg-clip-text text-transparent"></h1>
+                <NavLink to="/" className="logo">
+                  SkillSync
+                </NavLink>
+
                 <NavLink to="/about" className={linkClass}>
                   About
                 </NavLink>
