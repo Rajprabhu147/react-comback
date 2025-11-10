@@ -92,9 +92,9 @@ export default function Auth() {
 
             <div className="relative z-10">
               <div className="w-20 h-20 bg-white bg-opacity-20 backdrop-blur-md rounded-2xl flex items-center justify-center mx-auto mb-5 shadow-2xl">
-                <span className="text-white text-3xl">
+                {/* <span className="text-white text-3xl">
                   {showForgotPassword ? "🔑" : isSignup ? "✨" : "🔐"}
-                </span>
+                </span> */}
               </div>
 
               <h2 className="text-4xl font-bold text-white mb-3">
