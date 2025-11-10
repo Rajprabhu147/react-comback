@@ -74,7 +74,7 @@ export default function App() {
 
               <div className="hidden sm:flex items-center gap-2">
                 <h1 className="text-xl font-bold bg-gradient-to-r from-indigo-600 to-violet-600 bg-clip-text text-transparent"></h1>
-                <NavLink to="/" className="logo">
+                <NavLink to="/" className="logoTxt">
                   SkillSync
                 </NavLink>
 
