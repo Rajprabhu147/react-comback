@@ -136,13 +136,13 @@ export default function Dashboard() {
           background:
             "linear-gradient(135deg, var(--accent-start), var(--accent-end))",
           borderRadius: "1rem",
-          padding: "3rem 2rem",
           marginBottom: "2rem",
           color: "white",
           boxShadow: "0 12px 32px rgba(37,99,235,0.3)",
           position: "relative",
           overflow: "hidden",
         }}
+        className="heroBanner"
       >
         {/* Decorative circles */}
         <div

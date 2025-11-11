@@ -65,27 +65,16 @@ body {
 .app {
   max-width: 1100px;
   margin: 0rem auto;
-  padding: 2rem;
+  padding: 1rem;
 }
 
 .header {
-  padding: 1rem;
+  padding: 2rem;
 }
 
 /* -------------------------
    Navigation
    ------------------------- */
-
-
-.logoTxt {
-  font-size: 1.5rem;
-<<<<<<< HEAD
-  font-weight: 600;
-  color: #333;
-=======
-  padding: 10px;
->>>>>>> 7b1cfe5 (client correction)
-}
 
 .nav {
   display: flex;
@@ -95,22 +84,18 @@ body {
   justify-content: space-between;
   background: var(--card);
   border-radius: 12px;
-  padding: .5rem;
+  padding: 1rem;
   box-shadow: var(--shadow-soft);
   border: 1px solid rgba(2,6,23,0.03);
 
 }
-<<<<<<< HEAD
 .logoTxt {
   font-size: 1.25rem;
   padding: 10px;
 }
-=======
 
->>>>>>> 7b1cfe5 (client correction)
 .nav a {
-  padding: 0.5rem 1rem;
-  display: inline-block;
+  padding: 1rem 1rem;
   text-decoration: none;
   font-weight: 600;
   transition: color 0.2s ease;
@@ -468,6 +453,9 @@ textarea:focus {
 
 /* src/App.css */
 @media (max-width: 639px) {
+  .heroBanner {
+    padding: 0;
+  }
   .nav-mobile-menu {
     display: flex;
     flex-direction: column;
@@ -495,6 +483,9 @@ textarea:focus {
 }
 
 @media (min-width: 640px) and (max-width: 1023px) {
+  .heroBanner {
+    padding: 2rem 1rem;
+  }
   .nav-logo {
     font-size: 1.5rem;
   }
@@ -512,6 +503,9 @@ textarea:focus {
 }
 
 @media (min-width: 1024px) {
+  .heroBanner {
+    padding: 3rem 2rem;
+  }
   .nav-link {
     padding: 0.75rem 1.5rem;
   }

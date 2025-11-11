@@ -84,7 +84,7 @@ export default function Auth() {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        padding: "3rem 1rem",
+        padding: "1rem 1rem",
       }}
     >
       <div style={{ width: "100%", maxWidth: "28rem" }}>
