@@ -75,36 +75,80 @@ export default function Auth() {
     e.preventDefault();
     setShowForgotPassword(false);
     setNotice("Password reset link sent! Check your email.");
-    // Add actual password reset logic here with Supabase
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 py-12">
-      <div className="w-full max-w-md">
+    <div
+      style={{
+        minHeight: "100vh",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        padding: "3rem 1rem",
+      }}
+    >
+      <div style={{ width: "100%", maxWidth: "28rem" }}>
         {/* Main Auth Card */}
-        <div className="bg-white rounded-3xl shadow-2xl border border-slate-200 overflow-hidden">
+        <div
+          className="card"
+          style={{
+            background: "white",
+            borderRadius: "1.5rem",
+            boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.1)",
+            border: "1px solid rgba(226, 232, 240, 0.8)",
+            overflow: "hidden",
+          }}
+        >
           {/* Gradient Header */}
-          <div className="relative bg-gradient-to-br from-indigo-600 via-violet-600 to-purple-600 px-8 py-12 text-center overflow-hidden">
-            <div className="absolute inset-0 opacity-20">
-              <div className="absolute top-0 left-1/4 w-64 h-64 bg-white rounded-full blur-3xl"></div>
-              <div className="absolute bottom-0 right-1/4 w-64 h-64 bg-white rounded-full blur-3xl"></div>
-            </div>
-
-            <div className="relative z-10">
-              <div className="w-20 h-20 bg-white bg-opacity-20 backdrop-blur-md rounded-2xl flex items-center justify-center mx-auto mb-5 shadow-2xl">
-                {/* <span className="text-white text-3xl">
-                  {showForgotPassword ? "🔑" : isSignup ? "✨" : "🔐"}
-                </span> */}
+          <div
+            style={{
+              position: "relative",
+              background:
+                "linear-gradient(135deg, var(--accent-start), var(--accent-end))",
+              padding: "3rem 2rem",
+              textAlign: "center",
+              overflow: "hidden",
+            }}
+          >
+            <div style={{ position: "relative", zIndex: 10 }}>
+              <div
+                style={{
+                  width: "5rem",
+                  height: "5rem",
+                  background: "rgba(255, 255, 255, 0.2)",
+                  backdropFilter: "blur(10px)",
+                  borderRadius: "1rem",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  margin: "0 auto 1.5rem",
+                  boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.3)",
+                  fontSize: "3rem",
+                }}
+              >
+                {showForgotPassword ? "🔑" : isSignup ? "✨" : "🔐"}
               </div>
 
-              <h2 className="text-4xl font-bold text-white mb-3">
+              <h2
+                style={{
+                  fontSize: "2.25rem",
+                  fontWeight: "bold",
+                  color: "white",
+                  marginBottom: "0.75rem",
+                }}
+              >
                 {showForgotPassword
                   ? "Reset Password"
                   : isSignup
                   ? "Create Account"
                   : "Welcome Back"}
               </h2>
-              <p className="text-indigo-100 text-lg">
+              <p
+                style={{
+                  color: "rgba(224, 231, 255, 0.9)",
+                  fontSize: "1.125rem",
+                }}
+              >
                 {showForgotPassword
                   ? "Enter your email to receive a reset link"
                   : isSignup
@@ -115,14 +159,27 @@ export default function Auth() {
           </div>
 
           {/* Form Section */}
-          <div className="px-8 py-10">
+          <div style={{ padding: "2.5rem 2rem" }}>
             {showForgotPassword ? (
               // Forgot Password Form
-              <form onSubmit={handleForgotPassword} className="space-y-6">
+              <form
+                onSubmit={handleForgotPassword}
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "1.5rem",
+                }}
+              >
                 <div>
                   <label
                     htmlFor="reset-email"
-                    className="block text-sm font-semibold text-slate-700 mb-3"
+                    style={{
+                      display: "block",
+                      fontSize: "0.875rem",
+                      fontWeight: "600",
+                      color: "var(--text)",
+                      marginBottom: "0.75rem",
+                    }}
                   >
                     Email Address
                   </label>
@@ -135,13 +192,55 @@ export default function Auth() {
                     value={form.email}
                     onChange={handleChange}
                     placeholder="you@example.com"
-                    className="w-full px-4 py-3.5 rounded-xl border-2 border-slate-200 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100 outline-none transition-all text-slate-800 placeholder:text-slate-400 font-medium"
+                    style={{
+                      width: "100%",
+                      padding: "0.875rem 1rem",
+                      borderRadius: "0.75rem",
+                      border: "2px solid #e2e8f0",
+                      fontSize: "0.95rem",
+                      fontWeight: "500",
+                      outline: "none",
+                      transition: "all 0.2s ease",
+                    }}
+                    onFocus={(e) => {
+                      e.target.style.borderColor = "var(--accent-start)";
+                      e.target.style.boxShadow =
+                        "0 0 0 4px rgba(79, 70, 229, 0.1)";
+                    }}
+                    onBlur={(e) => {
+                      e.target.style.borderColor = "#e2e8f0";
+                      e.target.style.boxShadow = "none";
+                    }}
                   />
                 </div>
 
                 <button
                   type="submit"
-                  className="w-full bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-700 hover:to-violet-700 text-white font-bold py-4 rounded-xl transition-all transform hover:scale-105 active:scale-95 shadow-lg shadow-indigo-500/30 hover:shadow-xl hover:shadow-indigo-500/40"
+                  className="btn"
+                  style={{
+                    width: "100%",
+                    padding: "1rem",
+                    background:
+                      "linear-gradient(135deg, var(--accent-start), var(--accent-end))",
+                    color: "white",
+                    fontWeight: "bold",
+                    borderRadius: "0.75rem",
+                    border: "none",
+                    cursor: "pointer",
+                    fontSize: "1rem",
+                    boxShadow: "0 4px 14px rgba(79, 70, 229, 0.3)",
+                    transition: "all 0.2s ease",
+                  }}
+                  onMouseEnter={(e) => {
+                    e.target.style.transform = "translateY(-2px)";
+                    e.target.style.boxShadow =
+                      "0 6px 20px rgba(79, 70, 229, 0.4)";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.target.style.transform = "translateY(0)";
+                    e.target.style.boxShadow =
+                      "0 4px 14px rgba(79, 70, 229, 0.3)";
+                  }}
                 >
                   Send Reset Link
                 </button>
@@ -153,19 +252,48 @@ export default function Auth() {
                     setError("");
                     setNotice("");
                   }}
-                  className="w-full text-sm text-indigo-600 hover:text-indigo-700 font-semibold transition-colors py-2"
+                  style={{
+                    width: "100%",
+                    padding: "0.5rem",
+                    fontSize: "0.875rem",
+                    color: "var(--accent-start)",
+                    fontWeight: "600",
+                    background: "transparent",
+                    border: "none",
+                    cursor: "pointer",
+                    transition: "color 0.2s ease",
+                  }}
+                  onMouseEnter={(e) => {
+                    e.target.style.color = "var(--accent-end)";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.target.style.color = "var(--accent-start)";
+                  }}
                 >
                   ← Back to login
                 </button>
               </form>
             ) : (
               // Main Login/Signup Form
-              <form onSubmit={handleSubmit} className="space-y-7">
+              <form
+                onSubmit={handleSubmit}
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "1.75rem",
+                }}
+              >
                 {/* Email Input */}
                 <div>
                   <label
                     htmlFor="email"
-                    className="block text-sm font-semibold text-slate-700 mb-3"
+                    style={{
+                      display: "block",
+                      fontSize: "0.875rem",
+                      fontWeight: "600",
+                      color: "var(--text)",
+                      marginBottom: "0.75rem",
+                    }}
                   >
                     Email Address
                   </label>
@@ -178,7 +306,25 @@ export default function Auth() {
                     value={form.email}
                     onChange={handleChange}
                     placeholder="you@example.com"
-                    className="w-full px-4 py-3.5 rounded-xl border-2 border-slate-200 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100 outline-none transition-all text-slate-800 placeholder:text-slate-400 font-medium"
+                    style={{
+                      width: "100%",
+                      padding: "0.875rem 1rem",
+                      borderRadius: "0.75rem",
+                      border: "2px solid #e2e8f0",
+                      fontSize: "0.95rem",
+                      fontWeight: "500",
+                      outline: "none",
+                      transition: "all 0.2s ease",
+                    }}
+                    onFocus={(e) => {
+                      e.target.style.borderColor = "var(--accent-start)";
+                      e.target.style.boxShadow =
+                        "0 0 0 4px rgba(79, 70, 229, 0.1)";
+                    }}
+                    onBlur={(e) => {
+                      e.target.style.borderColor = "#e2e8f0";
+                      e.target.style.boxShadow = "none";
+                    }}
                   />
                 </div>
 
@@ -186,7 +332,13 @@ export default function Auth() {
                 <div>
                   <label
                     htmlFor="password"
-                    className="block text-sm font-semibold text-slate-700 mb-3"
+                    style={{
+                      display: "block",
+                      fontSize: "0.875rem",
+                      fontWeight: "600",
+                      color: "var(--text)",
+                      marginBottom: "0.75rem",
+                    }}
                   >
                     Password
                   </label>
@@ -202,10 +354,35 @@ export default function Auth() {
                     onChange={handleChange}
                     placeholder="••••••••"
                     minLength={6}
-                    className="w-full px-4 py-3.5 rounded-xl border-2 border-slate-200 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-100 outline-none transition-all text-slate-800 placeholder:text-slate-400 font-medium"
+                    style={{
+                      width: "100%",
+                      padding: "0.875rem 1rem",
+                      borderRadius: "0.75rem",
+                      border: "2px solid #e2e8f0",
+                      fontSize: "0.95rem",
+                      fontWeight: "500",
+                      outline: "none",
+                      transition: "all 0.2s ease",
+                    }}
+                    onFocus={(e) => {
+                      e.target.style.borderColor = "var(--accent-start)";
+                      e.target.style.boxShadow =
+                        "0 0 0 4px rgba(79, 70, 229, 0.1)";
+                    }}
+                    onBlur={(e) => {
+                      e.target.style.borderColor = "#e2e8f0";
+                      e.target.style.boxShadow = "none";
+                    }}
                   />
                   {isSignup && (
-                    <p className="text-xs text-slate-500 mt-2.5 ml-1">
+                    <p
+                      style={{
+                        fontSize: "0.75rem",
+                        color: "var(--muted)",
+                        marginTop: "0.625rem",
+                        marginLeft: "0.25rem",
+                      }}
+                    >
                       Must be at least 6 characters long
                     </p>
                   )}
@@ -213,20 +390,57 @@ export default function Auth() {
 
                 {/* Remember me & Forgot password */}
                 {!isSignup && (
-                  <div className="flex items-center justify-between pt-1">
-                    <label className="flex items-center gap-2 cursor-pointer group">
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                    }}
+                  >
+                    <label
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "0.5rem",
+                        cursor: "pointer",
+                      }}
+                    >
                       <input
                         type="checkbox"
-                        className="w-4 h-4 rounded border-slate-300 text-indigo-600 focus:ring-2 focus:ring-indigo-200 cursor-pointer"
+                        style={{
+                          width: "1rem",
+                          height: "1rem",
+                          cursor: "pointer",
+                        }}
                       />
-                      <span className="text-sm text-slate-600 group-hover:text-slate-800 transition-colors font-medium">
+                      <span
+                        style={{
+                          fontSize: "0.875rem",
+                          color: "var(--muted)",
+                          fontWeight: "500",
+                        }}
+                      >
                         Remember me
                       </span>
                     </label>
                     <button
                       type="button"
                       onClick={() => setShowForgotPassword(true)}
-                      className="text-sm text-indigo-600 hover:text-indigo-700 font-semibold transition-colors"
+                      style={{
+                        fontSize: "0.875rem",
+                        color: "var(--accent-start)",
+                        fontWeight: "600",
+                        background: "transparent",
+                        border: "none",
+                        cursor: "pointer",
+                        transition: "color 0.2s ease",
+                      }}
+                      onMouseEnter={(e) => {
+                        e.target.style.color = "var(--accent-end)";
+                      }}
+                      onMouseLeave={(e) => {
+                        e.target.style.color = "var(--accent-start)";
+                      }}
                     >
                       Forgot password?
                     </button>
@@ -236,10 +450,22 @@ export default function Auth() {
                 {/* Error Message */}
                 {error && (
                   <div
-                    className="bg-red-50 border-l-4 border-red-500 p-4 rounded-xl"
-                    role="alert"
+                    className="error"
+                    style={{
+                      background: "linear-gradient(to right, #fee2e2, #fecaca)",
+                      borderLeft: "4px solid #dc2626",
+                      padding: "1rem",
+                      borderRadius: "0.75rem",
+                    }}
                   >
-                    <p className="text-sm text-red-800 font-medium leading-relaxed">
+                    <p
+                      style={{
+                        fontSize: "0.875rem",
+                        color: "#dc2626",
+                        fontWeight: "500",
+                        lineHeight: "1.6",
+                      }}
+                    >
                       {error}
                     </p>
                   </div>
@@ -248,44 +474,133 @@ export default function Auth() {
                 {/* Success Notice */}
                 {notice && (
                   <div
-                    className="bg-green-50 border-l-4 border-green-500 p-4 rounded-xl"
-                    role="status"
+                    className="success"
+                    style={{
+                      background: "linear-gradient(to right, #d1fae5, #a7f3d0)",
+                      borderLeft: "4px solid #059669",
+                      padding: "1rem",
+                      borderRadius: "0.75rem",
+                    }}
                   >
-                    <p className="text-sm text-green-800 font-medium leading-relaxed">
+                    <p
+                      style={{
+                        fontSize: "0.875rem",
+                        color: "#059669",
+                        fontWeight: "500",
+                        lineHeight: "1.6",
+                      }}
+                    >
                       {notice}
                     </p>
                   </div>
                 )}
 
                 {/* Submit Button */}
-                <div className="pt-2">
+                <div style={{ paddingTop: "0.5rem" }}>
                   <button
                     type="submit"
                     disabled={busy}
-                    className="w-full bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-700 hover:to-violet-700 disabled:from-slate-400 disabled:to-slate-500 disabled:cursor-not-allowed text-white font-bold py-4 rounded-xl transition-all transform hover:scale-105 active:scale-95 shadow-lg shadow-indigo-500/30 disabled:shadow-none hover:shadow-xl hover:shadow-indigo-500/40"
+                    className="btn"
+                    style={{
+                      width: "100%",
+                      padding: "1rem",
+                      background: busy
+                        ? "linear-gradient(135deg, #94a3b8, #cbd5e1)"
+                        : "linear-gradient(135deg, var(--accent-start), var(--accent-end))",
+                      color: "white",
+                      fontWeight: "bold",
+                      borderRadius: "0.75rem",
+                      border: "none",
+                      cursor: busy ? "not-allowed" : "pointer",
+                      fontSize: "1.125rem",
+                      boxShadow: busy
+                        ? "none"
+                        : "0 4px 14px rgba(79, 70, 229, 0.3)",
+                      transition: "all 0.2s ease",
+                    }}
+                    onMouseEnter={(e) => {
+                      if (!busy) {
+                        e.target.style.transform = "translateY(-2px)";
+                        e.target.style.boxShadow =
+                          "0 6px 20px rgba(79, 70, 229, 0.4)";
+                      }
+                    }}
+                    onMouseLeave={(e) => {
+                      if (!busy) {
+                        e.target.style.transform = "translateY(0)";
+                        e.target.style.boxShadow =
+                          "0 4px 14px rgba(79, 70, 229, 0.3)";
+                      }
+                    }}
                   >
                     {busy ? (
-                      <span className="flex items-center justify-center gap-3">
-                        <span className="inline-block w-5 h-5 border-3 border-white border-t-transparent rounded-full animate-spin"></span>
+                      <span
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          gap: "0.75rem",
+                        }}
+                      >
+                        <span
+                          style={{
+                            display: "inline-block",
+                            width: "1.25rem",
+                            height: "1.25rem",
+                            border: "2px solid white",
+                            borderTopColor: "transparent",
+                            borderRadius: "50%",
+                            animation: "spin 1s linear infinite",
+                          }}
+                        />
                         {isSignup
                           ? "Creating your account..."
                           : "Signing you in..."}
                       </span>
                     ) : (
-                      <span className="text-lg">
-                        {isSignup ? "Create Account" : "Sign In"}
-                      </span>
+                      <span>{isSignup ? "Create Account" : "Sign In"}</span>
                     )}
                   </button>
                 </div>
 
                 {/* Divider */}
-                <div className="relative my-8">
-                  <div className="absolute inset-0 flex items-center">
-                    <div className="w-full border-t-2 border-slate-200"></div>
+                <div
+                  style={{
+                    position: "relative",
+                    margin: "2rem 0",
+                  }}
+                >
+                  <div
+                    style={{
+                      position: "absolute",
+                      inset: 0,
+                      display: "flex",
+                      alignItems: "center",
+                    }}
+                  >
+                    <div
+                      style={{
+                        width: "100%",
+                        borderTop: "2px solid #e2e8f0",
+                      }}
+                    />
                   </div>
-                  <div className="relative flex justify-center text-sm">
-                    <span className="px-4 bg-white text-slate-500 font-semibold">
+                  <div
+                    style={{
+                      position: "relative",
+                      display: "flex",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <span
+                      style={{
+                        padding: "0 1rem",
+                        background: "white",
+                        fontSize: "0.875rem",
+                        color: "var(--muted)",
+                        fontWeight: "600",
+                      }}
+                    >
                       {isSignup
                         ? "Already have an account?"
                         : "Don't have an account?"}
@@ -302,7 +617,29 @@ export default function Auth() {
                     setNotice("");
                     setForm({ email: "", password: "" });
                   }}
-                  className="w-full border-2 border-slate-200 hover:border-indigo-400 hover:bg-gradient-to-r hover:from-indigo-50 hover:to-violet-50 text-slate-700 hover:text-indigo-700 font-bold py-4 rounded-xl transition-all transform hover:scale-105 active:scale-95"
+                  className="btn-ghost"
+                  style={{
+                    width: "100%",
+                    padding: "1rem",
+                    border: "2px solid #e2e8f0",
+                    background: "transparent",
+                    color: "var(--text)",
+                    fontWeight: "bold",
+                    borderRadius: "0.75rem",
+                    cursor: "pointer",
+                    fontSize: "1rem",
+                    transition: "all 0.2s ease",
+                  }}
+                  onMouseEnter={(e) => {
+                    e.target.style.borderColor = "var(--accent-start)";
+                    e.target.style.background = "rgba(79, 70, 229, 0.05)";
+                    e.target.style.color = "var(--accent-start)";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.target.style.borderColor = "#e2e8f0";
+                    e.target.style.background = "transparent";
+                    e.target.style.color = "var(--text)";
+                  }}
                 >
                   {isSignup
                     ? "Sign in to existing account"
@@ -314,12 +651,30 @@ export default function Auth() {
         </div>
 
         {/* Footer */}
-        <div className="mt-8 text-center space-y-3">
-          <p className="text-xs text-slate-500 leading-relaxed px-4">
+        <div
+          className="footer"
+          style={{
+            marginTop: "2rem",
+            textAlign: "center",
+          }}
+        >
+          <p
+            style={{
+              fontSize: "0.75rem",
+              color: "var(--muted)",
+              lineHeight: "1.6",
+              padding: "0 1rem",
+              marginBottom: "0.75rem",
+            }}
+          >
             By continuing, you agree to SkillSync's{" "}
             <a
               href="#"
-              className="text-indigo-600 hover:text-indigo-700 font-semibold underline decoration-indigo-200 hover:decoration-indigo-400 transition-colors"
+              style={{
+                color: "var(--accent-start)",
+                fontWeight: "600",
+                textDecoration: "underline",
+              }}
               onClick={(e) => e.preventDefault()}
             >
               Terms of Service
@@ -327,16 +682,35 @@ export default function Auth() {
             and{" "}
             <a
               href="#"
-              className="text-indigo-600 hover:text-indigo-700 font-semibold underline decoration-indigo-200 hover:decoration-indigo-400 transition-colors"
+              style={{
+                color: "var(--accent-start)",
+                fontWeight: "600",
+                textDecoration: "underline",
+              }}
               onClick={(e) => e.preventDefault()}
             >
               Privacy Policy
             </a>
           </p>
-          <p className="text-xs text-slate-400 font-medium">
+          <p
+            style={{
+              fontSize: "0.75rem",
+              color: "#94a3b8",
+              fontWeight: "500",
+            }}
+          >
             © 2025 KingLord Corp. All Rights Reserved.
           </p>
         </div>
+
+        {/* Add keyframe animation for spinner */}
+        <style>
+          {`
+            @keyframes spin {
+              to { transform: rotate(360deg); }
+            }
+          `}
+        </style>
       </div>
     </div>
   );
