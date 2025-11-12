@@ -48,7 +48,7 @@ export default function SkillForm({ onAdd, disabled }) {
   return (
     <form onSubmit={handleSubmit} className="skill-form">
       {/* Skill Name */}
-      <div className="form-row" style={{ flex: "2 1 300px" }}>
+      <div className="form-row" style={{ flex: "2 1" }}>
         <label className="form-label">Skill Name</label>
         <input
           type="text"
