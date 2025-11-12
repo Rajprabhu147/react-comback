@@ -453,6 +453,9 @@ textarea:focus {
 
 /* src/App.css */
 @media (max-width: 639px) {
+  h1 {
+    font-size: 1.5rem;
+  }
   .heroBanner {
     padding: 0;
   }
@@ -478,11 +481,14 @@ textarea:focus {
   }
   .nav-btn {
     padding: 0.5rem 1rem;
-    font-size: 0.875rem;
+    font-size: 0.5rem;
   }
 }
 
 @media (min-width: 640px) and (max-width: 1023px) {
+  h1 {
+    font-size: 2.5rem;
+  }
   .heroBanner {
     padding: 2rem 1rem;
   }
@@ -495,7 +501,7 @@ textarea:focus {
   }
   .nav-btn {
     padding: 0.5rem 1.25rem;
-    font-size: 0.9rem;
+    font-size: 0.5rem;
   }
   .user-info {
     font-size: 0.85rem;
@@ -503,6 +509,9 @@ textarea:focus {
 }
 
 @media (min-width: 1024px) {
+  h1 {
+    font-size: 3.5rem;
+  }
   .heroBanner {
     padding: 3rem 2rem;
   }
@@ -519,7 +528,7 @@ textarea:focus {
     font-size: 0.75rem;
   }
 }
-/* 
+
 @media (max-width: 768px) {
   .app { 
     padding: 1rem; 
@@ -553,6 +562,9 @@ textarea:focus {
   .page-title {
     font-size: 1.75rem;
   }
+
+
+  
   
   .section-header {
     font-size: 1.25rem;
@@ -567,4 +579,4 @@ textarea:focus {
   .skill-top h4 {
     font-size: 1rem;
   }
-} */
+}

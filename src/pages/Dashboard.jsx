@@ -235,7 +235,7 @@ export default function Dashboard() {
               👋
             </div>
             <div>
-              <h1 style={{ fontSize: "2.5rem", fontWeight: "bold", margin: 0 }}>
+              <h1 style={{ fontWeight: "bold", margin: 0 }}>
                 Welcome back, {displayName}!
               </h1>
               <p
