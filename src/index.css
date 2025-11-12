@@ -572,6 +572,9 @@ textarea:focus {
 }
 
 @media (max-width: 640px) {
+  .card {
+    text-align: center;
+  }
   .skill-card {
     padding: 1rem;
   }
