@@ -51,6 +51,7 @@ export function useAddSkill() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["skills", user?.id] });
+      queryClient.refetchQueries({ queryKey: ["skills", user?.id] });
     },
     onError: (err) => {
       console.error("useAddSkill onError:", err);
