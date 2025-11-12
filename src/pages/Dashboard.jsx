@@ -13,6 +13,27 @@ export default function Dashboard() {
   const [busyAdd, setBusyAdd] = useState(false);
   const [busyDeleteId, setBusyDeleteId] = useState(null);
 
+  // Helper function to convert skill level to percentage
+  const levelToPercentage = (level) => {
+    // If it's already a number, return it
+    if (typeof level === "number") return level;
+
+    // Convert string to number if possible
+    const numLevel = Number(level);
+    if (!isNaN(numLevel)) return numLevel;
+
+    // Map text levels to percentages
+    const levelMap = {
+      beginner: 25,
+      intermediate: 50,
+      advanced: 75,
+      expert: 95,
+    };
+
+    const lowerLevel = String(level).toLowerCase();
+    return levelMap[lowerLevel] || 0;
+  };
+
   if (userLoading) {
     return (
       <div
@@ -119,14 +140,35 @@ export default function Dashboard() {
     }
   };
 
-  // Calculate stats
-  const totalSkills = skills.length;
+  // Calculate stats - FIXED to handle both text and numeric levels
+  const totalSkills = Array.isArray(skills) ? skills.length : 0;
+
+  // Calculate average level - convert all levels to percentages first
   const avgLevel =
     totalSkills > 0
-      ? Math.round(skills.reduce((sum, s) => sum + s.level, 0) / totalSkills)
+      ? Math.round(
+          skills.reduce((sum, skill) => {
+            const level = levelToPercentage(skill.level);
+            return sum + level;
+          }, 0) / totalSkills
+        )
       : 0;
-  const expertSkills = skills.filter((s) => s.level >= 80).length;
-  const learningSkills = skills.filter((s) => s.level < 50).length;
+
+  // Count expert skills (level >= 80 or "Expert")
+  const expertSkills = Array.isArray(skills)
+    ? skills.filter((skill) => {
+        const level = levelToPercentage(skill.level);
+        return level >= 80;
+      }).length
+    : 0;
+
+  // Count learning skills (level < 50 or "Beginner")
+  const learningSkills = Array.isArray(skills)
+    ? skills.filter((skill) => {
+        const level = levelToPercentage(skill.level);
+        return level < 50;
+      }).length
+    : 0;
 
   return (
     <div>
@@ -136,13 +178,13 @@ export default function Dashboard() {
           background:
             "linear-gradient(135deg, var(--accent-start), var(--accent-end))",
           borderRadius: "1rem",
+          padding: "2.5rem 2rem",
           marginBottom: "2rem",
           color: "white",
           boxShadow: "0 12px 32px rgba(37,99,235,0.3)",
           position: "relative",
           overflow: "hidden",
         }}
-        className="heroBanner"
       >
         {/* Decorative circles */}
         <div

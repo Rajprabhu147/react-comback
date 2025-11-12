@@ -1,37 +1,48 @@
 // src/components/SkillItem.jsx
 export default function SkillItem({ skill, onDelete, isDeleting }) {
-  // Convert text level to percentage for display
-  const getPercentageFromText = (levelText) => {
-    const text = String(levelText).toLowerCase();
-    if (text.includes("beginner")) return 25;
-    if (text.includes("intermediate")) return 60;
-    if (text.includes("advanced")) return 85;
-    // If it's already a number, use it
-    return isNaN(Number(levelText)) ? 50 : Number(levelText);
-  };
-
+  // Convert level to display info - matches Dashboard and SkillForm logic
   const getLevelInfo = (levelText) => {
-    const percentage = getPercentageFromText(levelText);
+    const text = String(levelText).toLowerCase();
 
-    if (percentage < 33)
+    if (text.includes("beginner")) {
       return {
         text: "Beginner",
         color: "#ef4444",
         emoji: "🌱",
         percentage: 25,
       };
-    if (percentage < 66)
+    }
+    if (text.includes("intermediate")) {
       return {
         text: "Intermediate",
         color: "#3b82f6",
         emoji: "⚡",
-        percentage: 60,
+        percentage: 50,
       };
+    }
+    if (text.includes("advanced")) {
+      return {
+        text: "Advanced",
+        color: "#8b5cf6",
+        emoji: "🚀",
+        percentage: 75,
+      };
+    }
+    if (text.includes("expert")) {
+      return {
+        text: "Expert",
+        color: "#059669",
+        emoji: "⭐",
+        percentage: 95,
+      };
+    }
+
+    // Fallback for any other values
     return {
-      text: "Advanced",
-      color: "#059669",
-      emoji: "⭐",
-      percentage: 85,
+      text: "Intermediate",
+      color: "#3b82f6",
+      emoji: "⚡",
+      percentage: 50,
     };
   };
 
@@ -78,7 +89,7 @@ export default function SkillItem({ skill, onDelete, isDeleting }) {
             }}
           >
             {skill.name}
-            <span style={{ fontSize: "1rem" }}>{levelInfo.emoji}</span>
+            <span style={{ fontSize: "1.1rem" }}>{levelInfo.emoji}</span>
           </h4>
         </div>
 
@@ -105,7 +116,7 @@ export default function SkillItem({ skill, onDelete, isDeleting }) {
           display: "inline-flex",
           alignItems: "center",
           gap: "0.5rem",
-          padding: "0.375rem 0.75rem",
+          padding: "0.375rem 0.875rem",
           background: `${levelInfo.color}15`,
           color: levelInfo.color,
           borderRadius: "20px",
@@ -143,7 +154,7 @@ export default function SkillItem({ skill, onDelete, isDeleting }) {
               color: levelInfo.color,
             }}
           >
-            {levelInfo.text}
+            {levelInfo.percentage}%
           </span>
         </div>
 
@@ -179,7 +190,7 @@ export default function SkillItem({ skill, onDelete, isDeleting }) {
           {formatDate(skill.created_at)}
         </span>
 
-        {levelInfo.percentage >= 85 && (
+        {levelInfo.percentage >= 80 && (
           <span
             style={{
               padding: "0.25rem 0.5rem",

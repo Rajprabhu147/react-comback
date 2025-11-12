@@ -3,38 +3,52 @@ import { useState } from "react";
 
 export default function SkillForm({ onAdd, disabled }) {
   const [name, setName] = useState("");
-  const [level, setLevel] = useState(50);
+  const [level, setLevel] = useState("Intermediate");
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!name.trim()) return;
 
-    // Convert percentage to text level for database
-    const levelText = getLevelText(level);
-    onAdd(name, levelText);
+    onAdd(name, level);
 
     setName("");
-    setLevel(50);
+    setLevel("Intermediate");
   };
 
-  const getLevelText = (value) => {
-    if (value < 33) return "Beginner";
-    if (value < 66) return "Intermediate";
-    return "Advanced";
-  };
+  const levelOptions = [
+    {
+      value: "Beginner",
+      label: "🌱 Beginner",
+      color: "#ef4444",
+      description: "Just starting out (25%)",
+    },
+    {
+      value: "Intermediate",
+      label: "⚡ Intermediate",
+      color: "#3b82f6",
+      description: "Building confidence (50%)",
+    },
+    {
+      value: "Advanced",
+      label: "🚀 Advanced",
+      color: "#8b5cf6",
+      description: "Proficient and capable (75%)",
+    },
+    {
+      value: "Expert",
+      label: "⭐ Expert",
+      color: "#059669",
+      description: "Mastered the skill (95%)",
+    },
+  ];
 
-  const getLevelLabel = (value) => {
-    if (value < 25) return "Beginner";
-    if (value < 50) return "Learning";
-    if (value < 75) return "Intermediate";
-    if (value < 90) return "Advanced";
-    return "Expert";
-  };
+  const currentLevel =
+    levelOptions.find((opt) => opt.value === level) || levelOptions[1];
 
   return (
     <form onSubmit={handleSubmit} className="skill-form">
-      {/* Skill Name - Full Width */}
-      <div className="form-row full-width">
+      {/* Skill Name */}
+      <div className="form-row" style={{ flex: "2 1 300px" }}>
         <label className="form-label">Skill Name</label>
         <input
           type="text"
@@ -44,70 +58,54 @@ export default function SkillForm({ onAdd, disabled }) {
           className="form-input"
           disabled={disabled}
           required
+          style={{
+            fontSize: "0.95rem",
+            fontWeight: "500",
+          }}
         />
       </div>
 
-      {/* Level Slider - Takes remaining space */}
-      <div className="form-row" style={{ flex: "2 1 300px" }}>
-        <label className="form-label">
-          Proficiency Level: {level}% ({getLevelLabel(level)})
-        </label>
-        <div
+      {/* Level Dropdown */}
+      <div className="form-row" style={{ flex: "1 1 240px" }}>
+        <label className="form-label">Proficiency Level</label>
+        <select
+          value={level}
+          onChange={(e) => setLevel(e.target.value)}
+          className="form-select"
+          disabled={disabled}
           style={{
-            display: "flex",
-            alignItems: "center",
-            gap: "1rem",
-            background: "white",
-            padding: "0.75rem 1rem",
-            borderRadius: "8px",
-            border: "1px solid #e2e8f0",
+            fontSize: "0.95rem",
+            fontWeight: "500",
+            cursor: "pointer",
+            paddingRight: "2.5rem",
+            backgroundImage: `linear-gradient(45deg, transparent 50%, ${currentLevel.color} 50%), linear-gradient(135deg, ${currentLevel.color} 50%, transparent 50%)`,
+            backgroundPosition:
+              "calc(100% - 20px) calc(1em + 2px), calc(100% - 15px) calc(1em + 2px)",
+            backgroundSize: "5px 5px, 5px 5px",
+            backgroundRepeat: "no-repeat",
           }}
         >
-          <input
-            type="range"
-            min="0"
-            max="100"
-            step="5"
-            value={level}
-            onChange={(e) => setLevel(Number(e.target.value))}
-            disabled={disabled}
-            style={{
-              flex: 1,
-              height: "8px",
-              borderRadius: "4px",
-              background: `linear-gradient(to right, var(--accent-start) 0%, var(--accent-end) ${level}%, #e2e8f0 ${level}%, #e2e8f0 100%)`,
-              outline: "none",
-              appearance: "none",
-              WebkitAppearance: "none",
-              cursor: "pointer",
-            }}
-          />
-          <div
-            style={{
-              minWidth: "50px",
-              textAlign: "center",
-              fontWeight: "bold",
-              color: "var(--accent-start)",
-              fontSize: "1.1rem",
-            }}
-          >
-            {level}%
-          </div>
-        </div>
+          {levelOptions.map((option) => (
+            <option key={option.value} value={option.value}>
+              {option.label}
+            </option>
+          ))}
+        </select>
 
-        {/* Visual indicator of what will be saved */}
+        {/* Level description */}
         <div
           style={{
             marginTop: "0.5rem",
-            padding: "0.5rem",
-            background: "#f1f5f9",
+            padding: "0.5rem 0.75rem",
+            background: `${currentLevel.color}10`,
             borderRadius: "6px",
-            fontSize: "0.85rem",
-            color: "var(--muted)",
-            textAlign: "center",
+            fontSize: "0.8rem",
+            color: currentLevel.color,
+            fontWeight: "500",
+            border: `1px solid ${currentLevel.color}30`,
           }}
         >
-          Will be saved as: <strong>{getLevelText(level)}</strong>
+          {currentLevel.description}
         </div>
       </div>
 
@@ -117,57 +115,42 @@ export default function SkillForm({ onAdd, disabled }) {
           type="submit"
           className="btn"
           disabled={disabled || !name.trim()}
-          style={{ minWidth: "140px" }}
+          style={{
+            minWidth: "140px",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: "0.5rem",
+          }}
         >
-          {disabled ? "Adding..." : "Add Skill"}
+          {disabled ? (
+            <>
+              <span
+                style={{
+                  width: "14px",
+                  height: "14px",
+                  border: "2px solid white",
+                  borderTopColor: "transparent",
+                  borderRadius: "50%",
+                  animation: "spin 0.6s linear infinite",
+                }}
+              />
+              Adding...
+            </>
+          ) : (
+            <>
+              <span>➕</span>
+              Add Skill
+            </>
+          )}
         </button>
       </div>
 
-      {/* Custom range slider styles */}
+      {/* Spinning animation */}
       <style>{`
-        input[type="range"]::-webkit-slider-thumb {
-          appearance: none;
-          width: 20px;
-          height: 20px;
-          border-radius: 50%;
-          background: linear-gradient(135deg, var(--accent-start), var(--accent-end));
-          cursor: pointer;
-          box-shadow: 0 2px 8px rgba(37,99,235,0.4);
-          transition: transform 0.1s ease;
-        }
-        
-        input[type="range"]::-webkit-slider-thumb:hover {
-          transform: scale(1.1);
-          box-shadow: 0 4px 12px rgba(37,99,235,0.5);
-        }
-        
-        input[type="range"]::-webkit-slider-thumb:active {
-          transform: scale(0.95);
-        }
-        
-        input[type="range"]::-moz-range-thumb {
-          width: 20px;
-          height: 20px;
-          border: none;
-          border-radius: 50%;
-          background: linear-gradient(135deg, var(--accent-start), var(--accent-end));
-          cursor: pointer;
-          box-shadow: 0 2px 8px rgba(37,99,235,0.4);
-          transition: transform 0.1s ease;
-        }
-        
-        input[type="range"]::-moz-range-thumb:hover {
-          transform: scale(1.1);
-          box-shadow: 0 4px 12px rgba(37,99,235,0.5);
-        }
-        
-        input[type="range"]:disabled {
-          opacity: 0.5;
-          cursor: not-allowed;
-        }
-        
-        input[type="range"]:disabled::-webkit-slider-thumb {
-          cursor: not-allowed;
+        @keyframes spin {
+          from { transform: rotate(0deg); }
+          to { transform: rotate(360deg); }
         }
       `}</style>
     </form>
