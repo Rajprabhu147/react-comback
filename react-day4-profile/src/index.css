@@ -1,0 +1,19 @@
+:root {
+  --bg: #f6f8fa;
+  --card: #fff;
+  --accent: #0066ff;
+}
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  background: var(--bg);
+  color: #111;
+}
+.app { max-width: 900px; margin: 0 auto; padding: 20px; }
+.nav { display: flex; gap: 12px; margin-bottom: 12px; }
+.nav a { color: #555; text-decoration: none; padding: 6px 10px; border-radius: 6px; }
+.nav a.active { background: var(--accent); color: white; }
+.main { background: var(--card); padding: 16px; border-radius: 8px; box-shadow: 0 6px 18px rgba(0,0,0,0.06); }
+input, textarea { padding: 8px; border: 1px solid #ddd; border-radius: 6px; width: 100%; box-sizing: border-box; }
+button { background: var(--accent); color: white; border: none; padding: 8px 12px; border-radius: 6px; cursor: pointer; }
+button:disabled { opacity: 0.6; cursor: not-allowed; }
