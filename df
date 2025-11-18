@@ -1,0 +1,94 @@
+[33m1c8c8a5[m[33m ([m[1;31morigin/backup-before-merge[m[33m)[m addign env to gitIgnore
+[33m26ebdad[m completly finished Login screen
+[33mc5c2828[m  styling up
+[33m285ff46[m fixing the login screen
+[33m0ad8972[m[33m ([m[1;32morigin/main[m[33m)[m fixing the login screen
+[33ma970fb8[m fixing the login screen
+[33m1251042[m fixing the login screen
+[33m2f77b3a[m fixing the login screen
+[33m09e5732[m fixing the login screen
+[33mbc05932[m fixing the login screen
+[33m32be797[m Adding Logo for skillSync
+[33m954cc25[m Adding Logo for skillSync
+[33m12d6331[m Tailwind css upgrading StyleComponents
+[33mea29c09[m managing database functionality
+[33m7e509ec[m managing database functionality
+[33m09589d3[m managing database functionality
+[33m5a42a26[m managing database functionality
+[33m2e9663a[m managing database functionality
+[33m0382ef2[m managing database functionality
+[33m16f120e[m managing database functionality
+[33m5f3739f[m managing database functionality
+[33m6809cc2[m managing database functionality
+[33m2625c81[m managing database functionality
+[33mfd47d64[m managing database functionality
+[33m7e022b2[m managing database functionality
+[33ma44ead6[m managing Login
+[33m2db5726[m finishing up
+[33mdb18355[m finishing up
+[33m8f49c25[m styling
+[33mabe44c9[m Step 12 — Components
+[33mfd2d9aa[m Step 8 — Create Authentication Page
+[33m1980391[m Step 7 — Create User Context
+[33m825efef[m Step 6 — Build App Routes
+[33mf3e9514[m Step 5 — Configure React Query + Routing + Context
+[33m0ef570c[m supabase setup and env
+[33macfb5ee[m setting up day6
+[33m118c13f[m final push
+[33m58186ed[m reviewing code
+[33m6f99a19[m Adding Readme
+[33mf6a8663[m final push
+[33mee19f26[m cleaning up css
+[33m79ed1ea[m cleaning up and styling
+[33mb93e943[m finishing up
+[33m96a71d5[m bugs fixs: display ticket
+[33m1f005f6[m fixing error: bad imports
+[33m4d6f9dd[m bug fixing day5
+[33m3015c6b[m TicketForm
+[33md833354[m ticket manager
+[33m7503441[m Setting up TicketManager
+[33m6d925e5[m finised useTicket[cutstomHooks]
+[33m5191529[m React Query hooks
+[33mec2beb0[m creating custom hooks for state and Api
+[33m32e48ac[m Creating Custom Hooks for data manipulation
+[33m8ff3d21[m Declaring State management, Context Api & React Query
+[33m85def05[m second commit - setting files
+[33m5b60c14[m Setting up day5
+[33m53f4d56[m Final Commit
+[33mbff1db5[m after code review
+[33me960222[m  final commit for code review
+[33m3fbe52f[m Adding Context Api
+[33m53e0f97[m[33m ([m[1;31morigin/feat/profiles-context-localstorage[m[33m, [m[1;32mfeat/profiles-context-localstorage[m[33m)[m Merge pull request #2 from Rajprabhu147/main
+[33mf599a04[m polish ProfilesContext data validation, focus input after submit, unify id typing
+[33m325c366[m Merge pull request #1 from Rajprabhu147/feat/profiles-context-localstorage
+[33ma7d072f[m feat(profiles): add ProfilesContext + localStorage persistence, improved AddProfile UX, generateId util, accessibility tweaks
+[33m1eec683[m wrapping Profile Provider
+[33mad51686[m Creating Profile Context + hook
+[33mbcb76ba[m Creating Profile Context + hook
+[33m97b1d8f[m  useContext  for profiles _ preset to local strorage + improved form ux
+[33m7540558[m Day4: Profile Manager - routing + controlled Add Profile form + view page
+[33m280e7d1[m Day4: Profile Manager - routing + controlled Add Proofile form + view page
+[33m848f25d[m Add profile modification for View Profile
+[33m19ca1e5[m Styling for Profiles
+[33me2e7daa[m View Profile Page to display
+[33m223b481[m Show Profiles
+[33m30e294e[m Controlled form - AddProfile
+[33m09df1b3[m folder structring, routing all pages, Adding State Management
+[33md3d45d4[m First commit - Setting up Project
+[33m5295f58[m Surfacing error message
+[33md0209d7[m Adding Delete All with window.confirm()
+[33mdbfb8f5[m TodoList FormValidation
+[33mbe6f089[m Setting up Day 4
+[33mdeaf1b2[m Setting up Day-4
+[33me7aa488[m Make the App viually appealing
+[33m859a6e7[m Bonus - Developer Dashboard to check Avilability
+[33m6b0be27[m Mini Challange - Adding in Local storage for tasks after refresh
+[33m1c8e694[m underStanding CRUD Concepts
+[33m1100999[m REACT Foundation Day3 - Todo List [Crud Operations]
+[33m7fbdcc7[m Finished Mini Challanges Day2
+[33mb92535d[m updated for remembrance
+[33m667ac69[m Tweaking Props for remambrance
+[33m497b736[m Day 2: React Fundamentals - JSK + Components
+[33m5cc0ba2[m small changes
+[33m9fb62ab[m Day 1: Setup + JS warm-up exercises
+[33mb82f60e[m Initial commit
