@@ -10,6 +10,7 @@ import "../../styles/components.css";
  * It displays:
  * - The app title/logo
  * - The logged-in user's email and avatar
+ *
  * - A Sign Out button
  */
 
