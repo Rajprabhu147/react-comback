@@ -1,0 +1,221 @@
+/* ====================================
+   404 NOT FOUND PAGE
+   ==================================== */
+
+.notfound-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: linear-gradient(180deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+}
+
+.notfound-content {
+  max-width: 600px;
+  width: 100%;
+  text-align: center;
+}
+
+/* ====================================
+   ANIMATION
+   ==================================== */
+
+.notfound-animation {
+  position: relative;
+  margin-bottom: 40px;
+}
+
+.wave-container {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.wave {
+  font-size: 3rem;
+  animation: wave-motion 2s ease-in-out infinite;
+  display: inline-block;
+}
+
+.wave-delay-1 {
+  animation-delay: 0.2s;
+}
+
+.wave-delay-2 {
+  animation-delay: 0.4s;
+}
+
+@keyframes wave-motion {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  25% {
+    transform: translateY(-20px) rotate(-10deg);
+  }
+  75% {
+    transform: translateY(-10px) rotate(10deg);
+  }
+}
+
+.notfound-number {
+  font-size: 8rem;
+  font-weight: 900;
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: 1;
+  letter-spacing: -0.05em;
+  animation: float 3s ease-in-out infinite;
+  text-shadow: 0 10px 30px rgba(5, 102, 141, 0.3);
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+/* ====================================
+   CONTENT
+   ==================================== */
+
+.notfound-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 16px;
+  animation: fadeInUp 0.6s ease-out 0.2s backwards;
+}
+
+.notfound-description {
+  font-size: 1.1rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin-bottom: 32px;
+  animation: fadeInUp 0.6s ease-out 0.4s backwards;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ====================================
+   ACTIONS
+   ==================================== */
+
+.notfound-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 48px;
+  animation: fadeInUp 0.6s ease-out 0.6s backwards;
+}
+
+/* ====================================
+   SUGGESTIONS
+   ==================================== */
+
+.notfound-suggestions {
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  padding: 32px;
+  box-shadow: var(--shadow-md);
+  animation: fadeInUp 0.6s ease-out 0.8s backwards;
+}
+
+.suggestions-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 20px;
+}
+
+.suggestions-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 12px;
+}
+
+.suggestion-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 16px;
+  background: var(--bg-primary);
+  border-radius: var(--radius-md);
+  color: var(--text-secondary);
+  text-decoration: none;
+  transition: var(--transition);
+  border: 2px solid transparent;
+}
+
+.suggestion-link:hover {
+  background: var(--primary-light);
+  color: var(--primary);
+  border-color: var(--primary);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-sm);
+}
+
+.suggestion-icon {
+  font-size: 1.5rem;
+}
+
+/* ====================================
+   RESPONSIVE
+   ==================================== */
+
+@media (max-width: 768px) {
+  .notfound-number {
+    font-size: 5rem;
+  }
+
+  .notfound-title {
+    font-size: 1.5rem;
+  }
+
+  .notfound-description {
+    font-size: 1rem;
+  }
+
+  .notfound-suggestions {
+    padding: 24px;
+  }
+
+  .suggestions-list {
+    grid-template-columns: 1fr;
+  }
+
+  .wave {
+    font-size: 2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .notfound-number {
+    font-size: 4rem;
+  }
+
+  .notfound-actions {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .notfound-actions .btn {
+    width: 100%;
+  }
+}
