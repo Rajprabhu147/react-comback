@@ -1,20 +1,21 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { supabase } from "../lib/supabaseClient.js";
+import { supabase } from "../lib/supabaseClient";
 
-const UserContext = createContext();
+const UserContext = createContext(undefined);
 
 export const UserProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Get inittal session
-
+    // Get initial session
     const initializeAuth = async () => {
       try {
         const {
           data: { session },
+          error,
         } = await supabase.auth.getSession();
+        if (error) throw error;
         setUser(session?.user ?? null);
       } catch (error) {
         console.error("Error fetching session:", error);
@@ -22,15 +23,17 @@ export const UserProvider = ({ children }) => {
         setLoading(false);
       }
     };
+
     initializeAuth();
 
-    //Listen for auth changes
+    // Listen for auth changes
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange(async (_event, session) => {
       setUser(session?.user ?? null);
       setLoading(false);
     });
+
     return () => {
       subscription?.unsubscribe();
     };
@@ -53,6 +56,7 @@ export const UserProvider = ({ children }) => {
     if (error) throw error;
     return data;
   };
+
   const signOut = async () => {
     const { error } = await supabase.auth.signOut();
     if (error) throw error;
@@ -66,12 +70,13 @@ export const UserProvider = ({ children }) => {
     signIn,
     signOut,
   };
+
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
 };
 
 export const useUser = () => {
   const context = useContext(UserContext);
-  if (!context) {
+  if (context === undefined) {
     throw new Error("useUser must be used within UserProvider");
   }
   return context;

@@ -8,8 +8,11 @@ import { useRealtimeSubscription } from "../hooks/useRealtime";
 import { useUIStore } from "../store/uiStore";
 
 const Dashboard = () => {
+  // Subscribe to realtime updates
   useRealtimeSubscription();
+
   const sidebarOpen = useUIStore((state) => state.sidebarOpen);
+  const toggleSidebar = useUIStore((state) => state.toggleSidebar);
 
   return (
     <div className="app">
@@ -27,10 +30,7 @@ const Dashboard = () => {
 
       {/* Mobile sidebar overlay */}
       {sidebarOpen && (
-        <div
-          className="sidebar-overlay"
-          onClick={() => useUIStore.getState().toggleSidebar()}
-        />
+        <div className="sidebar-overlay" onClick={toggleSidebar} />
       )}
     </div>
   );
