@@ -4,7 +4,7 @@ import Input from "../components/Shared/Input";
 import Button from "../components/Shared/Button";
 import EmailDropdown from "../components/Auth/EmailDropdown";
 
-// import "../styles/login.css";
+import "../styles/login.css";
 
 const Login = () => {
   // From UserContext: functions to sign in, sign up, or use Google OAuth
