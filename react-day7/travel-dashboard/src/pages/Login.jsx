@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useUser } from "../context/UserContext";
 import Input from "../components/Shared/Input";
 import Button from "../components/Shared/Button";
+import EmailDropdown from "../components/Auth/EmailDropdown";
+
 // import "../styles/login.css";
 
 const Login = () => {
@@ -174,7 +176,7 @@ const Login = () => {
 
         {/* Auth Form */}
         <form onSubmit={handleSubmit} className="login-form">
-          <Input
+          {/* <Input
             label="Email"
             name="email"
             type="email"
@@ -183,6 +185,11 @@ const Login = () => {
             error={errors.email}
             placeholder="your@email.com"
             autoComplete="email"
+          /> */}
+          <EmailDropdown
+            value={formData.email}
+            onChange={handleChange}
+            error={errors.email}
           />
 
           <Input
