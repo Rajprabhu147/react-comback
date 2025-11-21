@@ -3,8 +3,8 @@
    ==================================== */
 
 .sidebar {
-  width: 400px;
-  min-width: 400px;
+  width: 300px;
+  min-width: 300px;
   background: var(--surface);
   border-right: 1px solid var(--bg-secondary);
   height: 100vh;
