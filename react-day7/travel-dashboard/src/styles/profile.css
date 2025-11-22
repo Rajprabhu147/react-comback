@@ -334,4 +334,235 @@
 }
 
 .info-title {
+  font-weight: 600;color: var(--text-primary);
+  margin-bottom: 2px;
+}
+
+.info-description {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+/* Toggle Switch */
+.toggle-switch {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 26px;
+}
+
+.toggle-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.toggle-slider {
+  position: absolute;
+  cursor: pointer;
+  inset: 0;
+  background: var(--bg-secondary);
+  transition: var(--transition);
+  border-radius: 26px;
+}
+
+.toggle-slider::before {
+  position: absolute;
+  content: "";
+  height: 20px;
+  width: 20px;
+  left: 3px;
+  bottom: 3px;
+  background: white;
+  transition: var(--transition);
+  border-radius: 50%;
+}
+
+.toggle-switch input:checked + .toggle-slider {
+  background: var(--primary);
+}
+
+.toggle-switch input:checked + .toggle-slider::before {
+  transform: translateX(24px);
+}
+
+/* ====================================
+   ACTIVITY LIST
+   ==================================== */
+
+.activity-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.activity-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px;
+  background: var(--bg-primary);
+  border-radius: var(--radius-md);
+  transition: var(--transition);
+}
+
+.activity-item:hover {
+  background: var(--surface-hover);
+}
+
+.activity-icon {
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+
+.activity-details {
+  flex: 1;
+}
+
+.activity-title {
   font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 2px;
+}
+
+.activity-meta {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+.activity-badge {
+  padding: 4px 12px;
+  border-radius: var(--radius-sm);
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.activity-badge.active {
+  background: var(--accent-light);
+  color: var(--accent);
+}
+
+/* ====================================
+   DANGER ZONE
+   ==================================== */
+
+.danger-zone {
+  border: 2px solid var(--danger-light);
+}
+
+.danger-title {
+  color: var(--danger);
+}
+
+.danger-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.danger-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px;
+  background: var(--danger-light);
+  border-radius: var(--radius-md);
+  border: 1px solid transparent;
+  transition: var(--transition);
+}
+
+.danger-item:hover {
+  border-color: var(--danger);
+}
+
+.danger-info {
+  flex: 1;
+}
+
+.danger-item-title {
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+}
+
+.danger-item-description {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+.danger-modal {
+  max-width: 500px;
+}
+
+.warning-box {
+  padding: 16px;
+  background: var(--danger-light);
+  border-left: 4px solid var(--danger);
+  border-radius: var(--radius-md);
+  margin-bottom: 20px;
+}
+
+.warning-box p {
+  margin: 8px 0;
+  color: var(--text-primary);
+  font-size: 0.9rem;
+}
+
+.warning-box strong {
+  color: var(--danger);
+}
+
+/* ====================================
+   RESPONSIVE
+   ==================================== */
+
+@media (max-width: 768px) {
+  .profile-section {
+    padding: 20px;
+  }
+
+  .section-header {
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .action-buttons {
+    width: 100%;
+  }
+
+  .action-buttons .btn {
+    flex: 1;
+  }
+
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+
+  .avatar-upload {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .avatar-actions {
+    width: 100%;
+    align-items: center;
+  }
+
+  .avatar-actions .btn {
+    width: 100%;
+  }
+
+  .profile-stats {
+    grid-template-columns: 1fr;
+  }
+
+  .danger-item {
+    flex-direction: column;
+    gap: 16px;
+    align-items: flex-start;
+  }
+
+  .danger-item .btn {
+    width: 100%;
+  }
+}
