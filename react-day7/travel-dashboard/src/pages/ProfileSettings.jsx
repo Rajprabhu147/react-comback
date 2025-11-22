@@ -18,6 +18,7 @@ import "../styles/profile.css";
  * and provides UI to:
  * - View/update profile metadata (name, username, bio, etc.)
  * - Change password
+ *
  * - View device sessions
  * - Access destructive settings in the Danger Zone
  */
