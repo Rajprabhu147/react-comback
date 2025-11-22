@@ -1,0 +1,344 @@
+/* ====================================
+   NOTIFICATIONS PAGE
+   ==================================== */
+
+.notifications-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.notifications-layout {
+  display: grid;
+  grid-template-columns: 1fr 350px;
+  gap: 24px;
+}
+
+.notifications-main {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* ====================================
+   NOTIFICATION FILTERS
+   ==================================== */
+
+.notification-filters {
+  display: flex;
+  gap: 8px;
+  padding: 16px;
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+.filter-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  background: transparent;
+  border: 1px solid var(--bg-secondary);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: var(--transition);
+  color: var(--text-secondary);
+}
+
+.filter-btn:hover {
+  background: var(--surface-hover);
+  border-color: var(--primary);
+}
+
+.filter-btn.active {
+  background: var(--primary-light);
+  border-color: var(--primary);
+  color: var(--primary);
+  font-weight: 600;
+}
+
+.filter-label {
+  font-size: 0.9rem;
+}
+
+.filter-count {
+  font-size: 0.85rem;
+  padding: 2px 8px;
+  background: var(--bg-secondary);
+  border-radius: 12px;
+  min-width: 24px;
+  text-align: center;
+}
+
+.filter-btn.active .filter-count {
+  background: var(--primary);
+  color: white;
+}
+
+/* ====================================
+   NOTIFICATIONS LIST
+   ==================================== */
+
+.notifications-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.notification-item {
+  position: relative;
+  display: flex;
+  gap: 16px;
+  padding: 20px;
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition);
+  border-left: 4px solid transparent;
+}
+
+.notification-item:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateX(2px);
+}
+
+.notification-item.unread {
+  background: var(--primary-light);
+  border-left-color: var(--primary);
+}
+
+.notification-icon {
+  font-size: 1.5rem;
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-primary);
+  border-radius: 50%;
+}
+
+.notification-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.notification-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.notification-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.notification-time {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.notification-message {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  margin: 0 0 12px 0;
+}
+
+.notification-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.notification-action-btn {
+  padding: 6px 12px;
+  font-size: 0.85rem;
+  background: transparent;
+  border: 1px solid var(--bg-secondary);
+  border-radius: var(--radius-sm);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.notification-action-btn:hover {
+  background: var(--surface-hover);
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+.notification-action-btn.danger:hover {
+  border-color: var(--danger);
+  color: var(--danger);
+  background: var(--danger-light);
+}
+
+.unread-indicator {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 8px;
+  height: 8px;
+  background: var(--primary);
+  border-radius: 50%;
+  box-shadow: 0 0 8px var(--primary);
+}
+
+/* ====================================
+   EMPTY STATE
+   ==================================== */
+
+.notifications-empty {
+  text-align: center;
+  padding: 60px 20px;
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+.empty-icon {
+  font-size: 4rem;
+  margin-bottom: 16px;
+  opacity: 0.5;
+}
+
+.empty-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0 0 8px 0;
+}
+
+.empty-description {
+  font-size: 1rem;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+/* ====================================
+   NOTIFICATION SETTINGS SIDEBAR
+   ==================================== */
+
+.notifications-sidebar {
+  position: sticky;
+  top: 90px;
+  height: fit-content;
+}
+
+.notification-settings-card {
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  box-shadow: var(--shadow-md);
+}
+
+.settings-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0 0 4px 0;
+}
+
+.settings-description {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin: 0 0 20px 0;
+}
+
+.settings-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.setting-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px;
+  background: var(--bg-primary);
+  border-radius: var(--radius-md);
+  transition: var(--transition);
+}
+
+.setting-item:hover {
+  background: var(--surface-hover);
+}
+
+.setting-info {
+  flex: 1;
+  margin-right: 16px;
+}
+
+.setting-label {
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 2px;
+}
+
+.setting-description {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+.settings-tip {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px;
+  background: var(--accent-light);
+  border-radius: var(--radius-md);
+  margin-top: 16px;
+}
+
+.tip-icon {
+  font-size: 1.2rem;
+}
+
+.tip-text {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+/* ====================================
+   RESPONSIVE
+   ==================================== */
+
+@media (max-width: 1024px) {
+  .notifications-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .notifications-sidebar {
+    position: static;
+  }
+}
+
+@media (max-width: 768px) {
+  .notification-filters {
+    flex-wrap: wrap;
+  }
+
+  .filter-btn {
+    min-width: calc(50% - 4px);
+  }
+
+  .notification-item {
+    padding: 16px;
+  }
+
+  .notification-actions {
+    flex-direction: column;
+  }
+
+  .notification-action-btn {
+    width: 100%;
+  }
+}
