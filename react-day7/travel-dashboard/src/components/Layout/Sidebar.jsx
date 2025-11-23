@@ -9,6 +9,7 @@ import "../../styles/sidebar.css";
  * Sidebar component — safe version
  * - avoids mutating arrays from hooks
  * - guards relative time helper against invalid input
+ * - includes CSS class hooks for entrance & staggered animations
  */
 
 const Sidebar = () => {
@@ -23,7 +24,6 @@ const Sidebar = () => {
 
   const { data: items = [] } = useItems();
   // statusStats and priorityStats are fetched for potential usage;
-  // they are safe to call even if not used in JSX yet.
   const { data: statusStats = [] } = useStatusStats();
   const { data: priorityStats = [] } = usePriorityStats();
 
@@ -117,11 +117,12 @@ const Sidebar = () => {
   // Collapsed sidebar (icon-only)
   if (!sidebarOpen) {
     return (
-      <div className="sidebar-collapsed">
+      <div className="sidebar-collapsed fade-in-left">
         <button
           className="sidebar-toggle"
           onClick={toggleSidebar}
           aria-label="Open sidebar"
+          type="button"
         >
           <span className="toggle-icon">➡️</span>
         </button>
@@ -129,7 +130,9 @@ const Sidebar = () => {
         {menuItems.map((item) => (
           <button
             key={item.id}
-            className={`sidebar-collapsed-item ${item.active ? "active" : ""}`}
+            className={`sidebar-collapsed-item ${
+              item.active ? "active" : ""
+            } hover-lift`}
             onClick={item.onClick}
             title={item.label}
             type="button"
@@ -145,9 +148,9 @@ const Sidebar = () => {
   }
 
   return (
-    <aside className="sidebar" aria-label="Sidebar">
+    <aside className="sidebar fade-in-left" aria-label="Sidebar">
       {/* Sidebar Header */}
-      <div className="sidebar-header">
+      <div className="sidebar-header scale-in">
         <div className="sidebar-brand">
           <span className="brand-icon">🌊</span>
           <span className="brand-text">Dashboard</span>
@@ -164,8 +167,8 @@ const Sidebar = () => {
 
       {/* Quick Stats */}
       <div className="sidebar-section">
-        <div className="sidebar-stats-grid">
-          <div className="sidebar-stat-card">
+        <div className="sidebar-stats-grid stagger-children">
+          <div className="sidebar-stat-card hover-lift">
             <div className="stat-icon">📝</div>
             <div className="stat-content">
               <div className="stat-number">{totalItems}</div>
@@ -173,7 +176,7 @@ const Sidebar = () => {
             </div>
           </div>
 
-          <div className="sidebar-stat-card">
+          <div className="sidebar-stat-card hover-lift">
             <div className="stat-icon">⚡</div>
             <div className="stat-content">
               <div className="stat-number">{highPriorityItems}</div>
@@ -190,11 +193,16 @@ const Sidebar = () => {
           <h3 className="sidebar-title">By Status</h3>
         </div>
 
-        <nav className="sidebar-nav" aria-label="Status filters">
+        <nav
+          className="sidebar-nav stagger-children"
+          aria-label="Status filters"
+        >
           {menuItems.map((item) => (
             <button
               key={item.id}
-              className={`sidebar-item ${item.active ? "active" : ""}`}
+              className={`sidebar-item ${
+                item.active ? "active" : ""
+              } hover-lift`}
               onClick={item.onClick}
               type="button"
             >
@@ -215,11 +223,16 @@ const Sidebar = () => {
           <h3 className="sidebar-title">By Priority</h3>
         </div>
 
-        <nav className="sidebar-nav" aria-label="Priority filters">
+        <nav
+          className="sidebar-nav stagger-children"
+          aria-label="Priority filters"
+        >
           {priorityItems.map((item) => (
             <button
               key={item.id}
-              className={`sidebar-item ${item.active ? "active" : ""}`}
+              className={`sidebar-item ${
+                item.active ? "active" : ""
+              } hover-lift`}
               onClick={item.onClick}
               type="button"
             >
@@ -243,7 +256,7 @@ const Sidebar = () => {
         <div className="activity-list">
           {recentActivity.length > 0 ? (
             recentActivity.map((item) => (
-              <div key={item.id} className="activity-item">
+              <div key={item.id} className="activity-item hover-lift">
                 <div
                   className="activity-dot"
                   style={{
@@ -340,7 +353,7 @@ const Sidebar = () => {
       {/* Footer Actions */}
       <div className="sidebar-footer">
         <button
-          className="sidebar-action-btn"
+          className="sidebar-action-btn hover-lift"
           onClick={() => {
             setStatusFilter("all");
             setPriorityFilter("all");
