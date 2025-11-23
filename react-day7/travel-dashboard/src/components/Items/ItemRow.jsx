@@ -51,7 +51,7 @@ const ItemRow = ({ item }) => {
   };
 
   return (
-    <div className="item-row fade-in">
+    <div className="item-row hover-lift fade-in">
       {/* Header with title + actions */}
       <div className="item-header">
         <h3 className="item-title">{item.title}</h3>

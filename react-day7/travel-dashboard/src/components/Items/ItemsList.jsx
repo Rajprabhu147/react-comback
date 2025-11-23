@@ -157,7 +157,7 @@ const ItemsList = () => {
         </div>
       ) : (
         // Render item rows
-        <div className="items-list">
+        <div className="items-list stagger-children">
           {filteredItems.map((item) => (
             <ItemRow key={item.id} item={item} />
           ))}
