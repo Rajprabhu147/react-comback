@@ -136,8 +136,8 @@ const ItemEditor = () => {
   const isLoading = createItem.isLoading || updateItem.isLoading;
 
   return (
-    <div className="modal-overlay" onClick={clearSelection}>
-      <div className="modal" onClick={(e) => e.stopPropagation()}>
+    <div className="modal-overlay modern-overlay" onClick={clearSelection}>
+      <div className="modal modern-modal" onClick={(e) => e.stopPropagation()}>
         {/* Modal Header */}
         <div className="modal-header">
           <h2 className="modal-title">

@@ -21,6 +21,8 @@ import {
   useEventsTimeSeries,
 } from "../../hooks/useStats";
 import LoadingSpinner from "../Shared/LoadingSpinner";
+import '../../styles/charts.css';
+
 
 /**
  * Color palette for charts
