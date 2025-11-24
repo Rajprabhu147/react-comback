@@ -3,7 +3,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { useUser } from "../../context/UserContext";
 import Button from "../Shared/Button";
 import { useNotificationStore } from "../../store/notificationStore";
-import Tooltip from "../Shared/Tooltip"; // ⭐ NEW IMPORT
+import Tooltip from "../Shared/Tooltip.jsx"; // ⭐ NEW IMPORT
 import "../../styles/components.css";
 import "../../styles/header.css";
 
