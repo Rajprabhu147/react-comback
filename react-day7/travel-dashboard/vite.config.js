@@ -9,4 +9,15 @@ export default defineConfig({
   optimizeDeps: {
     include: ["react", "react-dom"],
   },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          "react-vendor": ["react", "react-dom", "react-router-dom"],
+          "chart-vendor": ["recharts"],
+          "query-vendor": ["@tanstack/react-query"],
+        },
+      },
+    },
+  },
 });
