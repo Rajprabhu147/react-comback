@@ -5,6 +5,7 @@ import { useItems } from "../../hooks/useItems";
 import { useUIStore } from "../../store/uiStore";
 import Input from "../Shared/Input";
 import Button from "../Shared/Button";
+import SkeletonLoader from "../Shared/SkeletonLoader";
 
 /**
  * ItemsList Component
@@ -64,7 +65,10 @@ const ItemsList = () => {
       return matchesSearch && matchesStatus && matchesPriority;
     });
   }, [items, searchQuery, statusFilter, priorityFilter]);
-
+  // Inside component
+  if (isLoading) {
+    return <SkeletonLoader type="item" count={5} />;
+  }
   // Loading state
   if (isLoading) {
     return <LoadingSpinner message="Loading items..." />;
