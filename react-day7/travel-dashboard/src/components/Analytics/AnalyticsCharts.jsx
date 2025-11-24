@@ -21,8 +21,8 @@ import {
   useEventsTimeSeries,
 } from "../../hooks/useStats";
 import LoadingSpinner from "../Shared/LoadingSpinner";
-import '../../styles/charts.css';
-
+import "../../styles/charts.css";
+import SkeletonLoader from "../Shared/SkeletonLoader";
 
 /**
  * Color palette for charts
@@ -57,6 +57,15 @@ const AnalyticsCharts = () => {
     usePriorityStats();
   const { data: eventsData = [], isLoading: eventsLoading } =
     useEventsTimeSeries();
+
+  if (statusLoading || priorityLoading || eventsLoading) {
+    return (
+      <div className="charts-container">
+        <SkeletonLoader type="chart" />
+        <SkeletonLoader type="chart" />
+      </div>
+    );
+  }
 
   // If any of the 3 datasets is loading → show spinner
   if (statusLoading || priorityLoading || eventsLoading) {
