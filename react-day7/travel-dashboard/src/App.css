@@ -567,6 +567,72 @@ main, .page {
 }
 
 /* ====================================
+   SKELETON LOADERS
+   ==================================== */
+
+.skeleton-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.skeleton-item {
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  box-shadow: var(--shadow-sm);
+}
+
+.skeleton-title {
+  height: 24px;
+  width: 60%;
+  margin-bottom: 12px;
+  border-radius: var(--radius-sm);
+}
+
+.skeleton-text {
+  height: 16px;
+  width: 100%;
+  margin-bottom: 8px;
+  border-radius: var(--radius-sm);
+}
+
+.skeleton-text.short {
+  width: 70%;
+}
+
+.skeleton-badges {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.skeleton-badge {
+  height: 24px;
+  width: 80px;
+  border-radius: 20px;
+}
+
+.skeleton-chart {
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  box-shadow: var(--shadow-sm);
+}
+
+.skeleton-chart-title {
+  height: 20px;
+  width: 40%;
+  margin-bottom: 20px;
+  border-radius: var(--radius-sm);
+}
+
+.skeleton-chart-body {
+  height: 250px;
+  border-radius: var(--radius-md);
+}
+
+/* ====================================
    RESPONSIVE
    ==================================== */
 
