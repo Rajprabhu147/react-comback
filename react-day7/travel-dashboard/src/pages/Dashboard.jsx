@@ -1,59 +1,107 @@
-import React from "react";
-// Used for navigation redirection (not used directly in this file but commonly needed in dashboards)
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-// Global layout components
 import Header from "../components/Layout/Header";
 import Sidebar from "../components/Layout/Sidebar";
-// Dashboard content components
 import ItemsList from "../components/Items/ItemsList";
 import ItemEditor from "../components/Items/ItemEditor";
 import AnalyticsCharts from "../components/Analytics/AnalyticsCharts";
-// Hook that listens to real-time Supabase changes for items or other entities
 import { useRealtimeSubscription } from "../hooks/useRealtime";
-// Global UI store (Zustand) for layout state like sidebar toggling
 import { useUIStore } from "../store/uiStore";
+import { useItems } from "../hooks/useItems";
 
 const Dashboard = () => {
-  // Activate real-time syncing so items update instantly when changed in Supabase
   useRealtimeSubscription();
-
-  // Read whether sidebar is currently open (for mobile overlay behaviour)
+  const navigate = useNavigate();
   const sidebarOpen = useUIStore((state) => state.sidebarOpen);
-
-  // A function from the UI store to toggle sidebar visibility
   const toggleSidebar = useUIStore((state) => state.toggleSidebar);
+  const setSelectedItem = useUIStore((state) => state.setSelectedItem);
+  const { data: items = [] } = useItems();
+
+  const [showWelcome, setShowWelcome] = useState(false);
+
+  useEffect(() => {
+    const hasVisited = localStorage.getItem("hasVisited");
+    if (!hasVisited && items.length === 0) {
+      setShowWelcome(true);
+      localStorage.setItem("hasVisited", "true");
+    }
+  }, [items.length]);
+
+  const handleDismissWelcome = () => {
+    setShowWelcome(false);
+  };
+
+  const handleCreateFirst = () => {
+    setShowWelcome(false);
+    setSelectedItem({});
+  };
 
   return (
     <div className="app">
-      {/* Top navigation bar that includes logo, actions, user menu */}
       <Header />
-
       <div className="app-container">
-        {/* Persistent Left Sidebar for navigation */}
         <Sidebar />
-
-        {/* Main content area of the dashboard */}
         <main className="main-content">
-          {/* Dashboard grid layout containing items on the left and charts on the right */}
-          <div className="grid-dashboard">
-            {/* List of items/tasks created by user */}
-            <ItemsList />
+          {showWelcome && (
+            <div className="welcome-overlay">
+              <div className="welcome-card scale-in">
+                <div className="welcome-icon bounce">🌊</div>
+                <h1
+                  className="welcome-title gradient-shift"
+                  style={{
+                    background:
+                      "linear-gradient(135deg, var(--primary), var(--accent))",
+                    backgroundSize: "200% 200%",
+                  }}
+                >
+                  Welcome to Travel Dashboard!
+                </h1>
+                <p className="welcome-description">
+                  Your journey begins here. Start by creating your first travel
+                  item and organize all your adventures in one beautiful place.
+                </p>
+                <div className="welcome-features stagger-children">
+                  <div className="welcome-feature">
+                    <span className="feature-icon">📝</span>
+                    <span className="feature-text">Create & Manage Items</span>
+                  </div>
+                  <div className="welcome-feature">
+                    <span className="feature-icon">📊</span>
+                    <span className="feature-text">Track Progress</span>
+                  </div>
+                  <div className="welcome-feature">
+                    <span className="feature-icon">⚡</span>
+                    <span className="feature-text">Real-time Updates</span>
+                  </div>
+                </div>
+                <div className="welcome-actions">
+                  <button
+                    className="btn btn-primary"
+                    onClick={handleCreateFirst}
+                  >
+                    🚀 Create Your First Item
+                  </button>
+                  <button
+                    className="btn btn-secondary"
+                    onClick={handleDismissWelcome}
+                  >
+                    Explore Dashboard
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
 
-            {/* Analytics charts showing statistics & insights */}
+          <div className="grid-dashboard">
+            <ItemsList />
             <AnalyticsCharts />
           </div>
         </main>
       </div>
-
-      {/* Component that opens as a modal/drawer to add or edit items */}
       <ItemEditor />
 
-      {/* 
-        Mobile overlay that appears when the sidebar is open on screens smaller than 1024px.
-        Clicking the dark background will close the mobile sidebar.
-      */}
       {sidebarOpen && window.innerWidth < 1024 && (
-        <div className="sidebar-overlay" onClick={toggleSidebar} />
+        <div className="sidebar-overlay fade-in" onClick={toggleSidebar} />
       )}
     </div>
   );
