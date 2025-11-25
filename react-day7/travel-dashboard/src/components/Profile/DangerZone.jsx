@@ -28,6 +28,7 @@ const DangerZone = ({ user }) => {
       // TODO: Replace with actual backend export feature
       toast.success("Data export started. You will receive an email shortly.");
     } catch (error) {
+      console.error(error);
       toast.error("Failed to export data");
     }
   };
@@ -52,6 +53,7 @@ const DangerZone = ({ user }) => {
       // Redirect user to login page
       navigate("/login");
     } catch (error) {
+      console.error(error);
       toast.error("Failed to delete account");
     } finally {
       // Regardless of success or failure, stop loading animation
@@ -127,6 +129,13 @@ const DangerZone = ({ user }) => {
                   All your data including items, events, and settings will be
                   permanently deleted.
                 </p>
+                {/* Show the affected user email if available (uses the `user` prop) */}
+                {user?.email && (
+                  <p className="muted">
+                    This will delete the account for{" "}
+                    <strong>{user.email}</strong>
+                  </p>
+                )}
               </div>
 
               {/* Input where user must type DELETE */}

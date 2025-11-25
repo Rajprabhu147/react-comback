@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import Header from "../components/Layout/Header";
 import Sidebar from "../components/Layout/Sidebar";
 import ItemsList from "../components/Items/ItemsList";
@@ -11,21 +10,34 @@ import { useItems } from "../hooks/useItems";
 
 const Dashboard = () => {
   useRealtimeSubscription();
-  const navigate = useNavigate();
+
   const sidebarOpen = useUIStore((state) => state.sidebarOpen);
   const toggleSidebar = useUIStore((state) => state.toggleSidebar);
   const setSelectedItem = useUIStore((state) => state.setSelectedItem);
   const { data: items = [] } = useItems();
 
-  const [showWelcome, setShowWelcome] = useState(false);
-
-  useEffect(() => {
+  /**
+   * Initialize welcome screen state lazily.
+   * This avoids calling setState inside a useEffect.
+   */
+  const [showWelcome, setShowWelcome] = useState(() => {
     const hasVisited = localStorage.getItem("hasVisited");
-    if (!hasVisited && items.length === 0) {
-      setShowWelcome(true);
-      localStorage.setItem("hasVisited", "true");
+    return !hasVisited && items.length === 0;
+  });
+
+  /**
+   * Persist "hasVisited" only when showWelcome becomes true.
+   * No setState inside effect → no lint warnings.
+   */
+  useEffect(() => {
+    if (showWelcome) {
+      try {
+        localStorage.setItem("hasVisited", "true");
+      } catch {
+        // ignore storage write errors
+      }
     }
-  }, [items.length]);
+  }, [showWelcome]);
 
   const handleDismissWelcome = () => {
     setShowWelcome(false);
@@ -41,11 +53,13 @@ const Dashboard = () => {
       <Header />
       <div className="app-container">
         <Sidebar />
+
         <main className="main-content">
           {showWelcome && (
             <div className="welcome-overlay">
               <div className="welcome-card scale-in">
                 <div className="welcome-icon bounce">🌊</div>
+
                 <h1
                   className="welcome-title gradient-shift"
                   style={{
@@ -56,10 +70,12 @@ const Dashboard = () => {
                 >
                   Welcome to Travel Dashboard!
                 </h1>
+
                 <p className="welcome-description">
                   Your journey begins here. Start by creating your first travel
                   item and organize all your adventures in one beautiful place.
                 </p>
+
                 <div className="welcome-features stagger-children">
                   <div className="welcome-feature">
                     <span className="feature-icon">📝</span>
@@ -74,6 +90,7 @@ const Dashboard = () => {
                     <span className="feature-text">Real-time Updates</span>
                   </div>
                 </div>
+
                 <div className="welcome-actions">
                   <button
                     className="btn btn-primary"
@@ -81,6 +98,7 @@ const Dashboard = () => {
                   >
                     🚀 Create Your First Item
                   </button>
+
                   <button
                     className="btn btn-secondary"
                     onClick={handleDismissWelcome}
@@ -92,14 +110,18 @@ const Dashboard = () => {
             </div>
           )}
 
+          {/* Main Grid */}
           <div className="grid-dashboard">
             <ItemsList />
             <AnalyticsCharts />
           </div>
         </main>
       </div>
+
+      {/* Editor Modal */}
       <ItemEditor />
 
+      {/* Mobile Sidebar Overlay */}
       {sidebarOpen && window.innerWidth < 1024 && (
         <div className="sidebar-overlay fade-in" onClick={toggleSidebar} />
       )}
