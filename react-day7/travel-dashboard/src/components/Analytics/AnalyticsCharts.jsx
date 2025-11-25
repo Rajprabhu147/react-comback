@@ -11,7 +11,6 @@ import {
   YAxis,
   CartesianGrid,
   Tooltip,
-  Legend,
   ResponsiveContainer,
 } from "recharts";
 
@@ -20,7 +19,6 @@ import {
   usePriorityStats,
   useEventsTimeSeries,
 } from "../../hooks/useStats";
-import LoadingSpinner from "../Shared/LoadingSpinner";
 import "../../styles/charts.css";
 import SkeletonLoader from "../Shared/SkeletonLoader";
 
@@ -58,6 +56,7 @@ const AnalyticsCharts = () => {
   const { data: eventsData = [], isLoading: eventsLoading } =
     useEventsTimeSeries();
 
+  // Show skeleton loaders while any dataset is loading
   if (statusLoading || priorityLoading || eventsLoading) {
     return (
       <div className="charts-container">
@@ -66,23 +65,6 @@ const AnalyticsCharts = () => {
       </div>
     );
   }
-
-  // If any of the 3 datasets is loading → show spinner
-  if (statusLoading || priorityLoading || eventsLoading) {
-    return <LoadingSpinner message="Loading analytics..." />;
-  }
-
-  // Total number of items using status stats
-  const totalItems = statusStats.reduce(
-    (sum, stat) => sum + Number(stat.count),
-    0
-  );
-
-  // Total number of events in last 7 days
-  const totalEvents = eventsData.reduce(
-    (sum, event) => sum + Number(event.event_count),
-    0
-  );
 
   // Colors for priority chart
   const priorityColors = {
@@ -93,19 +75,6 @@ const AnalyticsCharts = () => {
 
   return (
     <div className="charts-container">
-      {/* ========== SUMMARY CARDS ========== */}
-      <div className="stats-grid">
-        <div className="stat-card">
-          <div className="stat-value">{totalItems}</div>
-          <div className="stat-label">Total Items</div>
-        </div>
-
-        <div className="stat-card">
-          <div className="stat-value">{totalEvents}</div>
-          <div className="stat-label">Events (7d)</div>
-        </div>
-      </div>
-
       {/* ========== PIE CHART: STATUS DISTRIBUTION ========== */}
       <div className="chart-card">
         <h3 className="chart-title">Items by Status</h3>
