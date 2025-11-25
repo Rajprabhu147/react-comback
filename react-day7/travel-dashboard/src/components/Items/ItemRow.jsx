@@ -21,7 +21,7 @@ import { useDeleteItem } from "../../hooks/useItems";
 
 const ItemRow = ({ item }) => {
   // Zustand store method to select an item for editing
-  const setSelectedItem = useUIStore((state) => state.setSelectedItem);
+  const { setSelectedItem } = useUIStore();
 
   // Mutation hook to delete an item
   const deleteItem = useDeleteItem();
@@ -43,10 +43,11 @@ const ItemRow = ({ item }) => {
   /**
    * Handle edit click
    * - stopPropagation avoids row click handlers firing
-   * - sets selected item for the edit modal
+   * - sets selected item for the edit modal with FULL item object
    */
   const handleEdit = (e) => {
     e.stopPropagation();
+    console.log("Editing item:", item); // Debug log
     setSelectedItem(item);
   };
 

@@ -2,7 +2,6 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 import { supabase } from "../lib/supabaseClient";
 
 // Create context for authentication state
-// Default = undefined to force usage inside provider
 const UserContext = createContext(undefined);
 
 export const UserProvider = ({ children }) => {
@@ -24,7 +23,7 @@ export const UserProvider = ({ children }) => {
           error,
         } = await supabase.auth.getSession();
         if (error) throw error;
-        setUser(session?.user ?? null); // Set user if exists
+        setUser(session?.user ?? null);
       } catch (error) {
         console.error("Error fetching session:", error);
       } finally {
@@ -77,12 +76,30 @@ export const UserProvider = ({ children }) => {
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
-        redirectTo: window.location.origin, // Redirect back to app
+        redirectTo: window.location.origin,
         queryParams: {
           access_type: "offline",
-          prompt: "consent", // Forces Google refresh token
+          prompt: "consent",
         },
       },
+    });
+    if (error) throw error;
+    return data;
+  };
+
+  // Send password reset email
+  const resetPassword = async (email) => {
+    const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: `${window.location.origin}/reset-password`,
+    });
+    if (error) throw error;
+    return data;
+  };
+
+  // Update password (after receiving reset link)
+  const updatePassword = async (newPassword) => {
+    const { data, error } = await supabase.auth.updateUser({
+      password: newPassword,
     });
     if (error) throw error;
     return data;
@@ -102,6 +119,8 @@ export const UserProvider = ({ children }) => {
     signUp,
     signIn,
     signInWithGoogle,
+    resetPassword,
+    updatePassword,
     signOut,
   };
 
