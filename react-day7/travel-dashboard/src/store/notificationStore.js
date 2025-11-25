@@ -13,7 +13,7 @@ import { create } from "zustand";
  * This store is used throughout the dashboard to display and
  * update notification state in real-time.
  */
-export const useNotificationStore = create((set, get) => ({
+export const useNotificationStore = create((set) => ({
   /* -------------------------------------------------------
    * Default Notification List (sample data for demo)
    * Each notification includes:

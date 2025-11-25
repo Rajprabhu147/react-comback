@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 // navigation helper (used after destructive actions like sign-out or delete)
 import { useNavigate } from "react-router-dom";
-// supabase client for server-side actions (placeholders/todos use it)
-import { supabase } from "../../lib/supabaseClient";
 // settings store (Zustand) to read/write privacy related flags
 import { useSettingsStore } from "../../store/settingsStore";
 import Button from "../Shared/Button";
@@ -50,7 +48,8 @@ const DataManagement = () => {
       // notify success
       toast.success("Data exported successfully!");
     } catch (error) {
-      // show error toast on failure
+      // log the error and show error toast on failure
+      console.error("Export data error:", error);
       toast.error("Failed to export data");
     } finally {
       setExporting(false);
@@ -83,6 +82,8 @@ const DataManagement = () => {
       // reload after a short delay so user sees confirmation first
       setTimeout(() => window.location.reload(), 1000);
     } catch (error) {
+      // log error and notify user
+      console.error("Clear cache error:", error);
       toast.error("Failed to clear cache");
     } finally {
       setClearing(false);
