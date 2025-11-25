@@ -1,15 +1,19 @@
 /* ====================================
-   ANALYTICS CHARTS - MODERN DESIGN
+   GRID LAYOUTS
+   ==================================== */
+
+.grid { display: grid; gap: 24px; }
+.grid-2 { grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
+
+/* ====================================
+   ANALYTICS CHARTS
    ==================================== */
 
 .charts-container {
-
-  
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
   gap: 24px;
-  position: sticky;
-  /* top: 100px; */
+  width: 100%;
 }
 
 .chart-card {
@@ -67,11 +71,11 @@
 
 .chart-wrapper {
   width: 100%;
-  height: 280px;
+  height: 300px;
   position: relative;
 }
 
-/* Stats Grid for Summary Cards */
+/* Stats Grid */
 .stats-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -131,29 +135,22 @@
   z-index: 1;
 }
 
-/* Chart Loading State */
-.chart-loading {
+/* Chart States */
+.chart-loading,
+.chart-empty {
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 280px;
+  height: 300px;
   color: var(--text-muted);
+}
+
+.chart-loading {
   font-size: 14px;
 }
 
-.chart-loading .spinner {
-  width: 40px;
-  height: 40px;
-}
-
-/* Chart Empty State */
 .chart-empty {
-  display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 280px;
-  color: var(--text-muted);
   text-align: center;
 }
 
@@ -168,13 +165,9 @@
   font-weight: 500;
 }
 
-/* Recharts Custom Styling */
+/* Recharts Styling */
 .recharts-wrapper {
   border-radius: var(--radius-md);
-}
-
-.recharts-tooltip-wrapper {
-  outline: none;
 }
 
 .recharts-default-tooltip {
@@ -195,28 +188,4 @@
 .recharts-tooltip-item {
   color: var(--text-secondary) !important;
   font-size: 13px !important;
-}
-
-/* ====================================
-   RESPONSIVE
-   ==================================== */
-
-@media (max-width: 1280px) {
-  .charts-container {
-    position: static;
-  }
-}
-
-@media (max-width: 768px) {
-  .stats-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .chart-wrapper {
-    height: 220px;
-  }
-
-  .stat-value {
-    font-size: 2rem;
-  }
 }
