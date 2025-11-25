@@ -3,28 +3,20 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { useUser } from "../../context/UserContext";
 import Button from "../Shared/Button";
 import { useNotificationStore } from "../../store/notificationStore";
-import Tooltip from "../Shared/Tooltip.jsx"; // ⭐ NEW IMPORT
+import { useUIStore } from "../../store/uiStore";
 import "../../styles/components.css";
 import "../../styles/header.css";
 
-/**
- * Header Component — Top navigation bar
- * - Logo
- * - Notifications bell (with badge)
- * - User dropdown menu
- * - Click-outside listener to close dropdown
- */
 const Header = () => {
   const { user, signOut } = useUser();
   const navigate = useNavigate();
   const location = useLocation();
-
   const [showDropdown, setShowDropdown] = useState(false);
   const dropdownRef = useRef(null);
-
   const unreadCount = useNotificationStore((state) => state.unreadCount);
+  const toggleSidebar = useUIStore((state) => state.toggleSidebar);
+  const sidebarOpen = useUIStore((state) => state.sidebarOpen);
 
-  /** Close dropdown when clicking outside */
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -36,11 +28,13 @@ const Header = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  /** Utility helpers */
   const getShortUsername = (email) => {
     if (!email) return "User";
     const username = email.split("@")[0];
-    return username.length > 15 ? username.substring(0, 15) + "..." : username;
+    if (username.length > 15) {
+      return username.substring(0, 15) + "...";
+    }
+    return username;
   };
 
   const getDisplayName = (email) => {
@@ -60,7 +54,6 @@ const Header = () => {
     return username.substring(0, 2).toUpperCase();
   };
 
-  /** Logout */
   const handleSignOut = async () => {
     setShowDropdown(false);
     await signOut();
@@ -75,28 +68,34 @@ const Header = () => {
   return (
     <header className="header">
       <div className="header-container">
-        {/* Left: Logo */}
+        {/* Mobile Menu Button */}
+        <button
+          className="mobile-menu-btn"
+          onClick={toggleSidebar}
+          aria-label="Toggle menu"
+        >
+          {sidebarOpen ? "✕" : "☰"}
+        </button>
+
         <div className="header-logo" onClick={() => navigate("/")}>
           <span className="logo-icon">🌊</span>
           <span className="logo-text">Travel Dashboard</span>
         </div>
 
-        {/* Right: Actions */}
         <div className="header-actions">
-          {/* ⭐ Notifications Button Wrapped with Tooltip */}
-          <Tooltip text="Notifications" position="bottom">
-            <button
-              className="header-icon-btn"
-              onClick={() => navigate("/notifications")}
-            >
-              <span className="icon-wrapper">
-                🔔
-                {unreadCount > 0 && (
-                  <span className="notification-badge">{unreadCount}</span>
-                )}
-              </span>
-            </button>
-          </Tooltip>
+          {/* Notifications Bell */}
+          <button
+            className="header-icon-btn"
+            onClick={() => navigate("/notifications")}
+            title="Notifications"
+          >
+            <span className="icon-wrapper">
+              🔔
+              {unreadCount > 0 && (
+                <span className="notification-badge">{unreadCount}</span>
+              )}
+            </span>
+          </button>
 
           {/* User Profile Dropdown */}
           <div className="header-user" ref={dropdownRef}>
@@ -105,14 +104,12 @@ const Header = () => {
               onClick={() => setShowDropdown(!showDropdown)}
             >
               <div className="user-avatar">{getInitials(user?.email)}</div>
-
               <div className="user-info">
                 <span className="user-name">{getDisplayName(user?.email)}</span>
                 <span className="user-email">
                   {getShortUsername(user?.email)}
                 </span>
               </div>
-
               <span className="dropdown-arrow">{showDropdown ? "▲" : "▼"}</span>
             </button>
 
@@ -134,7 +131,6 @@ const Header = () => {
 
                 <div className="dropdown-divider"></div>
 
-                {/* Profile */}
                 <button
                   className={`dropdown-item ${
                     location.pathname === "/profile" ? "active" : ""
@@ -145,7 +141,6 @@ const Header = () => {
                   <span>Profile Settings</span>
                 </button>
 
-                {/* Notifications */}
                 <button
                   className={`dropdown-item ${
                     location.pathname === "/notifications" ? "active" : ""
@@ -154,13 +149,11 @@ const Header = () => {
                 >
                   <span className="item-icon">🔔</span>
                   <span>Notifications</span>
-
                   {unreadCount > 0 && (
                     <span className="dropdown-badge">{unreadCount}</span>
                   )}
                 </button>
 
-                {/* Settings */}
                 <button
                   className={`dropdown-item ${
                     location.pathname === "/settings" ? "active" : ""
@@ -173,7 +166,6 @@ const Header = () => {
 
                 <div className="dropdown-divider"></div>
 
-                {/* Logout */}
                 <button
                   className="dropdown-item danger"
                   onClick={handleSignOut}
