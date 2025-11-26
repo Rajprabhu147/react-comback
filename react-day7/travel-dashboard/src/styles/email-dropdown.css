@@ -1,88 +1,97 @@
-/* ====================================
-   EMAIL DROPDOWN COMPONENT
-   ==================================== */
+/* =============================================================================
+   email-dropdown.css — Clean, minimal Email Dropdown component
+   ============================================================================= */
 
+/* Container */
 .email-dropdown-container {
   position: relative;
   margin-bottom: 16px;
 }
 
+/* Input wrapper (keeps toggle button positioned) */
 .email-input-wrapper {
   position: relative;
 }
 
+/* Toggle (icon/button on the input) */
 .dropdown-toggle-btn {
   position: absolute;
-  right: 12px;
+  right: 8px;
   top: 50%;
   transform: translateY(-50%);
   background: transparent;
   border: none;
   color: var(--text-muted);
   cursor: pointer;
-  padding: 4px 8px;
-  font-size: 12px;
-  transition: var(--transition);
+  padding: 6px;
+  font-size: 13px;
+  transition: color .18s ease, transform .18s ease;
 }
-
-.dropdown-toggle-btn:hover {
+.dropdown-toggle-btn:hover,
+.dropdown-toggle-btn:focus {
   color: var(--primary);
+  transform: translateY(-50%) scale(1.02);
+  outline: none;
 }
 
+/* Dropdown panel */
 .email-dropdown {
   position: absolute;
-  top: calc(100% + 4px);
+  top: calc(100% + 6px);
   left: 0;
   right: 0;
   background: var(--surface);
   border: 1px solid var(--bg-secondary);
   border-radius: var(--radius-md);
-  box-shadow: var(--shadow-lg);
-  max-height: 250px;
+  box-shadow: 0 8px 24px rgba(10,37,64,0.06);
+  max-height: 260px;
   overflow-y: auto;
   z-index: 1000;
-  animation: slideDown 0.2s ease-out;
+  animation: emailSlideDown .18s ease-out both;
+  -webkit-overflow-scrolling: touch; /* smooth scrolling on iOS */
 }
 
-@keyframes slideDown {
-  from {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+/* Small, performant slide-down */
+@keyframes emailSlideDown {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
+/* Dropdown header (optional label) */
 .dropdown-header-text {
   padding: 8px 12px;
   font-size: 11px;
-  font-weight: 600;
+  font-weight: 700;
   text-transform: uppercase;
   color: var(--text-muted);
   letter-spacing: 0.5px;
   border-bottom: 1px solid var(--bg-secondary);
 }
 
+/* Individual item */
 .email-dropdown-item {
   display: flex;
   align-items: center;
   gap: 12px;
   padding: 10px 12px;
   cursor: pointer;
-  transition: var(--transition);
+  transition: background .12s ease, color .12s ease, transform .12s ease;
   border-bottom: 1px solid var(--bg-secondary);
+  background: transparent;
 }
-
 .email-dropdown-item:last-child {
   border-bottom: none;
 }
 
-.email-dropdown-item:hover {
+/* Hover / focus state (keyboard & mouse) */
+.email-dropdown-item:hover,
+.email-dropdown-item:focus {
   background: var(--primary-light);
+  color: var(--text-primary);
+  outline: none;
 }
 
+/* Avatar */
 .email-avatar {
   width: 36px;
   height: 36px;
@@ -91,12 +100,13 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: white;
-  font-weight: 600;
-  font-size: 12px;
+  color: #fff;
+  font-weight: 700;
+  font-size: 13px;
   flex-shrink: 0;
 }
 
+/* Text area (name / email) */
 .email-text {
   flex: 1;
   font-size: 14px;
@@ -106,34 +116,67 @@
   white-space: nowrap;
 }
 
+/* Remove / action button (hidden until hover/focus to reduce visual noise) */
 .email-remove-btn {
-  width: 24px;
-  height: 24px;
+  width: 28px;
+  height: 28px;
   border-radius: 50%;
   background: transparent;
   border: none;
   color: var(--text-muted);
   cursor: pointer;
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  font-size: 14px;
-  transition: var(--transition);
+  font-size: 13px;
+  transition: background .12s ease, color .12s ease;
   opacity: 0;
 }
 
-.email-dropdown-item:hover .email-remove-btn {
+/* Reveal remove button when item is hovered or focused */
+.email-dropdown-item:hover .email-remove-btn,
+.email-dropdown-item:focus .email-remove-btn,
+.email-remove-btn:focus {
   opacity: 1;
 }
 
+/* Remove hover visual */
 .email-remove-btn:hover {
   background: var(--danger-light);
   color: var(--danger);
+  transform: scale(1.02);
+  outline: none;
 }
 
+/* Error text under input */
 .error-text {
   display: block;
   color: var(--danger);
   font-size: 12px;
-  margin-top: 4px;
+  margin-top: 6px;
+}
+
+/* Accessibility: keyboard focus styles (visible, non-intrusive) */
+.email-dropdown-item:focus,
+.email-dropdown:focus {
+  box-shadow: 0 6px 18px rgba(10,37,64,0.06);
+  transform: translateY(0);
+}
+
+/* Compact / mobile adjustments */
+@media (max-width: 480px) {
+  .dropdown-toggle-btn { right: 6px; font-size: 12px; padding: 4px; }
+  .email-avatar { width: 32px; height: 32px; font-size: 12px; }
+  .email-text { font-size: 13px; }
+  .email-dropdown { max-height: 220px; }
+}
+
+/* Utility: visually hidden (for screen reader labels) */
+.visually-hidden {
+  position: absolute !important;
+  height: 1px; width: 1px;
+  overflow: hidden;
+  clip: rect(1px, 1px, 1px, 1px);
+  white-space: nowrap;
+  border: 0; padding: 0; margin: -1px;
 }

@@ -1,320 +1,88 @@
-/* ====================================
-   HEADER STYLES
-   ==================================== */
+/* layout-helpers.css
+   Makes specific pages full width / fluid while leaving default container behavior intact.
+*/
 
-.header {
-  background: var(--surface);
-  border-bottom: 1px solid var(--bg-secondary);
-  box-shadow: var(--shadow-sm);
-  position: sticky;
-  top: 0;
-  z-index: 100;
+/* configurable gutters (change once in variables) */
+:root {
+  --page-fluid-gutter: 24px;   /* side padding on very large screens */
+  --page-fluid-gap: 24px;      /* internal gaps between sections */
 }
 
-.header-container {
-  max-width: 1920px;
-  margin: 0 auto;
-  padding: 12px 24px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+/* ---------------------------
+   Page-level control
+   Usage: add `.page--full` to the top-level container of the page
+   e.g. <div class="app page--full profile-page"> ... </div>
+   --------------------------- */
+.page--full .app-container {
+  max-width: none !important;
+  width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important; /* let .main-content control gutters */
 }
 
-.header-logo {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: var(--primary);
-  text-decoration: none;
-  cursor: pointer;
-}
-
-.logo-icon {
-  font-size: 2rem;
-  animation: wave 3s ease-in-out infinite;
-}
-
-.logo-text {
-  background: linear-gradient(135deg, var(--primary), var(--accent));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-/* ====================================
-   USER PROFILE BUTTON
-   ==================================== */
-
-.header-user {
-  position: relative;
-}
-
-.user-profile-btn {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 8px 12px;
-  background: transparent;
-  border: 1px solid var(--bg-secondary);
-  border-radius: var(--radius-md);
-  cursor: pointer;
-  transition: var(--transition);
-}
-
-.user-profile-btn:hover {
-  background: var(--surface-hover);
-  border-color: var(--primary);
-}
-
-.user-avatar {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, var(--primary), var(--accent));
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  font-weight: 700;
-  font-size: 14px;
-  flex-shrink: 0;
-}
-
-.user-info {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  text-align: left;
-}
-
-.user-name {
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--text-primary);
-  line-height: 1.2;
-}
-
-.user-email {
-  font-size: 12px;
-  color: var(--text-muted);
-  line-height: 1.2;
-}
-
-.dropdown-arrow {
-  font-size: 10px;
-  color: var(--text-muted);
-  transition: var(--transition);
-}
-
-/* ====================================
-   USER DROPDOWN MENU
-   ==================================== */
-
-.user-dropdown {
-  position: absolute;
-  top: calc(100% + 8px);
-  right: 0;
-  min-width: 280px;
-  background: var(--surface);
-  border: 1px solid var(--bg-secondary);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-lg);
-  z-index: 1000;
-  animation: dropdownSlide 0.2s ease-out;
-}
-
-@keyframes dropdownSlide {
-  from {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.dropdown-header {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 16px;
-  background: linear-gradient(135deg, var(--primary-light), var(--accent-light));
-}
-
-.dropdown-avatar {
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, var(--primary), var(--accent));
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  font-weight: 700;
-  font-size: 18px;
-  flex-shrink: 0;
-}
-
-.dropdown-info {
-  flex: 1;
-  min-width: 0;
-}
-
-.dropdown-name {
-  font-size: 15px;
-  font-weight: 600;
-  color: var(--text-primary);
-  margin-bottom: 2px;
-}
-
-.dropdown-email {
-  font-size: 13px;
-  color: var(--text-secondary);
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.dropdown-divider {
-  height: 1px;
-  background: var(--bg-secondary);
-  margin: 8px 0;
-}
-
-.dropdown-item {
-  display: flex;
-  align-items: center;
-  gap: 12px;
+/* Expand main content edge-to-edge but keep a small inner gutter */
+.page--full .main-content {
+  padding-left: var(--page-fluid-gutter);
+  padding-right: var(--page-fluid-gutter);
+  padding-top: 32px;
+  padding-bottom: 48px;
+  max-width: 100%;
   width: 100%;
-  padding: 12px 16px;
-  background: transparent;
-  border: none;
-  text-align: left;
-  cursor: pointer;
-  transition: var(--transition);
-  color: var(--text-primary);
-  font-size: 14px;
 }
 
-.dropdown-item:hover {
-  background: var(--surface-hover);
+/* Make sections span full width and use fluid grids */
+.page--full .dashboard-layout,
+.page--full .analytics-section,
+.page--full .items-section,
+.page--full .profile-section,
+.page--full .settings-section,
+.page--full .notifications-section {
+  width: 100%;
+  max-width: 100%;
+  margin: 0;
+  gap: var(--page-fluid-gap);
 }
 
-.dropdown-item.danger {
-  color: var(--danger);
-}
-
-.dropdown-item.danger:hover {
-  background: var(--danger-light);
-}
-
-.item-icon {
-  font-size: 18px;
-  width: 24px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-/* ====================================
-   HEADER ACTIONS
-   ==================================== */
-
-.header-actions {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.header-icon-btn {
-  position: relative;
-  width: 44px;
-  height: 44px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: transparent;
-  border: 1px solid var(--bg-secondary);
-  border-radius: var(--radius-md);
-  cursor: pointer;
-  transition: var(--transition);
-  font-size: 20px;
-}
-
-.header-icon-btn:hover {
-  background: var(--surface-hover);
-  border-color: var(--primary);
-}
-
-.icon-wrapper {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.notification-badge {
-  position: absolute;
-  top: -8px;
-  right: -8px;
-  background: var(--danger);
-  color: white;
-  font-size: 10px;
-  font-weight: 700;
-  padding: 2px 6px;
-  border-radius: 10px;
-  min-width: 18px;
-  text-align: center;
-  box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3);
-  animation: pulse 2s infinite;
-}
-
-@keyframes pulse {
-  0%, 100% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.1);
-  }
-}
-
-.dropdown-item.active {
-  background: var(--primary-light);
-  color: var(--primary);
-  font-weight: 600;
-}
-
-.dropdown-badge {
+/* Cards inside full pages get edge-aware widths (so they don't become huge) */
+.page--full .card {
+  max-width: 1280px;        /* optional: cap extremely wide cards */
+  width: 100%;
   margin-left: auto;
-  background: var(--danger);
-  color: white;
-  font-size: 11px;
-  font-weight: 700;
-  padding: 2px 8px;
-  border-radius: 10px;
-  min-width: 20px;
-  text-align: center;
+  margin-right: auto;
+  box-sizing: border-box;
 }
-/* ====================================
-   RESPONSIVE
-   ==================================== */
 
-@media (max-width: 768px) {
-  .header-container {
-    padding: 12px 16px;
-  }
+/* Force grid children to expand fluidly on full pages */
+.page--full .grid, 
+.page--full .charts-container,
+.page--full .stats-grid {
+  gap: var(--page-fluid-gap);
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
 
-  .logo-text {
-    display: none;
-  }
+/* For pages where you want absolutely edge-to-edge sections (hero banners, maps) */
+.page--full .section-edge {
+  width: 100vw;
+  position: relative;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+  padding-left: var(--page-fluid-gutter);
+  padding-right: var(--page-fluid-gutter);
+}
 
-  .user-info {
-    display: none;
-  }
+/* Make modals and dropdowns centered but unaffected */
+.page--full .modal,
+.page--full .user-dropdown {
+  margin: 0 auto;
+}
 
-  .user-dropdown {
-    right: -16px;
-  }
+/* Responsive tweaks: reduce gutters on small screens */
+@media (max-width: 1024px) {
+  .page--full .main-content { padding-left: 20px; padding-right: 20px; }
+}
+@media (max-width: 480px) {
+  .page--full .main-content { padding-left: 12px; padding-right: 12px; }
+  .page--full .card { margin-left: 0; margin-right: 0; padding-left: 12px; padding-right: 12px; }
 }
