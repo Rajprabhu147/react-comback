@@ -5,60 +5,70 @@
   --surface: #ffffff;
   --surface-hover: #f0f9fb;
   --surface-elevated: #ffffff;
-  
+
   --text-primary: #0a2540;
   --text-secondary: #425466;
   --text-muted: #6b7b8a;
-  
+
   --primary: #0ea5e9;
   --primary-hover: #0284c7;
   --primary-light: #e0f2fe;
   --primary-dark: #075985;
-  
+
   --accent: #06b6d4;
   --accent-hover: #0891b2;
   --accent-light: #cffafe;
-  
+
   --sun: #f59e0b;
   --sun-hover: #d97706;
   --sun-light: #fef3c7;
-  
+
   --danger: #ef4444;
   --danger-hover: #dc2626;
   --danger-light: #fee2e2;
-  
+
   --success: #10b981;
   --success-hover: #059669;
   --success-light: #d1fae5;
-  
+
   --warning: #f59e0b;
   --warning-hover: #d97706;
   --warning-light: #fef3c7;
-  
+
   --info: #3b82f6;
   --info-light: #dbeafe;
-  
-  /* Spacing */
+
+  /* Spacing / radii */
   --radius-sm: 8px;
   --radius-md: 12px;
   --radius-lg: 16px;
   --radius-xl: 20px;
-  
+
+  /* Shadows */
   --shadow-xs: 0 1px 2px rgba(10, 37, 64, 0.04);
   --shadow-sm: 0 2px 4px rgba(10, 37, 64, 0.06), 0 1px 2px rgba(10, 37, 64, 0.04);
   --shadow-md: 0 4px 8px rgba(10, 37, 64, 0.08), 0 2px 4px rgba(10, 37, 64, 0.04);
   --shadow-lg: 0 8px 16px rgba(10, 37, 64, 0.1), 0 4px 8px rgba(10, 37, 64, 0.06);
   --shadow-xl: 0 16px 32px rgba(10, 37, 64, 0.12), 0 8px 16px rgba(10, 37, 64, 0.08);
-  
+
+  /* Transitions */
   --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   --transition-fast: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
   --transition-slow: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-* {
+/* Simple reset */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
+}
+
+/* Base body */
+html, body {
+  height: 100%;
 }
 
 body {
@@ -70,34 +80,33 @@ body {
   color: var(--text-primary);
   min-height: 100vh;
   line-height: 1.6;
+  -webkit-text-size-adjust: 100%;
 }
 
-code {
-  font-family: 'Fira Code', source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+/* Code blocks */
+code,
+pre {
+  font-family: 'Fira Code', ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", monospace;
+  font-size: 0.95em;
 }
 
-/* Scrollbar Styling */
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+/* Form defaults */
+button,
+input,
+select,
+textarea {
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
 }
 
-::-webkit-scrollbar-track {
-  background: var(--bg-secondary);
-  border-radius: 10px;
+/* Accessibility: focus outline (kept visible for keyboard users) */
+:focus {
+  outline: 3px solid color-mix(in srgb, var(--primary) 20%, transparent);
+  outline-offset: 2px;
 }
 
-::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, var(--primary), var(--accent));
-  border-radius: 10px;
-  transition: var(--transition);
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(180deg, var(--primary-hover), var(--accent-hover));
-}
-
-/* Selection */
+/* Lightweight selection styling (non-invasive) */
 ::selection {
   background: var(--primary-light);
   color: var(--primary-dark);
