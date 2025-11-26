@@ -1,76 +1,110 @@
-/* ====================================
-   PAGE LAYOUT
-   ==================================== */
+/* ==========================================================================
+   page.css — Clean, minimal page header & layout styles
+   ========================================================================== */
 
+/* -----------------------
+   Page header shell
+   ----------------------- */
 .page-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 16px;
   margin-bottom: 32px;
-  padding-bottom: 24px;
+  padding-bottom: 20px;
   border-bottom: 2px solid var(--bg-secondary);
 }
 
+/* Left: title + small meta */
 .page-header-content {
   display: flex;
   align-items: center;
   gap: 16px;
 }
 
+/* Back button (keeps size, accessible) */
 .back-button {
   flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-md);
+  background: transparent;
+  border: 1px solid var(--bg-secondary);
+  cursor: pointer;
+  transition: transform .14s ease, box-shadow .14s ease;
 }
+.back-button:hover { transform: translateY(-2px); box-shadow: var(--shadow-sm); }
+.back-button:focus { outline: 3px solid color-mix(in srgb, var(--primary) 18%, transparent); outline-offset: 2px; }
 
+/* Title & subtitle */
 .page-title {
   font-size: 2rem;
   font-weight: 700;
-  color: var(--text-primary);
   margin: 0;
+  line-height: 1.05;
+  color: var(--text-primary);
+  /* decorative gradient while preserving accessibility */
   background: linear-gradient(135deg, var(--primary), var(--accent));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  background-clip: text;
 }
 
 .page-subtitle {
   font-size: 1rem;
   color: var(--text-secondary);
-  margin: 4px 0 0 0;
+  margin: 6px 0 0 0;
+  display: block;
 }
 
+/* Actions on the right */
 .page-header-actions {
   display: flex;
   gap: 12px;
+  align-items: center;
 }
 
+/* Content area with subtle entrance */
 .page-content {
-  animation: fadeIn 0.3s ease-out;
+  animation: pageFadeIn .28s ease-out both;
+  will-change: opacity, transform;
 }
 
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+/* Minimal, single keyframe for entrances */
+@keyframes pageFadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
-/* Responsive */
+/* -----------------------
+   Responsive adjustments
+   ----------------------- */
 @media (max-width: 768px) {
   .page-header {
     flex-direction: column;
     align-items: flex-start;
-    gap: 16px;
+    gap: 12px;
+    padding-bottom: 16px;
   }
 
-  .page-title {
-    font-size: 1.5rem;
-  }
+  .page-title { font-size: 1.4rem; }
+  .page-subtitle { font-size: 0.95rem; }
 
   .page-header-actions {
     width: 100%;
+    justify-content: flex-start;
+    gap: 8px;
   }
+
+  .back-button { width: 36px; height: 36px; }
+}
+
+/* -----------------------
+   Accessibility: reduce motion
+   ----------------------- */
+@media (prefers-reduced-motion: reduce) {
+  .page-content { animation: none !important; transition: none !important; }
+  .back-button, .page-header-actions > * { transition: none !important; }
 }
