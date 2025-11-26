@@ -3,7 +3,7 @@
    ==================================== */
 
 .profile-container {
-  max-width: 900px;
+  width: 100%;
   margin: 0 auto;
 }
 
@@ -55,7 +55,7 @@
 }
 
 .profile-banner {
-  height: 150px;
+  /* height: 150px; */
   position: relative;
   background: linear-gradient(135deg, var(--primary), var(--accent));
 }
