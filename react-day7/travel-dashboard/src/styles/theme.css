@@ -1,206 +1,160 @@
-/* theme.css
-   Centralized CSS variables and theme overrides.
-   Usage:
-     - Default (light): no attribute or data-theme="light"
-     - Dark:           <html data-theme="dark">
-     - Coastal:        <html data-theme="coastal">
-     - High contrast:  <html data-theme="contrast">
-*/
+/* ====================================
+   THEME VARIABLES - DESIGN TOKENS
+   ==================================== */
 
-/* ------------------------
-   Core variables (default LIGHT theme)
-   ------------------------ */
 :root {
-  /* Backgrounds & surfaces */
-  --bg-primary: #f8fcfd;        /* page background */
-  --bg-secondary: #eef7f9;      /* subtle panels / tracks */
-  --surface: #ffffff;           /* cards, panels */
-  --surface-hover: #f4fbfd;
+  /* ====================================
+     COLORS - COASTAL PALETTE
+     ==================================== */
+  
+  /* Background Colors */
+  --bg-primary: #f8fcfd;
+  --bg-secondary: #eef7f9;
+  
+  /* Surface Colors */
+  --surface: #ffffff;
+  --surface-hover: #f0f9fb;
   --surface-elevated: #ffffff;
-
-  /* Text */
+  
+  /* Text Colors */
   --text-primary: #0a2540;
   --text-secondary: #425466;
   --text-muted: #6b7b8a;
-
-  /* Brand / accents */
+  
+  /* Primary Brand Colors */
   --primary: #0ea5e9;
   --primary-hover: #0284c7;
   --primary-light: #e0f2fe;
   --primary-dark: #075985;
-
+  
+  /* Accent Colors */
   --accent: #06b6d4;
   --accent-hover: #0891b2;
   --accent-light: #cffafe;
-
-  /* Semantic */
+  
+  /* Semantic Colors */
   --success: #10b981;
   --success-hover: #059669;
   --success-light: #d1fae5;
-
+  
   --warning: #f59e0b;
   --warning-hover: #d97706;
   --warning-light: #fef3c7;
-
+  
   --danger: #ef4444;
   --danger-hover: #dc2626;
   --danger-light: #fee2e2;
-
-  /* UI geometry / spacing */
+  
+  --info: #3b82f6;
+  --info-light: #dbeafe;
+  
+  /* Special Colors */
+  --sun: #f59e0b;
+  --sun-hover: #d97706;
+  --sun-light: #fef3c7;
+  
+  /* ====================================
+     SPACING & SIZING
+     ==================================== */
+  
+  /* Border Radius */
   --radius-sm: 8px;
   --radius-md: 12px;
   --radius-lg: 16px;
   --radius-xl: 20px;
-
+  
   /* Shadows */
   --shadow-xs: 0 1px 2px rgba(10, 37, 64, 0.04);
-  --shadow-sm: 0 4px 10px rgba(10, 37, 64, 0.06);
-  --shadow-md: 0 8px 20px rgba(10, 37, 64, 0.08);
-  --shadow-lg: 0 12px 36px rgba(10, 37, 64, 0.12);
-  --shadow-xl: 0 18px 60px rgba(10, 37, 64, 0.14);
-
-  /* Motion */
-  --transition: all .18s cubic-bezier(.4,0,.2,1);
-  --transition-fast: all .12s cubic-bezier(.2,.9,.3,1);
-
-  /* Misc */
-  --page-fluid-gutter: 28px;
+  --shadow-sm: 0 2px 4px rgba(10, 37, 64, 0.06), 0 1px 2px rgba(10, 37, 64, 0.04);
+  --shadow-md: 0 4px 8px rgba(10, 37, 64, 0.08), 0 2px 4px rgba(10, 37, 64, 0.04);
+  --shadow-lg: 0 8px 16px rgba(10, 37, 64, 0.1), 0 4px 8px rgba(10, 37, 64, 0.06);
+  --shadow-xl: 0 16px 32px rgba(10, 37, 64, 0.12), 0 8px 16px rgba(10, 37, 64, 0.08);
+  
+  /* ====================================
+     TRANSITIONS
+     ==================================== */
+  
+  --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-fast: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  
+  /* ====================================
+     TYPOGRAPHY
+     ==================================== */
+  
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  --font-mono: 'Fira Code', source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+  
+  /* Font Sizes */
+  --text-xs: 0.75rem;    /* 12px */
+  --text-sm: 0.875rem;   /* 14px */
+  --text-base: 1rem;     /* 16px */
+  --text-lg: 1.125rem;   /* 18px */
+  --text-xl: 1.25rem;    /* 20px */
+  --text-2xl: 1.5rem;    /* 24px */
+  --text-3xl: 1.875rem;  /* 30px */
+  --text-4xl: 2.25rem;   /* 36px */
+  
+  /* Line Heights */
+  --leading-none: 1;
+  --leading-tight: 1.25;
+  --leading-normal: 1.5;
+  --leading-relaxed: 1.625;
+  --leading-loose: 2;
+  
+  /* ====================================
+     Z-INDEX LAYERS
+     ==================================== */
+  
+  --z-dropdown: 1000;
+  --z-sticky: 1020;
+  --z-fixed: 1030;
+  --z-modal-backdrop: 1040;
+  --z-modal: 1050;
+  --z-popover: 1060;
+  --z-tooltip: 1070;
 }
 
-/* Apply smooth color transitions to top-level containers */
-html, body, .app, .page--full {
-  transition: background-color .18s ease, color .18s ease;
-  background-color: var(--bg-primary);
+/* ====================================
+   DARK MODE (OPTIONAL)
+   ==================================== */
+
+@media (prefers-color-scheme: dark) {
+  .dark-mode {
+    /* Background Colors */
+    --bg-primary: #0a2540;
+    --bg-secondary: #142d4c;
+    
+    /* Surface Colors */
+    --surface: #1a3650;
+    --surface-hover: #234563;
+    --surface-elevated: #2a4d6b;
+    
+    /* Text Colors */
+    --text-primary: #f8fcfd;
+    --text-secondary: #b8d4e6;
+    --text-muted: #8ba7bd;
+    
+    /* Adjust shadows for dark mode */
+    --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.2);
+    --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.3), 0 1px 2px rgba(0, 0, 0, 0.2);
+    --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.4), 0 2px 4px rgba(0, 0, 0, 0.2);
+    --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.5), 0 4px 8px rgba(0, 0, 0, 0.3);
+    --shadow-xl: 0 16px 32px rgba(0, 0, 0, 0.6), 0 8px 16px rgba(0, 0, 0, 0.4);
+  }
+}
+
+/* ====================================
+   CUSTOM PROPERTIES USAGE
+   ==================================== */
+
+/* Example:
+.my-element {
   color: var(--text-primary);
-}
-
-/* ------------------------
-   DARK THEME
-   Activate with: <html data-theme="dark">
-   ------------------------ */
-html[data-theme="dark"] {
-  --bg-primary: #071426;
-  --bg-secondary: #0a2133;
-  --surface: #071a2a;
-  --surface-hover: #082433;
-  --surface-elevated: #082a3c;
-
-  --text-primary: #e6f6ff;
-  --text-secondary: #c6e8fb;
-  --text-muted: #88a9bf;
-
-  --primary: #2dd4bf;
-  --primary-hover: #22c1a9;
-  --primary-light: rgba(45,212,191,0.08);
-  --primary-dark: #066b5e;
-
-  --accent: #60a5fa;
-  --accent-light: rgba(96,165,250,0.08);
-
-  --success: #34d399;
-  --success-light: rgba(52,211,153,0.08);
-
-  --warning: #fbbf24;
-  --danger: #ff6b6b;
-  --danger-light: rgba(255,107,107,0.06);
-
-  /* stronger shadows for dark */
-  --shadow-xs: 0 1px 2px rgba(0,0,0,0.35);
-  --shadow-sm: 0 6px 18px rgba(0,0,0,0.45);
-  --shadow-md: 0 12px 36px rgba(0,0,0,0.5);
-}
-
-/* ------------------------
-   COASTAL / BLUE THEME
-   Activate with: <html data-theme="coastal">
-   ------------------------ */
-html[data-theme="coastal"] {
-  --bg-primary: #f3fbfd;
-  --bg-secondary: #e8f6fb;
-  --surface: #ffffff;
-  --surface-hover: #f7fdff;
-
-  --text-primary: #04293a;
-  --text-secondary: #2b5876;
-  --text-muted: #51778b;
-
-  --primary: #0ea5e9;
-  --primary-hover: #0284c7;
-  --primary-light: #dff7ff;
-
-  --accent: #06b6d4;
-  --accent-light: #e6fdfd;
-
-  --success: #10b981;
-  --danger: #ef4444;
-}
-
-/* ------------------------
-   HIGH CONTRAST THEME (accessibility-minded)
-   Activate with: <html data-theme="contrast">
-   ------------------------ */
-html[data-theme="contrast"] {
-  --bg-primary: #000000;
-  --bg-secondary: #111111;
-  --surface: #000000;
-  --surface-hover: #111111;
-
-  --text-primary: #ffffff;
-  --text-secondary: #f1f1f1;
-  --text-muted: #d6d6d6;
-
-  --primary: #ffff00;       /* bright yellow accent */
-  --primary-light: rgba(255,255,0,0.08);
-  --accent: #00ffff;
-
-  --success: #00ff00;
-  --danger: #ff0000;
-
-  --shadow-xs: none;
-  --shadow-sm: none;
-  --shadow-md: none;
-}
-
-/* ------------------------
-   Helper combos (semantic utilities)
-   Use these when you need quick background/text combos.
-   ------------------------ */
-.bg-surface { background: var(--surface) !important; }
-.bg-primary { background: var(--bg-primary) !important; }
-.text-primary { color: var(--text-primary) !important; }
-.text-secondary { color: var(--text-secondary) !important; }
-
-/* Buttons that use variables */
-.btn-primary {
-  background: linear-gradient(135deg, var(--primary), var(--accent));
-  color: white;
-  box-shadow: var(--shadow-sm);
+  background: var(--surface);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
   transition: var(--transition);
 }
-.btn-primary:hover { filter: brightness(.96); transform: translateY(-2px); }
-
-/* Tiny accessibility tweak: ensure focus outlines are visible across themes */
-:focus { outline: 3px solid color-mix(in srgb, var(--primary) 18%, transparent); outline-offset: 3px; }
-
-/* ------------------------
-   Reduced motion support
-   ------------------------ */
-@media (prefers-reduced-motion: reduce) {
-  * { transition: none !important; animation: none !important; }
-}
-
-/* ------------------------
-   Notes / Integration tips (keep as comment)
-   ------------------------
-   1) Ensure your components reference the CSS variables (e.g. background: var(--surface))
-      not hard-coded hex values — otherwise theme changes won't affect them.
-
-   2) Toggle theme by setting data-theme on <html>:
-        document.documentElement.setAttribute('data-theme', 'dark')
-      or remove attribute for default/light theme.
-
-   3) Keep theme overrides loaded after base CSS (import theme.css after your component CSS)
-      so overrides reliably apply.
-
-   4) To persist theme across reloads, save the chosen theme to localStorage and re-apply on app init.
 */
