@@ -8,7 +8,7 @@
 
 .charts-container {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   gap: 24px;
   width: 100%;
 }
@@ -29,7 +29,7 @@
   transition: var(--transition);
   position: relative;
   overflow: hidden;
-  min-height: 180px;
+  min-height: 150px;
 }
 
 .chart-card::before {
@@ -82,7 +82,7 @@
    ==================================== */
 
 .chart-wrapper {
-  width: 100%;
+  width: 90%;
   height: 300px;
   position: relative;
 }
