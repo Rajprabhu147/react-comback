@@ -2,8 +2,12 @@
    SETTINGS PAGE
    ==================================== */
 
+/* ====================================
+   CONTAINER
+   ==================================== */
+
 .settings-container {
-  width: 100%;
+  width: 90%;
   margin: 0 auto;
 }
 
@@ -169,69 +173,6 @@
 }
 
 /* ====================================
-   THEME PREVIEW
-   ==================================== */
-
-.theme-preview {
-  padding: 20px;
-  background: var(--bg-primary);
-  border-radius: var(--radius-md);
-}
-
-.preview-label {
-  font-size: 0.9rem;
-  font-weight: 600;
-  color: var(--text-secondary);
-  margin-bottom: 12px;
-}
-
-.preview-box {
-  background: var(--surface);
-  border: 1px solid var(--bg-secondary);
-  border-radius: var(--radius-md);
-  overflow: hidden;
-}
-
-.preview-header {
-  display: flex;
-  gap: 6px;
-  padding: 12px;
-  background: var(--bg-secondary);
-}
-
-.preview-dot {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background: var(--text-muted);
-}
-
-.preview-content {
-  display: flex;
-  height: 150px;
-}
-
-.preview-sidebar {
-  width: 60px;
-  background: var(--bg-primary);
-  border-right: 1px solid var(--bg-secondary);
-}
-
-.preview-main {
-  flex: 1;
-  padding: 12px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.preview-card {
-  height: 40px;
-  background: var(--bg-primary);
-  border-radius: var(--radius-sm);
-}
-
-/* ====================================
    SETTINGS OPTIONS
    ==================================== */
 
@@ -269,6 +210,52 @@
 .option-description {
   font-size: 0.85rem;
   color: var(--text-secondary);
+}
+
+/* ====================================
+   TOGGLE SWITCH
+   ==================================== */
+
+.toggle-switch {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 26px;
+}
+
+.toggle-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.toggle-slider {
+  position: absolute;
+  cursor: pointer;
+  inset: 0;
+  background: var(--bg-secondary);
+  transition: var(--transition);
+  border-radius: 26px;
+}
+
+.toggle-slider::before {
+  position: absolute;
+  content: "";
+  height: 20px;
+  width: 20px;
+  left: 3px;
+  bottom: 3px;
+  background: white;
+  transition: var(--transition);
+  border-radius: 50%;
+}
+
+.toggle-switch input:checked + .toggle-slider {
+  background: var(--primary);
+}
+
+.toggle-switch input:checked + .toggle-slider::before {
+  transform: translateX(24px);
 }
 
 /* ====================================
@@ -320,10 +307,11 @@
   justify-content: space-between;
   color: var(--text-secondary);
   font-weight: 600;
+  font-size: 0.85rem;
 }
 
 /* ====================================
-   SHORTCUTS LIST
+   KEYBOARD SHORTCUTS
    ==================================== */
 
 .shortcuts-list {
@@ -344,6 +332,11 @@
   border-radius: var(--radius-sm);
 }
 
+.shortcut-description {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
 .shortcut-keys {
   display: flex;
   gap: 4px;
@@ -359,11 +352,6 @@ kbd {
   font-weight: 600;
   color: var(--text-primary);
   box-shadow: 0 2px 0 var(--text-muted);
-}
-
-.shortcut-description {
-  font-size: 0.9rem;
-  color: var(--text-secondary);
 }
 
 /* ====================================
@@ -413,38 +401,6 @@ kbd {
 .data-action-description {
   font-size: 0.85rem;
   color: var(--text-secondary);
-}
-
-/* ====================================
-   STORAGE INFO
-   ==================================== */
-
-.storage-info {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  gap: 16px;
-  padding: 20px;
-  background: var(--bg-primary);
-  border-radius: var(--radius-md);
-}
-
-.storage-item {
-  text-align: center;
-  padding: 16px;
-  background: var(--surface);
-  border-radius: var(--radius-md);
-}
-
-.storage-label {
-  font-size: 0.85rem;
-  color: var(--text-secondary);
-  margin-bottom: 8px;
-}
-
-.storage-value {
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: var(--primary);
 }
 
 /* ====================================
@@ -513,52 +469,6 @@ kbd {
 }
 
 /* ====================================
-   DANGER ZONE
-   ==================================== */
-
-.danger-zone {
-  border: 2px solid var(--danger-light);
-  padding: 24px;
-  border-radius: var(--radius-md);
-}
-
-.danger-zone .section-block-title {
-  color: var(--danger);
-}
-
-.danger-actions {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-.danger-action-item {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 20px;
-  background: var(--danger-light);
-  border-radius: var(--radius-md);
-  border: 1px solid transparent;
-  transition: var(--transition);
-}
-
-.danger-action-item:hover {
-  border-color: var(--danger);
-}
-
-.danger-action-title {
-  font-weight: 600;
-  color: var(--text-primary);
-  margin-bottom: 4px;
-}
-
-.danger-action-description {
-  font-size: 0.85rem;
-  color: var(--text-secondary);
-}
-
-/* ====================================
    RESPONSIVE
    ==================================== */
 
@@ -579,33 +489,17 @@ kbd {
     grid-template-columns: 1fr;
   }
 
-  .option-item {
+  .option-item,
+  .data-action-item,
+  .session-item {
     flex-direction: column;
     align-items: flex-start;
     gap: 12px;
   }
 
-  .data-action-item,
-  .danger-action-item {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 16px;
-  }
-
+  .option-item .btn,
   .data-action-item .btn,
-  .danger-action-item .btn {
-    width: 100%;
-  }
-
-  .session-item {
-    flex-wrap: wrap;
-  }
-
   .session-item .btn {
     width: 100%;
-  }
-
-  .storage-info {
-    grid-template-columns: 1fr;
   }
 }
