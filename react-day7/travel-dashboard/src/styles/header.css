@@ -1,88 +1,428 @@
-/* layout-helpers.css
-   Makes specific pages full width / fluid while leaving default container behavior intact.
-*/
+/* ====================================
+   HEADER - CLEANED & OPTIMIZED
+   ==================================== */
 
-/* configurable gutters (change once in variables) */
-:root {
-  --page-fluid-gutter: 24px;   /* side padding on very large screens */
-  --page-fluid-gap: 24px;      /* internal gaps between sections */
+/* ====================================
+   HEADER CONTAINER
+   ==================================== */
+
+.header {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(14, 165, 233, 0.1);
+  box-shadow: 0 4px 20px rgba(14, 165, 233, 0.08);
+  position: sticky;
+  top: 0;
+  z-index: 100;
 }
 
-/* ---------------------------
-   Page-level control
-   Usage: add `.page--full` to the top-level container of the page
-   e.g. <div class="app page--full profile-page"> ... </div>
-   --------------------------- */
-.page--full .app-container {
-  max-width: none !important;
-  width: 100% !important;
-  margin: 0 !important;
-  padding: 0 !important; /* let .main-content control gutters */
-}
-
-/* Expand main content edge-to-edge but keep a small inner gutter */
-.page--full .main-content {
-  padding-left: var(--page-fluid-gutter);
-  padding-right: var(--page-fluid-gutter);
-  padding-top: 32px;
-  padding-bottom: 48px;
-  max-width: 100%;
-  width: 100%;
-}
-
-/* Make sections span full width and use fluid grids */
-.page--full .dashboard-layout,
-.page--full .analytics-section,
-.page--full .items-section,
-.page--full .profile-section,
-.page--full .settings-section,
-.page--full .notifications-section {
-  width: 100%;
-  max-width: 100%;
-  margin: 0;
-  gap: var(--page-fluid-gap);
-}
-
-/* Cards inside full pages get edge-aware widths (so they don't become huge) */
-.page--full .card {
-  max-width: 1280px;        /* optional: cap extremely wide cards */
-  width: 100%;
-  margin-left: auto;
-  margin-right: auto;
-  box-sizing: border-box;
-}
-
-/* Force grid children to expand fluidly on full pages */
-.page--full .grid, 
-.page--full .charts-container,
-.page--full .stats-grid {
-  gap: var(--page-fluid-gap);
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-}
-
-/* For pages where you want absolutely edge-to-edge sections (hero banners, maps) */
-.page--full .section-edge {
-  width: 100vw;
-  position: relative;
-  left: 50%;
-  right: 50%;
-  margin-left: -50vw;
-  margin-right: -50vw;
-  padding-left: var(--page-fluid-gutter);
-  padding-right: var(--page-fluid-gutter);
-}
-
-/* Make modals and dropdowns centered but unaffected */
-.page--full .modal,
-.page--full .user-dropdown {
+.header-container {
+  max-width: 1920px;
   margin: 0 auto;
+  padding: 16px 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
-/* Responsive tweaks: reduce gutters on small screens */
-@media (max-width: 1024px) {
-  .page--full .main-content { padding-left: 20px; padding-right: 20px; }
+/* ====================================
+   LOGO
+   ==================================== */
+
+.header-logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 1.5rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition: var(--transition);
+  text-decoration: none;
 }
+
+.header-logo:hover {
+  transform: scale(1.05);
+}
+
+.logo-icon {
+  font-size: 2.2rem;
+  filter: drop-shadow(0 4px 12px rgba(14, 165, 233, 0.4));
+  animation: wave 3s ease-in-out infinite;
+}
+
+.logo-text {
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-weight: 800;
+  letter-spacing: -1px;
+}
+
+/* ====================================
+   HEADER ACTIONS
+   ==================================== */
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+/* ====================================
+   ICON BUTTONS
+   ==================================== */
+
+.header-icon-btn {
+  position: relative;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(14, 165, 233, 0.08);
+  border: 2px solid transparent;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: var(--transition);
+  font-size: 22px;
+  color: var(--text-primary);
+}
+
+.header-icon-btn:hover {
+  background: var(--primary-light);
+  border-color: var(--primary);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(14, 165, 233, 0.2);
+}
+
+.notification-badge {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  background: linear-gradient(135deg, var(--danger), #dc2626);
+  color: white;
+  font-size: 11px;
+  font-weight: 800;
+  padding: 3px 7px;
+  border-radius: 20px;
+  min-width: 22px;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
+  animation: pulse 2s infinite;
+}
+
+/* ====================================
+   USER PROFILE BUTTON
+   ==================================== */
+
+.header-user {
+  position: relative;
+}
+
+.user-profile-btn {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 12px 8px 8px;
+  background: rgba(14, 165, 233, 0.08);
+  border: 2px solid transparent;
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.user-profile-btn:hover {
+  background: var(--primary-light);
+  border-color: var(--primary);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(14, 165, 233, 0.2);
+}
+
+.user-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 800;
+  font-size: 16px;
+  flex-shrink: 0;
+  box-shadow: 0 4px 12px rgba(14, 165, 233, 0.3);
+  border: 3px solid white;
+}
+
+.user-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+}
+
+.user-name {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-primary);
+  line-height: 1.2;
+}
+
+.user-email {
+  font-size: 12px;
+  color: var(--text-muted);
+  line-height: 1.2;
+}
+
+.dropdown-arrow {
+  font-size: 10px;
+  color: var(--text-muted);
+  transition: var(--transition);
+}
+
+.user-profile-btn:hover .dropdown-arrow {
+  transform: translateY(2px);
+}
+
+/* ====================================
+   USER DROPDOWN
+   ==================================== */
+
+.user-dropdown {
+  position: absolute;
+  top: calc(100% + 12px);
+  right: 0;
+  min-width: 320px;
+  background: rgba(255, 255, 255, 0.98);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(14, 165, 233, 0.1);
+  border-radius: var(--radius-xl);
+  box-shadow: 0 12px 40px rgba(14, 165, 233, 0.15);
+  z-index: 1000;
+  animation: slideDown 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  overflow: hidden;
+}
+
+.dropdown-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 20px;
+  background: linear-gradient(135deg, rgba(14, 165, 233, 0.1), rgba(6, 182, 212, 0.1));
+  border-bottom: 2px solid var(--bg-secondary);
+}
+
+.dropdown-avatar {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 800;
+  font-size: 22px;
+  flex-shrink: 0;
+  box-shadow: 0 6px 20px rgba(14, 165, 233, 0.3);
+  border: 4px solid white;
+}
+
+.dropdown-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.dropdown-name {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+}
+
+.dropdown-email {
+  font-size: 13px;
+  color: var(--text-secondary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dropdown-divider {
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--bg-secondary), transparent);
+  margin: 8px 0;
+}
+
+/* ====================================
+   DROPDOWN ITEMS
+   ==================================== */
+
+.dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  padding: 14px 20px;
+  background: transparent;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+  transition: var(--transition);
+  color: var(--text-primary);
+  font-size: 14px;
+  font-weight: 500;
+  position: relative;
+  overflow: hidden;
+}
+
+.dropdown-item::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 3px;
+  background: linear-gradient(180deg, var(--primary), var(--accent));
+  transform: scaleY(0);
+  transition: var(--transition);
+}
+
+.dropdown-item:hover {
+  background: linear-gradient(90deg, rgba(14, 165, 233, 0.08), transparent);
+  color: var(--primary);
+  padding-left: 24px;
+}
+
+.dropdown-item:hover::before {
+  transform: scaleY(1);
+}
+
+.dropdown-item.active {
+  background: linear-gradient(90deg, rgba(14, 165, 233, 0.12), transparent);
+  color: var(--primary);
+  font-weight: 700;
+}
+
+.dropdown-item.danger {
+  color: var(--danger);
+}
+
+.dropdown-item.danger:hover {
+  background: var(--danger-light);
+}
+
+.item-icon {
+  font-size: 20px;
+  width: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.dropdown-badge {
+  margin-left: auto;
+  background: linear-gradient(135deg, var(--danger), #dc2626);
+  color: white;
+  font-size: 11px;
+  font-weight: 800;
+  padding: 3px 8px;
+  border-radius: 20px;
+  min-width: 22px;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3);
+}
+
+/* ====================================
+   MOBILE MENU BUTTON
+   ==================================== */
+
+.mobile-menu-btn {
+  display: none;
+  width: 48px;
+  height: 48px;
+  align-items: center;
+  justify-content: center;
+  background: rgba(14, 165, 233, 0.08);
+  border: 2px solid transparent;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  font-size: 20px;
+  color: var(--text-primary);
+  transition: var(--transition);
+}
+
+.mobile-menu-btn:hover {
+  background: var(--primary-light);
+  border-color: var(--primary);
+}
+
+/* ====================================
+   RESPONSIVE
+   ==================================== */
+
+@media (max-width: 1024px) {
+  .header-container {
+    padding: 12px 24px;
+  }
+
+  .user-info {
+    display: none;
+  }
+
+  .dropdown-arrow {
+    display: none;
+  }
+
+  .mobile-menu-btn {
+    display: flex;
+  }
+}
+
+@media (max-width: 768px) {
+  .header-container {
+    padding: 12px 16px;
+  }
+
+  .logo-text {
+    display: none;
+  }
+
+  .header-actions {
+    gap: 12px;
+  }
+
+  .header-icon-btn {
+    width: 44px;
+    height: 44px;
+    font-size: 20px;
+  }
+
+  .user-avatar {
+    width: 40px;
+    height: 40px;
+    font-size: 14px;
+    border: 2px solid white;
+  }
+
+  .user-dropdown {
+    right: -16px;
+    min-width: 280px;
+  }
+}
+
 @media (max-width: 480px) {
-  .page--full .main-content { padding-left: 12px; padding-right: 12px; }
-  .page--full .card { margin-left: 0; margin-right: 0; padding-left: 12px; padding-right: 12px; }
+  .header-icon-btn {
+    width: 40px;
+    height: 40px;
+    font-size: 18px;
+  }
+
+  .notification-badge {
+    font-size: 10px;
+    padding: 2px 5px;
+    min-width: 18px;
+  }
 }
