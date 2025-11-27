@@ -1,5 +1,9 @@
 /* ====================================
-   TOOLTIP COMPONENT — CLEAN VERSION
+   TOOLTIP COMPONENT
+   ==================================== */
+
+/* ====================================
+   WRAPPER
    ==================================== */
 
 .tooltip-wrapper {
@@ -7,24 +11,29 @@
   display: inline-block;
 }
 
+/* ====================================
+   TOOLTIP BASE
+   ==================================== */
+
 .tooltip {
   position: absolute;
+  background: rgba(10, 37, 64, 0.95);
+  backdrop-filter: blur(10px);
+  color: white;
   padding: 8px 12px;
+  border-radius: var(--radius-md);
   font-size: 13px;
   font-weight: 500;
   white-space: nowrap;
+  z-index: var(--z-tooltip);
   pointer-events: none;
-
-  /* Visuals */
-  background: rgba(10, 37, 64, 0.95);
-  color: white;
-  border-radius: var(--radius-md);
   box-shadow: var(--shadow-lg);
-  backdrop-filter: blur(10px);
-
-  /* Arrow */
-  z-index: 1000;
+  animation: fadeIn 0.2s ease-out;
 }
+
+/* ====================================
+   TOOLTIP ARROW
+   ==================================== */
 
 .tooltip::after {
   content: '';
@@ -32,8 +41,11 @@
   border: 6px solid transparent;
 }
 
-/* --------- PLACEMENTS --------- */
+/* ====================================
+   TOOLTIP POSITIONS
+   ==================================== */
 
+/* Top */
 .tooltip-top {
   bottom: calc(100% + 8px);
   left: 50%;
@@ -47,6 +59,7 @@
   border-top-color: rgba(10, 37, 64, 0.95);
 }
 
+/* Bottom */
 .tooltip-bottom {
   top: calc(100% + 8px);
   left: 50%;
@@ -60,6 +73,7 @@
   border-bottom-color: rgba(10, 37, 64, 0.95);
 }
 
+/* Left */
 .tooltip-left {
   right: calc(100% + 8px);
   top: 50%;
@@ -73,6 +87,7 @@
   border-left-color: rgba(10, 37, 64, 0.95);
 }
 
+/* Right */
 .tooltip-right {
   left: calc(100% + 8px);
   top: 50%;
@@ -84,4 +99,81 @@
   top: 50%;
   transform: translateY(-50%);
   border-right-color: rgba(10, 37, 64, 0.95);
+}
+
+/* ====================================
+   TOOLTIP VARIANTS
+   ==================================== */
+
+.tooltip-primary {
+  background: var(--primary);
+}
+
+.tooltip-primary::after {
+  border-top-color: var(--primary);
+  border-bottom-color: var(--primary);
+  border-left-color: var(--primary);
+  border-right-color: var(--primary);
+}
+
+.tooltip-success {
+  background: var(--success);
+}
+
+.tooltip-success::after {
+  border-top-color: var(--success);
+  border-bottom-color: var(--success);
+  border-left-color: var(--success);
+  border-right-color: var(--success);
+}
+
+.tooltip-danger {
+  background: var(--danger);
+}
+
+.tooltip-danger::after {
+  border-top-color: var(--danger);
+  border-bottom-color: var(--danger);
+  border-left-color: var(--danger);
+  border-right-color: var(--danger);
+}
+
+.tooltip-warning {
+  background: var(--warning);
+}
+
+.tooltip-warning::after {
+  border-top-color: var(--warning);
+  border-bottom-color: var(--warning);
+  border-left-color: var(--warning);
+  border-right-color: var(--warning);
+}
+
+/* ====================================
+   TOOLTIP WITH MULTILINE TEXT
+   ==================================== */
+
+.tooltip-multiline {
+  white-space: normal;
+  max-width: 200px;
+  text-align: center;
+}
+
+/* ====================================
+   RESPONSIVE
+   ==================================== */
+
+@media (max-width: 768px) {
+  .tooltip {
+    font-size: 12px;
+    padding: 6px 10px;
+  }
+
+  .tooltip::after {
+    border-width: 5px;
+  }
+
+  .tooltip-multiline {
+    max-width: 150px;
+  }
 }
