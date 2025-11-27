@@ -1,182 +1,275 @@
-/* ==========================================================================
-   charts.css — Grid + Chart Cards (clean, minimal, responsive)
-   ========================================================================== */
+/* ====================================
+   ANALYTICS CHARTS - CLEANED
+   ==================================== */
 
-/* Grid helpers */
+/* ====================================
+   CHARTS CONTAINER
+   ==================================== */
+
 .charts-container {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 24px;
   width: 100%;
-  align-items: start;
 }
 
-/* Card: compact, accessible, and consistent */
+/* ====================================
+   CHART CARD
+   ==================================== */
+
 .chart-card {
-  position: relative;
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  background: rgba(255,255,255,0.95);
-  backdrop-filter: blur(6px);
-  border-radius: var(--radius-lg, 16px);
-  padding: 18px;
-  border: 1px solid rgba(14,165,233,0.06);
-  box-shadow: var(--shadow-sm, 0 2px 6px rgba(10,37,64,0.06));
-  transition: var(--transition, all .2s ease);
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(12px);
+  border-radius: var(--radius-xl);
+  padding: 24px;
+  box-shadow: var(--shadow-lg);
+  border: 1px solid rgba(14, 165, 233, 0.1);
+  transition: var(--transition);
+  position: relative;
   overflow: hidden;
-  min-height: 160px;
+  min-height: 180px;
 }
 
-/* Accent bar (thin) — shown on hover */
 .chart-card::before {
-  content: "";
+  content: '';
   position: absolute;
-  left: 0;
   top: 0;
-  height: 3px;
-  width: 100%;
-  background: linear-gradient(90deg, var(--primary, #0ea5e9), var(--accent, #06b6d4));
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--primary), var(--accent));
   opacity: 0;
-  transition: opacity .2s ease;
+  transition: var(--transition);
 }
-.chart-card:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--shadow-md, 0 8px 20px rgba(10,37,64,0.08));
-  border-color: rgba(14,165,233,0.12);
-}
-.chart-card:hover::before { opacity: 1; }
 
-/* Titles */
+.chart-card:hover {
+  box-shadow: var(--shadow-xl);
+  transform: translateY(-4px);
+  border-color: rgba(14, 165, 233, 0.2);
+}
+
+.chart-card:hover::before {
+  opacity: 1;
+}
+
+/* ====================================
+   CHART TITLE
+   ==================================== */
+
 .chart-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 20px;
+  background: linear-gradient(135deg, var(--text-primary), var(--primary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
   display: flex;
   align-items: center;
   gap: 10px;
-  font-size: 1rem;
-  font-weight: 700;
-  margin: 0;
-  color: var(--text-primary, #0a2540);
-  /* subtle text gradient for emphasis without breaking accessibility */
-  background: linear-gradient(90deg, var(--text-primary, #0a2540), var(--primary, #0ea5e9));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-.chart-title::before {
-  content: "📊";
-  font-size: 1.1rem;
-  opacity: 0.9;
 }
 
-/* Chart wrapper keeps consistent visual ratio where supported */
+.chart-title::before {
+  content: '📊';
+  font-size: 1.3rem;
+  filter: drop-shadow(0 2px 4px rgba(14, 165, 233, 0.2));
+}
+
+/* ====================================
+   CHART WRAPPER
+   ==================================== */
+
 .chart-wrapper {
   width: 100%;
-  aspect-ratio: 16 / 9;
-  height: auto;
+  height: 300px;
   position: relative;
-  display: block;
 }
 
-/* Ensure Recharts / SVG wrappers fill the container */
-.recharts-wrapper,
-.chart-card .recharts-wrapper > svg,
-.chart-card .recharts-wrapper > div {
+/* Recharts specific overrides */
+.chart-wrapper .recharts-wrapper,
+.chart-wrapper .recharts-surface {
   width: 100% !important;
   height: 100% !important;
 }
 
-/* Compact stats grid used within chart cards */
+/* ====================================
+   STATS GRID
+   ==================================== */
+
 .stats-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 12px;
-  margin-bottom: 8px;
+  gap: 16px;
+  margin-bottom: 24px;
 }
 
 .stat-card {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  padding: 12px;
-  border-radius: var(--radius-md, 12px);
-  background: linear-gradient(135deg, rgba(14,165,233,0.04), rgba(6,182,212,0.04));
-  border: 1px solid transparent;
-  box-shadow: var(--shadow-xs, 0 1px 2px rgba(10,37,64,0.04));
-  transition: var(--transition, all .18s ease);
+  background: linear-gradient(135deg, rgba(14, 165, 233, 0.08), rgba(6, 182, 212, 0.08));
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition);
+  border: 2px solid transparent;
+  position: relative;
+  overflow: hidden;
 }
+
+.stat-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 60px;
+  height: 60px;
+  background: radial-gradient(circle, rgba(14, 165, 233, 0.1), transparent);
+  border-radius: 50%;
+  transform: translate(20px, -20px);
+}
+
 .stat-card:hover {
+  box-shadow: var(--shadow-md);
   transform: translateY(-4px);
-  box-shadow: var(--shadow-sm, 0 4px 10px rgba(10,37,64,0.06));
-  border-color: rgba(14,165,233,0.08);
+  border-color: var(--primary);
 }
 
 .stat-value {
-  font-size: 1.5rem;
-  font-weight: 800;
-  line-height: 1;
-  margin: 0;
-  background: linear-gradient(90deg, var(--primary, #0ea5e9), var(--accent, #06b6d4));
+  font-size: 2.5rem;
+  font-weight: 900;
+  background: linear-gradient(135deg, var(--primary), var(--accent));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 8px;
+  line-height: 1;
+  position: relative;
+  z-index: 1;
 }
+
 .stat-label {
-  font-size: 0.78rem;
-  color: var(--text-secondary, #425466);
+  font-size: 0.85rem;
+  color: var(--text-secondary);
   text-transform: uppercase;
   font-weight: 700;
   letter-spacing: 0.5px;
+  position: relative;
+  z-index: 1;
 }
 
-/* Chart states (loading / empty) */
+/* ====================================
+   CHART STATES
+   ==================================== */
+
 .chart-loading,
 .chart-empty {
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 160px;
-  padding: 12px;
-  color: var(--text-muted, #6b7b8a);
+  height: 300px;
+  color: var(--text-muted);
 }
-.chart-empty { flex-direction: column; text-align: center; }
-.chart-empty-icon { font-size: 2.2rem; margin-bottom: 8px; opacity: 0.6; }
-.chart-empty-text { font-size: 0.95rem; font-weight: 600; }
 
-/* Recharts tooltip: minimal polished override */
+.chart-loading {
+  font-size: 14px;
+}
+
+.chart-empty {
+  flex-direction: column;
+  text-align: center;
+}
+
+.chart-empty-icon {
+  font-size: 3rem;
+  margin-bottom: 12px;
+  opacity: 0.5;
+}
+
+.chart-empty-text {
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+/* ====================================
+   RECHARTS TOOLTIP STYLING
+   ==================================== */
+
+.recharts-tooltip-wrapper {
+  outline: none;
+}
+
 .recharts-default-tooltip {
-  background: rgba(255,255,255,0.95) !important;
-  border-radius: var(--radius-md, 12px) !important;
-  border: 1px solid rgba(14,165,233,0.08) !important;
-  box-shadow: var(--shadow-md, 0 8px 20px rgba(10,37,64,0.08)) !important;
-  padding: 8px 10px !important;
-  backdrop-filter: blur(6px);
-}
-.recharts-tooltip-label { font-weight: 700 !important; color: var(--text-primary) !important; margin-bottom: 4px !important; }
-.recharts-tooltip-item { color: var(--text-secondary) !important; font-size: 13px !important; }
-
-/* Accessibility focus within card */
-.chart-card:focus-within {
-  box-shadow: 0 10px 30px rgba(5,102,141,0.08);
-  transform: translateY(-2px);
+  background: rgba(255, 255, 255, 0.98) !important;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(14, 165, 233, 0.2) !important;
+  border-radius: var(--radius-md) !important;
+  box-shadow: var(--shadow-lg) !important;
+  padding: 12px !important;
 }
 
-/* Small adjustments to ensure SVGs don't receive unexpected outlines */
-.chart-card svg { display: block; }
+.recharts-tooltip-label {
+  color: var(--text-primary) !important;
+  font-weight: 700 !important;
+  margin-bottom: 8px !important;
+}
 
-/* -----------------------
-   Responsive tweaks
-   ----------------------- */
-/* Medium / narrow columns: make charts taller (portrait feel) */
+.recharts-tooltip-item {
+  color: var(--text-secondary) !important;
+  font-size: 13px !important;
+}
+
+/* ====================================
+   RESPONSIVE
+   ==================================== */
+
 @media (max-width: 1024px) {
-  .charts-container { gap: 16px; }
-  .chart-wrapper { aspect-ratio: 4 / 3; }
-  .chart-card { padding: 16px; min-height: 140px; }
-  .stat-value { font-size: 1.35rem; }
+  .charts-container {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .chart-card {
+    padding: 20px;
+  }
+
+  .chart-wrapper {
+    height: 250px;
+  }
 }
 
-/* Small screens: single column flow */
+@media (max-width: 768px) {
+  .stats-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .chart-card {
+    padding: 16px;
+  }
+
+  .chart-wrapper {
+    height: 240px;
+  }
+
+  .stat-value {
+    font-size: 2rem;
+  }
+
+  .chart-title {
+    font-size: 1rem;
+  }
+}
+
 @media (max-width: 480px) {
-  .charts-container { grid-template-columns: 1fr; gap: 12px; }
-  .chart-card { padding: 12px; border-radius: var(--radius-md, 12px); min-height: 120px; }
-  .chart-wrapper { aspect-ratio: 4 / 3; }
-  .chart-title { font-size: 0.98rem; }
-  .stat-value { font-size: 1.15rem; }
+  .charts-container {
+    gap: 16px;
+  }
+
+  .chart-wrapper {
+    height: 200px;
+  }
+
+  .stat-value {
+    font-size: 1.75rem;
+  }
 }
