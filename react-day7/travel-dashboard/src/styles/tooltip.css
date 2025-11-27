@@ -1,5 +1,5 @@
 /* ====================================
-   TOOLTIP COMPONENT
+   TOOLTIP COMPONENT — CLEAN VERSION
    ==================================== */
 
 .tooltip-wrapper {
@@ -9,17 +9,21 @@
 
 .tooltip {
   position: absolute;
-  background: rgba(10, 37, 64, 0.95);
-  backdrop-filter: blur(10px);
-  color: white;
   padding: 8px 12px;
-  border-radius: var(--radius-md);
   font-size: 13px;
   font-weight: 500;
   white-space: nowrap;
-  z-index: 1000;
   pointer-events: none;
+
+  /* Visuals */
+  background: rgba(10, 37, 64, 0.95);
+  color: white;
+  border-radius: var(--radius-md);
   box-shadow: var(--shadow-lg);
+  backdrop-filter: blur(10px);
+
+  /* Arrow */
+  z-index: 1000;
 }
 
 .tooltip::after {
@@ -27,6 +31,8 @@
   position: absolute;
   border: 6px solid transparent;
 }
+
+/* --------- PLACEMENTS --------- */
 
 .tooltip-top {
   bottom: calc(100% + 8px);
