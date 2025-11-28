@@ -8,7 +8,7 @@
 
 .charts-container {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
   gap: 24px;
   width: 100%;
 }
@@ -29,7 +29,7 @@
   transition: var(--transition);
   position: relative;
   overflow: hidden;
-  min-height: 150px;
+  min-height: 100px;
 }
 
 .chart-card::before {
@@ -166,7 +166,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 300px;
+  height: 100px;
   color: var(--text-muted);
 }
 
@@ -233,7 +233,7 @@
   }
 
   .chart-wrapper {
-    height: 250px;
+    height: 100px;
   }
 }
 
@@ -248,7 +248,7 @@
   }
 
   .chart-wrapper {
-    height: 240px;
+    height: 100px;
   }
 
   .stat-value {
@@ -266,7 +266,7 @@
   }
 
   .chart-wrapper {
-    height: 200px;
+    height: 100px;
   }
 
   .stat-value {
