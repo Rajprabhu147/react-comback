@@ -6,24 +6,21 @@ import { useUIStore } from "../../store/uiStore";
 import Input from "../Shared/Input";
 import Button from "../Shared/Button";
 import SkeletonLoader from "../Shared/SkeletonLoader";
+import ItemEditor from "./ItemEditor";
 
 /**
- * ItemsList Component
+ * ItemsList Component - Split Screen Layout
  * ---------------------------------------------------------
- * This component handles:
- * - Fetching items
- * - Showing loading / error states
- * - Search, Status, and Priority filtering
- * - Rendering a list of ItemRow components
- * - Showing an empty state when no results match
- * - Opening the "New Item" modal
+ * Features:
+ * - Split screen: Editor on left, List on right
+ * - Real-time filtering
+ * - Smooth animations
+ * - Responsive design
  */
 
 const ItemsList = () => {
-  // Fetch items (data, loading, and error state)
   const { data: items = [], isLoading, isError } = useItems();
 
-  // Get UI filter + search state from Zustand store
   const {
     searchQuery,
     statusFilter,
@@ -33,48 +30,30 @@ const ItemsList = () => {
     setPriorityFilter,
     resetFilters,
     setSelectedItem,
+    selectedItem,
   } = useUIStore();
 
-  /**
-   * Filtering Logic (Memoized)
-   * ---------------------------------------------------
-   * The filtering happens inside useMemo so it's fast
-   * and does not re-run unless items or filters change.
-   *
-   * Filters applied:
-   * - Search text (title or description)
-   * - Status filter
-   * - Priority filter
-   */
   const filteredItems = useMemo(() => {
     return items.filter((item) => {
-      // Matches search (title or description)
       const matchesSearch =
         !searchQuery ||
         item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
         item.description?.toLowerCase().includes(searchQuery.toLowerCase());
 
-      // Matches status filter
       const matchesStatus =
         statusFilter === "all" || item.status === statusFilter;
 
-      // Matches priority filter
       const matchesPriority =
         priorityFilter === "all" || item.priority === priorityFilter;
 
       return matchesSearch && matchesStatus && matchesPriority;
     });
   }, [items, searchQuery, statusFilter, priorityFilter]);
-  // Inside component
+
   if (isLoading) {
     return <SkeletonLoader type="item" count={5} />;
   }
-  // Loading state
-  if (isLoading) {
-    return <LoadingSpinner message="Loading items..." />;
-  }
 
-  // Error state
   if (isError) {
     return (
       <div className="card">
@@ -85,88 +64,79 @@ const ItemsList = () => {
     );
   }
 
-  /**
-   * Render Main Component
-   * ---------------------------------------------------------
-   * Includes:
-   * - Card header with "New Item" button
-   * - Filters: Search, Status, Priority, Reset
-   * - Items list OR empty state message
-   */
   return (
-    <div className="items-container">
-      {/* Header + Filters */}
-      <div className="card">
-        <div className="card-header">
-          <h2 className="card-title">Items ({filteredItems.length})</h2>
-
-          {/* Clicking this opens the "New Item" modal */}
-          <Button onClick={() => setSelectedItem({})}>➕ New Item</Button>
-        </div>
-
-        {/* Filters Section */}
-        <div className="items-filters">
-          {/* Search input */}
-          <Input
-            placeholder="Search items..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            style={{ flex: 1 }}
-          />
-
-          {/* Status filter dropdown */}
-          <select
-            className="form-select"
-            value={statusFilter}
-            onChange={(e) => setStatusFilter(e.target.value)}
-          >
-            <option value="all">All Status</option>
-            <option value="open">Open</option>
-            <option value="in-progress">In Progress</option>
-            <option value="closed">Closed</option>
-          </select>
-
-          {/* Priority filter dropdown */}
-          <select
-            className="form-select"
-            value={priorityFilter}
-            onChange={(e) => setPriorityFilter(e.target.value)}
-          >
-            <option value="all">All Priority</option>
-            <option value="low">Low</option>
-            <option value="medium">Medium</option>
-            <option value="high">High</option>
-          </select>
-
-          {/* Reset all filters */}
-          <Button variant="secondary" onClick={resetFilters}>
-            Reset
-          </Button>
-        </div>
+    <div className="items-split-container">
+      {/* LEFT SIDE - Item Editor (only shows when item is selected) */}
+      <div className={`items-editor-panel ${selectedItem ? "active" : ""}`}>
+        {selectedItem && <ItemEditor />}
       </div>
 
-      {/* If no items match filters → show empty state */}
-      {filteredItems.length === 0 ? (
-        <div className="card empty-state">
-          <div className="empty-state-icon">📭</div>
-          <h3 className="empty-state-title">No items found</h3>
+      {/* RIGHT SIDE - Items List */}
+      <div className={`items-list-panel ${selectedItem ? "with-editor" : ""}`}>
+        {/* Header + Filters */}
+        <div className="card">
+          <div className="card-header">
+            <h2 className="card-title">Items ({filteredItems.length})</h2>
+            <Button onClick={() => setSelectedItem({})}>➕ New Item</Button>
+          </div>
 
-          <p className="empty-state-description">
-            {searchQuery || statusFilter !== "all" || priorityFilter !== "all"
-              ? "Try adjusting your filters"
-              : "Create your first item to get started"}
-          </p>
+          {/* Filters Section */}
+          <div className="items-filters">
+            <Input
+              placeholder="Search items..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              style={{ flex: 1 }}
+            />
 
-          <Button onClick={() => setSelectedItem({})}>Create Item</Button>
+            <select
+              className="form-select"
+              value={statusFilter}
+              onChange={(e) => setStatusFilter(e.target.value)}
+            >
+              <option value="all">All Status</option>
+              <option value="open">Open</option>
+              <option value="in-progress">In Progress</option>
+              <option value="closed">Closed</option>
+            </select>
+
+            <select
+              className="form-select"
+              value={priorityFilter}
+              onChange={(e) => setPriorityFilter(e.target.value)}
+            >
+              <option value="all">All Priority</option>
+              <option value="low">Low</option>
+              <option value="medium">Medium</option>
+              <option value="high">High</option>
+            </select>
+
+            <Button variant="secondary" onClick={resetFilters}>
+              Reset
+            </Button>
+          </div>
         </div>
-      ) : (
-        // Render item rows
-        <div className="items-list stagger-children">
-          {filteredItems.map((item) => (
-            <ItemRow key={item.id} item={item} />
-          ))}
-        </div>
-      )}
+
+        {/* Items List or Empty State */}
+        {filteredItems.length === 0 ? (
+          <div className="card empty-state">
+            <div className="empty-state-icon">📭</div>
+            <h3 className="empty-state-title">No items found</h3>
+            <p className="empty-state-description">
+              {searchQuery || statusFilter !== "all" || priorityFilter !== "all"
+                ? "Try adjusting your filters"
+                : "Create your first item to get started"}
+            </p>
+            <Button onClick={() => setSelectedItem({})}>Create Item</Button>
+          </div>
+        ) : (
+          <div className="items-list stagger-children">
+            {filteredItems.map((item) => (
+              <ItemRow key={item.id} item={item} />
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   );
 };
