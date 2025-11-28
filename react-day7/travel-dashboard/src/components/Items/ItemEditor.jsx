@@ -5,9 +5,9 @@ import Input from "../Shared/Input";
 import Button from "../Shared/Button";
 
 /**
- * ItemEditor
- * - Modal for creating or editing items.
- * - Syncs form state with `selectedItem` whenever it changes.
+ * ItemEditor - Panel Version for Split Screen
+ * - No modal overlay, just a side panel
+ * - Cleaner, more modern UX
  */
 const ItemEditor = () => {
   const { selectedItem, clearSelection } = useUIStore();
@@ -34,7 +34,6 @@ const ItemEditor = () => {
         status: selectedItem.status ?? "open",
       });
     } else {
-      // Reset when no item selected (create mode / closed)
       setFormData({
         title: "",
         description: "",
@@ -60,13 +59,11 @@ const ItemEditor = () => {
 
     try {
       if (selectedItem?.id) {
-        // Edit existing item
         await updateItem.mutateAsync({
           ...selectedItem,
           ...formData,
         });
       } else {
-        // Create new item
         await createItem.mutateAsync(formData);
       }
 
@@ -95,48 +92,60 @@ const ItemEditor = () => {
     }
   };
 
-  // If no item is selected → do NOT render the modal
   if (!selectedItem) return null;
 
   const isEditing = !!selectedItem.id;
   const isLoading = createItem.isLoading || updateItem.isLoading;
 
   return (
-    <div className="modal-overlay modern-overlay" onClick={clearSelection}>
-      <div className="modal modern-modal" onClick={(e) => e.stopPropagation()}>
-        <div className="modal-header">
-          <h2 className="modal-title">
-            {isEditing ? "Edit Item" : "Create New Item"}
-          </h2>
-
-          <Button variant="secondary" size="sm" onClick={clearSelection}>
-            ✕
-          </Button>
+    <div className="item-editor-panel-content">
+      {/* Header */}
+      <div className="editor-header">
+        <div className="editor-header-content">
+          <div className="editor-icon">{isEditing ? "✏️" : "➕"}</div>
+          <div>
+            <h2 className="editor-title">
+              {isEditing ? "Edit Item" : "Create New Item"}
+            </h2>
+            <p className="editor-subtitle">
+              {isEditing ? "Update item details" : "Fill in the details below"}
+            </p>
+          </div>
         </div>
+        <button
+          className="editor-close"
+          onClick={clearSelection}
+          aria-label="Close"
+        >
+          ✕
+        </button>
+      </div>
 
-        <form onSubmit={handleSubmit}>
-          <div className="modal-body">
-            <Input
-              label="Title *"
-              name="title"
-              value={formData.title}
+      {/* Form */}
+      <form onSubmit={handleSubmit} className="editor-form">
+        <div className="editor-body">
+          <Input
+            label="Title *"
+            name="title"
+            value={formData.title}
+            onChange={handleChange}
+            error={errors.title}
+            placeholder="Enter item title"
+          />
+
+          <div className="form-group">
+            <label className="form-label">Description</label>
+            <textarea
+              className="form-textarea"
+              name="description"
+              value={formData.description}
               onChange={handleChange}
-              error={errors.title}
-              placeholder="Enter item title"
+              placeholder="Enter item description"
+              rows={4}
             />
+          </div>
 
-            <div className="form-group">
-              <label className="form-label">Description</label>
-              <textarea
-                className="form-textarea"
-                name="description"
-                value={formData.description}
-                onChange={handleChange}
-                placeholder="Enter item description"
-                rows={4}
-              />
-            </div>
-
+          <div className="form-row">
             <div className="form-group">
               <label className="form-label">Priority *</label>
               <select
@@ -165,23 +174,24 @@ const ItemEditor = () => {
               </select>
             </div>
           </div>
+        </div>
 
-          <div className="modal-footer">
-            <Button
-              type="button"
-              variant="secondary"
-              onClick={clearSelection}
-              disabled={isLoading}
-            >
-              Cancel
-            </Button>
+        {/* Footer Actions */}
+        <div className="editor-footer">
+          <Button
+            type="button"
+            variant="secondary"
+            onClick={clearSelection}
+            disabled={isLoading}
+          >
+            Cancel
+          </Button>
 
-            <Button type="submit" loading={isLoading} disabled={isLoading}>
-              {isEditing ? "Update" : "Create"}
-            </Button>
-          </div>
-        </form>
-      </div>
+          <Button type="submit" loading={isLoading} disabled={isLoading}>
+            {isEditing ? "Update Item" : "Create Item"}
+          </Button>
+        </div>
+      </form>
     </div>
   );
 };

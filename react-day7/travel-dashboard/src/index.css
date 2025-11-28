@@ -1,3 +1,5 @@
+@import './styles/split_screen_items_css.css';
+
 :root {
   /* Coastal Color Palette - Enhanced */
   --bg-primary: #f8fcfd;
