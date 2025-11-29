@@ -1,5 +1,5 @@
 /* ====================================
-   HEADER - CLEANED
+   HEADER - WITH CREATE BUTTON
    ==================================== */
 
 .header {
@@ -19,6 +19,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 24px;
 }
 
 .header-logo {
@@ -49,6 +50,40 @@
   background-clip: text;
   font-weight: 800;
   letter-spacing: -1px;
+}
+
+/* CREATE BUTTON IN HEADER */
+.header-center {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.header-create-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  color: white;
+  border: none;
+  border-radius: var(--radius-md);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  box-shadow: var(--shadow-md);
+}
+
+.header-create-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+  opacity: 0.95;
+}
+
+.header-create-btn .btn-icon {
+  font-size: 18px;
 }
 
 .header-actions {
@@ -331,6 +366,10 @@
 @media (max-width: 1024px) {
   .header-container {
     padding: 12px 24px;
+  }
+
+  .header-center {
+    display: none;
   }
 
   .user-info {

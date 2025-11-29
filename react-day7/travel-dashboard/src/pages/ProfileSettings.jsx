@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { useUser } from "../context/UserContext";
 import PageLayout from "../components/Layout/PageLayout";
 import ProfileHeader from "../components/Profile/ProfileHeader";
-import AvatarUpload from "../components/Profile/AvatarUpload";
 import PasswordChange from "../components/Profile/PasswordChange";
 import DangerZone from "../components/Profile/DangerZone";
 import Button from "../components/Shared/Button";
@@ -13,30 +12,27 @@ import "../styles/profile.css";
 /**
  * ProfileSettings Component
  *
- * Renders the user account settings page.
- * Uses the authenticated user from UserContext
- * and provides UI to:
- * - View/update profile metadata (name, username, bio, etc.)
- * - Change password
- *
- * - View device sessions
- * - Access destructive settings in the Danger Zone
+ * FIXED FEATURES:
+ * - Avatar upload with save button
+ * - Avatar updates in header after save
+ * - Tighter spacing throughout
+ * - Coordinated CSS
  */
 const ProfileSettings = () => {
-  // Get logged-in user from Supabase auth context
-  const { user } = useUser();
+  const { user, updateUser } = useUser(); // Add updateUser if available in context
 
-  // Tracks whether editable fields are enabled ("Edit" mode)
+  // Profile editing state
   const [isEditing, setIsEditing] = useState(false);
-
-  // Shows loading UI during profile update request
   const [loading, setLoading] = useState(false);
 
-  /**
-   * formData stores all editable user metadata fields.
-   * It initializes from user.user_metadata if available.
-   * These values are not saved permanently until "Save Changes" is clicked.
-   */
+  // Avatar upload state
+  const [avatarFile, setAvatarFile] = useState(null);
+  const [avatarPreview, setAvatarPreview] = useState(
+    user?.user_metadata?.avatar_url || null
+  );
+  const [avatarLoading, setAvatarLoading] = useState(false);
+
+  // Form data for profile fields
   const [formData, setFormData] = useState({
     fullName: user?.user_metadata?.full_name || "",
     username: user?.user_metadata?.username || "",
@@ -47,8 +43,7 @@ const ProfileSettings = () => {
   });
 
   /**
-   * Generic form handler that updates local state when input changes.
-   * Runs for both text inputs and textarea fields.
+   * Handle text input changes
    */
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -56,18 +51,118 @@ const ProfileSettings = () => {
   };
 
   /**
-   * handleSave()
-   *
-   * Triggered when user clicks "Save Changes".
-   * - Shows loading indicator
-   * - (Currently) simulates a backend call
-   * - Should later be replaced with Supabase `updateUser()` to persist metadata
-   * - On success, closes edit mode and shows toast
+   * Handle avatar file selection
+   */
+  const handleAvatarChange = (e) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      // Validate file type
+      if (!file.type.startsWith("image/")) {
+        toast.error("Please select an image file");
+        return;
+      }
+
+      // Validate file size (max 5MB)
+      if (file.size > 5 * 1024 * 1024) {
+        toast.error("Image size must be less than 5MB");
+        return;
+      }
+
+      setAvatarFile(file);
+
+      // Create preview URL
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setAvatarPreview(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  /**
+   * Save avatar to server and update user context
+   */
+  const handleAvatarSave = async () => {
+    if (!avatarFile) {
+      toast.error("Please select an image first");
+      return;
+    }
+
+    setAvatarLoading(true);
+    try {
+      // Simulate upload delay
+      await new Promise((resolve) => setTimeout(resolve, 1500));
+
+      /**
+       * TODO: Replace with real upload logic:
+       *
+       * const formData = new FormData();
+       * formData.append('avatar', avatarFile);
+       *
+       * const response = await fetch('/api/upload-avatar', {
+       *   method: 'POST',
+       *   body: formData
+       * });
+       *
+       * const { url } = await response.json();
+       *
+       * await supabase.auth.updateUser({
+       *   data: { avatar_url: url }
+       * });
+       */
+
+      // For now, use the preview URL (in production, use uploaded URL)
+      const avatarUrl = avatarPreview;
+
+      // Update user context with new avatar
+      if (updateUser) {
+        updateUser({
+          ...user,
+          user_metadata: {
+            ...user.user_metadata,
+            avatar_url: avatarUrl,
+          },
+        });
+      }
+
+      toast.success("Avatar updated successfully!");
+      setAvatarFile(null);
+    } catch (error) {
+      toast.error("Failed to update avatar");
+      console.error(error);
+    } finally {
+      setAvatarLoading(false);
+    }
+  };
+
+  /**
+   * Remove avatar
+   */
+  const handleAvatarRemove = () => {
+    setAvatarFile(null);
+    setAvatarPreview(null);
+
+    // Update user context
+    if (updateUser) {
+      updateUser({
+        ...user,
+        user_metadata: {
+          ...user.user_metadata,
+          avatar_url: null,
+        },
+      });
+    }
+
+    toast.success("Avatar removed");
+  };
+
+  /**
+   * Save profile changes
    */
   const handleSave = async () => {
     setLoading(true);
     try {
-      await new Promise((resolve) => setTimeout(resolve, 1000)); // simulate network delay
+      await new Promise((resolve) => setTimeout(resolve, 1000));
 
       /**
        * TODO: Replace with real Supabase update:
@@ -88,10 +183,7 @@ const ProfileSettings = () => {
   };
 
   /**
-   * handleCancel()
-   *
-   * Restores form fields to original user metadata
-   * and exits editing mode.
+   * Cancel profile editing
    */
   const handleCancel = () => {
     setFormData({
@@ -112,16 +204,85 @@ const ProfileSettings = () => {
       showBackButton={true}
     >
       <div className="profile-container">
-        {/* USER HEADER + AVATAR
-           Displays current user's name, email, join date, etc.
-           Also provides avatar upload component.
-        */}
-        <div className="profile-section">
+        {/* PROFILE HEADER & AVATAR */}
+        <div className="profile-section profile-header-section">
           <ProfileHeader user={user} />
-          <AvatarUpload user={user} />
+
+          {/* AVATAR UPLOAD WITH SAVE BUTTON */}
+          <div className="avatar-upload">
+            <div
+              className="avatar-preview"
+              onClick={() => document.getElementById("avatar-input").click()}
+            >
+              {avatarPreview ? (
+                <img
+                  src={avatarPreview}
+                  alt="Avatar"
+                  className="avatar-image"
+                />
+              ) : (
+                <div className="avatar-placeholder">
+                  {user?.user_metadata?.full_name?.[0]?.toUpperCase() ||
+                    user?.email?.[0]?.toUpperCase() ||
+                    "?"}
+                </div>
+              )}
+              <div className="avatar-overlay">
+                <span className="overlay-text">
+                  {avatarPreview ? "Change Photo" : "Upload Photo"}
+                </span>
+              </div>
+            </div>
+
+            <input
+              id="avatar-input"
+              type="file"
+              accept="image/*"
+              onChange={handleAvatarChange}
+              style={{ display: "none" }}
+            />
+
+            <div className="avatar-actions">
+              <div className="avatar-buttons">
+                <Button
+                  variant="secondary"
+                  size="sm"
+                  onClick={() =>
+                    document.getElementById("avatar-input").click()
+                  }
+                >
+                  📤 Choose Photo
+                </Button>
+                {avatarFile && (
+                  <Button
+                    variant="primary"
+                    size="sm"
+                    onClick={handleAvatarSave}
+                    loading={avatarLoading}
+                    disabled={avatarLoading}
+                  >
+                    💾 Save Avatar
+                  </Button>
+                )}
+                {avatarPreview && (
+                  <Button
+                    variant="danger"
+                    size="sm"
+                    onClick={handleAvatarRemove}
+                    disabled={avatarLoading}
+                  >
+                    🗑️ Remove
+                  </Button>
+                )}
+              </div>
+              <p className="avatar-hint">
+                JPG, PNG or GIF. Max size 5MB. Recommended 400x400px.
+              </p>
+            </div>
+          </div>
         </div>
 
-        {/* PERSONAL INFORMATION SETTINGS */}
+        {/* PERSONAL INFORMATION */}
         <div className="profile-section">
           <div className="section-header">
             <div>
@@ -131,7 +292,6 @@ const ProfileSettings = () => {
               </p>
             </div>
 
-            {/* EDIT / SAVE BUTTON LOGIC */}
             {!isEditing ? (
               <Button onClick={() => setIsEditing(true)}>
                 ✏️ Edit Profile
@@ -156,7 +316,6 @@ const ProfileSettings = () => {
             )}
           </div>
 
-          {/* EDITABLE FORM FIELDS */}
           <div className="profile-form">
             {/* EMAIL — READ ONLY */}
             <div className="form-row">
@@ -190,7 +349,7 @@ const ProfileSettings = () => {
               />
             </div>
 
-            {/* BIO FIELD */}
+            {/* BIO */}
             <div className="form-group">
               <label className="form-label">Bio</label>
               <textarea
@@ -200,7 +359,8 @@ const ProfileSettings = () => {
                 disabled={!isEditing}
                 placeholder="Tell us about yourself..."
                 className="form-textarea"
-                rows={4}
+                rows={3}
+                maxLength={500}
               />
               <span className="character-count">
                 {formData.bio.length} / 500
@@ -241,15 +401,12 @@ const ProfileSettings = () => {
           </div>
         </div>
 
-        {/* PASSWORD CHANGE SECTION */}
+        {/* PASSWORD CHANGE */}
         <div className="profile-section">
           <PasswordChange />
         </div>
 
-        {/* SESSIONS / ACTIVITY LIST
-           This is currently a static preview of recent sessions.
-           In a real-world app, you'd fetch this data from an API.
-         */}
+        {/* ACTIVITY & SESSIONS */}
         <div className="profile-section">
           <div className="section-header">
             <div>
@@ -261,7 +418,6 @@ const ProfileSettings = () => {
           </div>
 
           <div className="activity-list">
-            {/* Current browser session */}
             <div className="activity-item">
               <div className="activity-icon">💻</div>
               <div className="activity-details">
@@ -273,7 +429,6 @@ const ProfileSettings = () => {
               <span className="activity-badge active">Active Now</span>
             </div>
 
-            {/* Example secondary session */}
             <div className="activity-item">
               <div className="activity-icon">📱</div>
               <div className="activity-details">
@@ -289,7 +444,7 @@ const ProfileSettings = () => {
           </div>
         </div>
 
-        {/* ACCOUNT DELETION AREA */}
+        {/* DANGER ZONE */}
         <DangerZone user={user} />
       </div>
     </PageLayout>
