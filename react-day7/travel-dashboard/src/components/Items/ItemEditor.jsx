@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useUIStore } from "../../store/uiStore";
 import { useCreateItem, useUpdateItem } from "../../hooks/useItems";
 import Input from "../Shared/Input";
@@ -9,23 +9,37 @@ import Button from "../Shared/Button";
  * - No modal overlay, just a side panel
  * - Cleaner, more modern UX
  */
+const DEFAULT_FORM = {
+  title: "",
+  description: "",
+  priority: "medium",
+  status: "open",
+};
+
 const ItemEditor = () => {
   const { selectedItem, clearSelection } = useUIStore();
 
   const createItem = useCreateItem();
   const updateItem = useUpdateItem();
 
-  const [formData, setFormData] = useState({
-    title: "",
-    description: "",
-    priority: "medium",
-    status: "open",
-  });
-
+  const [formData, setFormData] = useState(DEFAULT_FORM);
   const [errors, setErrors] = useState({});
 
-  // Sync form data whenever selectedItem changes
+  // Keep track of previous selected item's id to avoid unnecessary setState calls
+  const prevSelectedIdRef = useRef(selectedItem?.id ?? null);
+
+  // Sync form data whenever selectedItem changes (only when id actually changes)
   useEffect(() => {
+    const prevId = prevSelectedIdRef.current;
+    const nextId = selectedItem?.id ?? null;
+
+    if (prevId === nextId) {
+      // nothing changed — avoid setState
+      return;
+    }
+
+    prevSelectedIdRef.current = nextId;
+
     if (selectedItem) {
       setFormData({
         title: selectedItem.title ?? "",
@@ -34,15 +48,13 @@ const ItemEditor = () => {
         status: selectedItem.status ?? "open",
       });
     } else {
-      setFormData({
-        title: "",
-        description: "",
-        priority: "medium",
-        status: "open",
-      });
+      setFormData(DEFAULT_FORM);
     }
+
     setErrors({});
-  }, [selectedItem]);
+    // We intentionally depend only on selectedItem?.id to avoid calling setState during unrelated prop changes.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedItem?.id]);
 
   const validate = () => {
     const newErrors = {};
@@ -68,12 +80,7 @@ const ItemEditor = () => {
       }
 
       clearSelection();
-      setFormData({
-        title: "",
-        description: "",
-        priority: "medium",
-        status: "open",
-      });
+      setFormData(DEFAULT_FORM);
     } catch (error) {
       console.error("Save error:", error);
     }
@@ -122,7 +129,7 @@ const ItemEditor = () => {
       </div>
 
       {/* Form */}
-      <form onSubmit={handleSubmit} className="editor-form">
+      <form onSubmit={handleSubmit} className="editor-form" noValidate>
         <div className="editor-body">
           <Input
             label="Title *"
