@@ -1,9 +1,5 @@
 /* ====================================
-   ANALYTICS CHARTS - CLEANED (UPDATED FOR 100px CHARTS)
-   ==================================== */
-
-/* ====================================
-   CHARTS CONTAINER
+   ANALYTICS CHARTS - CLEANED
    ==================================== */
 
 .charts-container {
@@ -13,23 +9,19 @@
   width: 100%;
 }
 
-/* ====================================
-   CHART CARD
-   ==================================== */
-
 .chart-card {
   display: flex;
   flex-direction: column;
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(12px);
   border-radius: var(--radius-xl);
-  padding: 16px; /* reduced to better fit 100px charts */
+  padding: 16px;
   box-shadow: var(--shadow-lg);
   border: 1px solid rgba(14, 165, 233, 0.1);
   transition: var(--transition);
   position: relative;
   overflow: hidden;
-  min-height: 120px; /* lowered to match reduced chart height */
+  min-height: 120px;
 }
 
 .chart-card::before {
@@ -54,14 +46,10 @@
   opacity: 1;
 }
 
-/* ====================================
-   CHART TITLE
-   ==================================== */
-
 .chart-title {
   font-size: 1.1rem;
   font-weight: 700;
-  margin-bottom: 12px; /* tightened spacing for compact layout */
+  margin-bottom: 12px;
   background: linear-gradient(135deg, var(--text-primary), var(--primary));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -77,32 +65,23 @@
   filter: drop-shadow(0 2px 4px rgba(14, 165, 233, 0.2));
 }
 
-/* ====================================
-   CHART WRAPPER
-   ==================================== */
-
 .chart-wrapper {
-  width: 90%;
-  height: 100px;   /* ⬅️ updated from 300px to 100px */
+  width: 100%;
+  height: 100px;
   position: relative;
 }
 
-/* Recharts specific overrides */
 .chart-wrapper .recharts-wrapper,
 .chart-wrapper .recharts-surface {
   width: 100% !important;
   height: 100% !important;
 }
 
-/* ====================================
-   STATS GRID
-   ==================================== */
-
 .stats-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 16px;
-  margin-bottom: 16px; /* tightened spacing */
+  margin-bottom: 16px;
 }
 
 .stat-card {
@@ -157,21 +136,17 @@
   z-index: 1;
 }
 
-/* ====================================
-   CHART STATES
-   ==================================== */
-
 .chart-loading,
 .chart-empty {
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 100px;   /* ⬅️ updated to match new chart height */
+  height: 100px;
   color: var(--text-muted);
 }
 
 .chart-loading {
-  font-size: 13px; /* slightly smaller to fit */
+  font-size: 13px;
 }
 
 .chart-empty {
@@ -180,7 +155,7 @@
 }
 
 .chart-empty-icon {
-  font-size: 2.4rem; /* scaled down from 3rem */
+  font-size: 2.4rem;
   margin-bottom: 8px;
   opacity: 0.5;
 }
@@ -190,21 +165,13 @@
   font-weight: 500;
 }
 
-/* ====================================
-   RECHARTS TOOLTIP STYLING
-   ==================================== */
-
-.recharts-tooltip-wrapper {
-  outline: none;
-}
-
 .recharts-default-tooltip {
   background: rgba(255, 255, 255, 0.98) !important;
   backdrop-filter: blur(10px);
   border: 1px solid rgba(14, 165, 233, 0.2) !important;
   border-radius: var(--radius-md) !important;
   box-shadow: var(--shadow-lg) !important;
-  padding: 10px !important; /* tightened padding */
+  padding: 10px !important;
 }
 
 .recharts-tooltip-label {
@@ -218,10 +185,7 @@
   font-size: 12px !important;
 }
 
-/* ====================================
-   RESPONSIVE
-   ==================================== */
-
+/* RESPONSIVE */
 @media (max-width: 1024px) {
   .charts-container {
     grid-template-columns: 1fr;
@@ -230,10 +194,6 @@
 
   .chart-card {
     padding: 14px;
-  }
-
-  .chart-wrapper {
-    height: 100px; /* keep compact on tablet */
   }
 }
 
@@ -247,29 +207,11 @@
     padding: 12px;
   }
 
-  .chart-wrapper {
-    height: 100px; /* consistent small charts on mobile */
-  }
-
   .stat-value {
     font-size: 2rem;
   }
 
   .chart-title {
     font-size: 1rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .charts-container {
-    gap: 16px;
-  }
-
-  .chart-wrapper {
-    height: 80px; /* slightly smaller for very small screens */
-  }
-
-  .stat-value {
-    font-size: 1.75rem;
   }
 }
