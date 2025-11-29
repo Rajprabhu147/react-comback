@@ -1,134 +1,27 @@
-/* =========================================================
-   SIDEBAR — FULL CSS STYLING + ANIMATIONS
-   Works with all classes in Sidebar.jsx
-   ========================================================= */
+/* ====================================
+   SIDEBAR - CLEANED
+   ==================================== */
 
-/* Root variables for safe fallback */
 :root {
   --sidebar-width: 260px;
-  --sidebar-bg: var(--surface);
-  --sidebar-text: var(--text-primary);
-  --sidebar-border: var(--bg-secondary);
-  --hover-bg: rgba(255, 255, 255, 0.06);
-  --radius: 10px;
 }
-
-/* =========================================================
-   ANIMATIONS
-   ========================================================= */
-
-/* Slide + fade entrance */
-.fade-in-left {
-  animation: fadeInLeft 0.35s ease-out both;
-}
-@keyframes fadeInLeft {
-  from {
-    opacity: 0;
-    transform: translateX(-14px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-/* Scale in (header, top cards) */
-.scale-in {
-  animation: scaleIn 0.35s cubic-bezier(0.2, 0.9, 0.2, 1) both;
-}
-@keyframes scaleIn {
-  from {
-    opacity: 0;
-    transform: scale(0.96);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
-/* Staggered children animations */
-.stagger-children > * {
-  opacity: 0;
-  transform: translateY(6px);
-  animation: staggerChildIn 0.35s ease forwards;
-}
-.stagger-children > *:nth-child(1) {
-  animation-delay: 80ms;
-}
-.stagger-children > *:nth-child(2) {
-  animation-delay: 120ms;
-}
-.stagger-children > *:nth-child(3) {
-  animation-delay: 160ms;
-}
-.stagger-children > *:nth-child(4) {
-  animation-delay: 200ms;
-}
-@keyframes staggerChildIn {
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* Hover lift on buttons / cards */
-.hover-lift {
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
-}
-.hover-lift:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
-}
-
-/* =========================================================
-   SIDEBAR LAYOUT
-   ========================================================= */
 
 .sidebar {
   width: var(--sidebar-width);
-  background: var(--sidebar-bg);
-  border-right: 1px solid var(--sidebar-border);
+  background: var(--surface);
+  border-right: 1px solid var(--bg-secondary);
   padding: 16px 0;
   display: flex;
   flex-direction: column;
   height: 100vh;
-  position: relative;
-  z-index: 20;
+  position: sticky;
+  top: 0;
+  overflow-y: auto;
 }
 
 .sidebar-collapsed {
   width: 76px;
-  background: var(--sidebar-bg);
-  border-right: 1px solid var(--sidebar-border);
-  padding: 16px 0;
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
 }
-
-/* =========================================================
-   TOGGLE BUTTON
-   ========================================================= */
-
-.sidebar-toggle {
-  background: transparent;
-  border: none;
-  font-size: 20px;
-  cursor: pointer;
-  color: var(--sidebar-text);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.sidebar-toggle:hover {
-  opacity: 0.7;
-}
-
-/* =========================================================
-   HEADER
-   ========================================================= */
 
 .sidebar-header {
   padding: 0 20px 20px;
@@ -143,13 +36,18 @@
   font-weight: 600;
   font-size: 17px;
 }
+
 .brand-icon {
   margin-right: 8px;
 }
 
-/* =========================================================
-   STATS GRID
-   ========================================================= */
+.sidebar-toggle {
+  background: transparent;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  color: var(--text-primary);
+}
 
 .sidebar-stats-grid {
   display: grid;
@@ -159,8 +57,8 @@
 }
 
 .sidebar-stat-card {
-  background: var(--hover-bg);
-  border-radius: var(--radius);
+  background: rgba(14, 165, 233, 0.08);
+  border-radius: var(--radius-md);
   padding: 12px;
   display: flex;
   align-items: center;
@@ -170,17 +68,15 @@
 .stat-icon {
   font-size: 20px;
 }
+
 .stat-number {
   font-weight: 600;
 }
+
 .stat-text {
   font-size: 12px;
   opacity: 0.7;
 }
-
-/* =========================================================
-   SECTION GROUPS
-   ========================================================= */
 
 .sidebar-section {
   margin-top: 12px;
@@ -197,9 +93,13 @@
   margin-right: 6px;
 }
 
-/* =========================================================
-   NAV LIST
-   ========================================================= */
+.sidebar-title {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  letter-spacing: 0.5px;
+}
 
 .sidebar-nav {
   display: flex;
@@ -211,21 +111,27 @@
   display: flex;
   align-items: center;
   padding: 10px;
-  border-radius: var(--radius);
+  border-radius: var(--radius-md);
   cursor: pointer;
   background: transparent;
   border: none;
   justify-content: space-between;
   font-size: 14px;
-  transition: background 0.15s;
+  transition: var(--transition);
+  color: var(--text-secondary);
+  text-decoration: none;
+  width: 100%;
 }
 
 .sidebar-item:hover {
-  background: var(--hover-bg);
+  background: var(--surface-hover);
+  color: var(--text-primary);
 }
 
 .sidebar-item.active {
-  background: var(--bg-secondary);
+  background: var(--primary-light);
+  color: var(--primary);
+  font-weight: 600;
 }
 
 .sidebar-icon {
@@ -240,26 +146,27 @@
 
 .sidebar-count {
   font-weight: 600;
+  font-size: 12px;
 }
-
-/* =========================================================
-   COLLAPSED SIDEBAR ITEMS
-   ========================================================= */
 
 .sidebar-collapsed-item {
   width: 50px;
   height: 50px;
-  border-radius: var(--radius);
+  border-radius: var(--radius-md);
   background: transparent;
-  color: var(--sidebar-text);
+  color: var(--text-primary);
   border: none;
   margin: 8px 0;
   position: relative;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--transition);
 }
 
 .sidebar-collapsed-item:hover {
-  background: var(--hover-bg);
+  background: var(--surface-hover);
 }
 
 .sidebar-badge {
@@ -271,39 +178,61 @@
   font-size: 11px;
   border-radius: 6px;
   padding: 1px 4px;
+  min-width: 16px;
+  text-align: center;
 }
-
-/* =========================================================
-   ACTIVITY LIST
-   ========================================================= */
 
 .sidebar-activity {
   margin-top: 20px;
+  flex: 1;
+  min-height: 0;
+  padding: 0 20px;
 }
 
 .activity-list {
   display: flex;
   flex-direction: column;
   gap: 10px;
+  overflow-y: auto;
+  max-height: 320px;
 }
 
 .activity-item {
   display: flex;
   gap: 10px;
   padding: 10px;
-  border-radius: var(--radius);
-  background: var(--hover-bg);
+  border-radius: var(--radius-md);
+  background: rgba(14, 165, 233, 0.05);
+  transition: var(--transition);
+  cursor: pointer;
+}
+
+.activity-item:hover {
+  background: var(--surface-hover);
+  transform: translateX(4px);
 }
 
 .activity-dot {
   width: 10px;
   height: 10px;
   border-radius: 50%;
+  margin-top: 6px;
+  flex-shrink: 0;
+}
+
+.activity-content {
+  flex: 1;
+  min-width: 0;
 }
 
 .activity-title {
-  font-weight: 500;
-  margin-bottom: 2px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: 4px;
 }
 
 .activity-meta {
@@ -317,27 +246,17 @@
   padding: 2px 6px;
   border-radius: 6px;
   text-transform: capitalize;
+  font-weight: 600;
 }
 
-.badge-open {
-  background: var(--primary);
-  color: white;
+.activity-time {
+  font-size: 0.7rem;
+  color: var(--text-muted);
 }
-.badge-in-progress {
-  background: var(--warning);
-  color: black;
-}
-.badge-closed {
-  background: var(--success);
-  color: white;
-}
-
-/* =========================================================
-   PROGRESS BARS
-   ========================================================= */
 
 .sidebar-progress {
   margin-top: 20px;
+  padding: 0 20px;
 }
 
 .progress-item {
@@ -350,21 +269,43 @@
   margin-bottom: 4px;
 }
 
+.progress-label {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  font-weight: 600;
+}
+
+.progress-value {
+  font-size: 0.9rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
 .progress-bar {
   height: 8px;
   background: var(--bg-secondary);
-  border-radius: var(--radius);
+  border-radius: 20px;
   overflow: hidden;
 }
 
 .progress-fill {
   height: 100%;
-  border-radius: var(--radius);
+  border-radius: 20px;
+  transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
 }
 
-/* =========================================================
-   FOOTER BUTTON
-   ========================================================= */
+.progress-fill::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+  animation: shimmer 2s infinite;
+}
 
 .sidebar-footer {
   margin-top: auto;
@@ -373,32 +314,33 @@
 
 .sidebar-action-btn {
   width: 100%;
-  background: var(--hover-bg);
+  background: rgba(14, 165, 233, 0.08);
   border: none;
   padding: 10px;
-  border-radius: var(--radius);
+  border-radius: var(--radius-md);
   display: flex;
   align-items: center;
   gap: 8px;
   cursor: pointer;
+  transition: var(--transition);
+  color: var(--text-primary);
+  font-weight: 600;
 }
 
 .sidebar-action-btn:hover {
-  background: var(--bg-secondary);
+  background: var(--primary-light);
+  color: var(--primary);
 }
 
 .action-icon {
   font-size: 18px;
 }
 
-/* =========================================================
-   EMPTY STATES
-   ========================================================= */
-
 .activity-empty {
   text-align: center;
   opacity: 0.6;
   padding: 20px 0;
+  color: var(--text-muted);
 }
 
 .empty-icon {
@@ -406,227 +348,25 @@
   display: block;
   margin-bottom: 6px;
 }
-.scale-in {
-  animation: scaleIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
 
-/* Slide In Right */
-@keyframes slideInRight {
-  from {
-    opacity: 0;
-    transform: translateX(30px);
+/* RESPONSIVE */
+@media (max-width: 1024px) {
+  .sidebar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 90;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
   }
-  to {
-    opacity: 1;
+
+  .sidebar.sidebar-open {
     transform: translateX(0);
   }
 }
 
-.slide-in-right {
-  animation: slideInRight 0.4s ease-out;
-}
-
-/* Slide In Left */
-@keyframes slideInLeft {
-  from {
-    opacity: 0;
-    transform: translateX(-30px);
+@media (max-width: 768px) {
+  .sidebar {
+    width: 280px;
   }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-.slide-in-left {
-  animation: slideInLeft 0.4s ease-out;
-}
-
-/* Rotate In */
-@keyframes rotateIn {
-  from {
-    opacity: 0;
-    transform: rotate(-180deg) scale(0.5);
-  }
-  to {
-    opacity: 1;
-    transform: rotate(0) scale(1);
-  }
-}
-
-.rotate-in {
-  animation: rotateIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-
-/* Bounce */
-@keyframes bounce {
-  0%, 100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-10px);
-  }
-}
-
-.bounce {
-  animation: bounce 1s ease-in-out infinite;
-}
-
-/* Glow Effect */
-@keyframes glow {
-  0%, 100% {
-    filter: drop-shadow(0 0 5px rgba(14, 165, 233, 0.5));
-  }
-  50% {
-    filter: drop-shadow(0 0 20px rgba(14, 165, 233, 0.8));
-  }
-}
-
-.glow {
-  animation: glow 2s ease-in-out infinite;
-}
-
-/* Gradient Animation */
-@keyframes gradientShift {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
-}
-
-.gradient-shift {
-  background-size: 200% 200%;
-  animation: gradientShift 3s ease infinite;
-}
-
-/* Stagger Children Animation */
-.stagger-children > * {
-  opacity: 0;
-  animation: fadeInUp 0.5s ease-out forwards;
-}
-
-.stagger-children > *:nth-child(1) { animation-delay: 0.1s; }
-.stagger-children > *:nth-child(2) { animation-delay: 0.2s; }
-.stagger-children > *:nth-child(3) { animation-delay: 0.3s; }
-.stagger-children > *:nth-child(4) { animation-delay: 0.4s; }
-.stagger-children > *:nth-child(5) { animation-delay: 0.5s; }
-.stagger-children > *:nth-child(6) { animation-delay: 0.6s; }
-
-/* Loading Dots */
-@keyframes loadingDots {
-  0%, 80%, 100% {
-    opacity: 0;
-  }
-  40% {
-    opacity: 1;
-  }
-}
-
-.loading-dots span {
-  animation: loadingDots 1.4s infinite;
-}
-
-.loading-dots span:nth-child(1) {
-  animation-delay: 0s;
-}
-
-.loading-dots span:nth-child(2) {
-  animation-delay: 0.2s;
-}
-
-.loading-dots span:nth-child(3) {
-  animation-delay: 0.4s;
-}
-
-/* Typewriter Effect */
-@keyframes typewriter {
-  from {
-    width: 0;
-  }
-  to {
-    width: 100%;
-  }
-}
-
-.typewriter {
-  overflow: hidden;
-  border-right: 2px solid var(--primary);
-  white-space: nowrap;
-  animation: typewriter 3s steps(40) 1s forwards;
-}
-
-/* Ripple Effect */
-@keyframes ripple {
-  0% {
-    transform: scale(0);
-    opacity: 1;
-  }
-  100% {
-    transform: scale(4);
-    opacity: 0;
-  }
-}
-
-.ripple {
-  position: relative;
-  overflow: hidden;
-}
-
-.ripple::after {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 0;
-  height: 0;
-  border-radius: 50%;
-  background: rgba(14, 165, 233, 0.5);
-  transform: translate(-50%, -50%);
-  animation: ripple 0.6s ease-out;
-}
-
-/* Skeleton Loading */
-@keyframes skeletonLoading {
-  0% {
-    background-position: -200px 0;
-  }
-  100% {
-    background-position: calc(200px + 100%) 0;
-  }
-}
-
-.skeleton {
-  background: linear-gradient(
-    90deg,
-    var(--bg-secondary) 0%,
-    var(--surface-hover) 50%,
-    var(--bg-secondary) 100%
-  );
-  background-size: 200px 100%;
-  animation: skeletonLoading 1.5s ease-in-out infinite;
-}
-
-/* Attention Seeker */
-@keyframes attentionSeeker {
-  0%, 100% {
-    transform: scale(1);
-  }
-  10%, 20% {
-    transform: scale(0.9) rotate(-3deg);
-  }
-  30%, 50%, 70%, 90% {
-    transform: scale(1.1) rotate(3deg);
-  }
-  40%, 60%, 80% {
-    transform: scale(1.1) rotate(-3deg);
-  }
-}
-
-.attention-seeker {
-  animation: attentionSeeker 1s ease-in-out;
 }
