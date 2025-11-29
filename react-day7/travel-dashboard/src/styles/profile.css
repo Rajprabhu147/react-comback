@@ -1,46 +1,52 @@
 /* ====================================
-   PROFILE SETTINGS PAGE
+   PROFILE SETTINGS - FIXED & COORDINATED
+   Tighter spacing, avatar save button, clean layout
    ==================================== */
 
 .profile-container {
-  width: 90%;
+  width: 80%;
   margin: 0 auto;
 }
 
 .profile-section {
   background: var(--surface);
   border-radius: var(--radius-lg);
-  padding: 32px;
-  margin-bottom: 24px;
+  padding: 24px;
+  margin-bottom: 20px;
   box-shadow: var(--shadow-md);
   animation: fadeIn 0.3s ease-out;
+}
+
+.profile-header-section {
+  padding: 0;
+  overflow: hidden;
 }
 
 .section-header {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  margin-bottom: 24px;
-  padding-bottom: 16px;
+  margin-bottom: 20px;
+  padding-bottom: 12px;
   border-bottom: 1px solid var(--bg-secondary);
 }
 
 .section-title {
-  font-size: 1.5rem;
+  font-size: 1.25rem;
   font-weight: 700;
   color: var(--text-primary);
   margin: 0 0 4px 0;
 }
 
 .section-description {
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   color: var(--text-secondary);
   margin: 0;
 }
 
 .action-buttons {
   display: flex;
-  gap: 12px;
+  gap: 10px;
 }
 
 /* ====================================
@@ -49,13 +55,12 @@
 
 .profile-header {
   position: relative;
-  margin: -32px -32px 24px -32px;
-  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
   overflow: hidden;
 }
 
-.profile-banner {
-  /* height: 150px; */
+/* .profile-banner {
+  display: hidden;
+  height: 120px;
   position: relative;
   background: linear-gradient(135deg, var(--primary), var(--accent));
 }
@@ -68,29 +73,29 @@
     transparent 0%,
     rgba(0, 0, 0, 0.1) 100%
   );
-}
+} */
 
 .profile-info {
-  padding: 24px 32px;
+  padding: 20px 24px;
   background: var(--surface);
 }
 
 .profile-stats {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 24px;
-  margin-bottom: 16px;
+  gap: 16px;
+  margin-bottom: 12px;
 }
 
 .stat-item {
   text-align: center;
-  padding: 16px;
+  padding: 12px;
   background: var(--bg-primary);
   border-radius: var(--radius-md);
 }
 
 .stat-value {
-  font-size: 2rem;
+  font-size: 1.75rem;
   font-weight: 700;
   color: var(--primary);
   line-height: 1;
@@ -98,7 +103,7 @@
 }
 
 .stat-label {
-  font-size: 0.85rem;
+  font-size: 0.75rem;
   color: var(--text-secondary);
   text-transform: uppercase;
   font-weight: 600;
@@ -107,37 +112,43 @@
 
 .profile-meta {
   display: flex;
-  gap: 20px;
+  gap: 16px;
   flex-wrap: wrap;
 }
 
 .meta-item {
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   color: var(--text-secondary);
 }
 
 /* ====================================
-   AVATAR UPLOAD
+   AVATAR UPLOAD - FIXED WITH SAVE BUTTON
    ==================================== */
 
 .avatar-upload {
   display: flex;
   align-items: center;
-  gap: 24px;
-  padding: 24px;
-  background: var(--bg-primary);
-  border-radius: var(--radius-md);
-  margin-top: 24px;
+  gap: 20px;
+  padding: 20px 24px;
+  background: linear-gradient(135deg, rgba(14, 165, 233, 0.05), rgba(6, 182, 212, 0.05));
+  border-top: 1px solid var(--bg-secondary);
 }
 
 .avatar-preview {
   position: relative;
-  width: 120px;
-  height: 120px;
+  width: 100px;
+  height: 100px;
   border-radius: 50%;
   overflow: hidden;
   cursor: pointer;
   transition: var(--transition);
+  flex-shrink: 0;
+  box-shadow: var(--shadow-md);
+  border: 4px solid white;
+}
+
+.avatar-preview:hover {
+  transform: scale(1.05);
 }
 
 .avatar-preview:hover .avatar-overlay {
@@ -175,25 +186,29 @@
 
 .overlay-text {
   color: white;
-  font-size: 0.9rem;
+  font-size: 0.8rem;
   font-weight: 600;
   text-align: center;
+  padding: 0 10px;
 }
 
 .avatar-actions {
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 10px;
 }
 
-.avatar-actions .btn {
-  width: fit-content;
+.avatar-buttons {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
 }
 
 .avatar-hint {
-  font-size: 0.85rem;
+  font-size: 0.75rem;
   color: var(--text-muted);
+  line-height: 1.4;
 }
 
 /* ====================================
@@ -203,32 +218,40 @@
 .profile-form {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 16px;
 }
 
 .form-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 20px;
+  gap: 16px;
+  position: relative;
+}
+
+.form-group {
   position: relative;
 }
 
 .verified-badge {
   position: absolute;
-  top: 35px;
+  top: 34px;
   right: 12px;
   color: var(--success);
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 4px;
 }
 
 .disabled-input {
-  background: var(--bg-secondary);
-  cursor: not-allowed;
+  background: var(--bg-secondary) !important;
+  cursor: not-allowed !important;
+  opacity: 0.7;
 }
 
 .character-count {
-  font-size: 0.85rem;
+  font-size: 0.75rem;
   color: var(--text-muted);
   margin-top: 4px;
   display: block;
@@ -240,22 +263,22 @@
    ==================================== */
 
 .password-form {
-  padding: 24px;
+  padding: 20px;
   background: var(--bg-primary);
   border-radius: var(--radius-md);
-  margin-top: 20px;
+  margin-top: 16px;
 }
 
 .password-requirements {
-  margin: 20px 0;
-  padding: 16px;
+  margin: 16px 0;
+  padding: 14px;
   background: var(--surface);
   border-radius: var(--radius-md);
   border-left: 4px solid var(--primary);
 }
 
 .requirements-title {
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   font-weight: 600;
   color: var(--text-primary);
   margin: 0 0 8px 0;
@@ -268,10 +291,10 @@
 }
 
 .requirements-list li {
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   color: var(--text-muted);
-  padding: 4px 0;
-  padding-left: 24px;
+  padding: 3px 0;
+  padding-left: 20px;
   position: relative;
 }
 
@@ -294,9 +317,9 @@
 
 .form-actions {
   display: flex;
-  gap: 12px;
+  gap: 10px;
   justify-content: flex-end;
-  margin-top: 20px;
+  margin-top: 16px;
 }
 
 /* ====================================
@@ -306,15 +329,15 @@
 .security-info {
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  margin-top: 24px;
+  gap: 12px;
+  margin-top: 16px;
 }
 
 .info-item {
   display: flex;
   align-items: center;
-  gap: 16px;
-  padding: 16px;
+  gap: 14px;
+  padding: 14px;
   background: var(--bg-primary);
   border-radius: var(--radius-md);
   transition: var(--transition);
@@ -325,7 +348,7 @@
 }
 
 .info-icon {
-  font-size: 1.5rem;
+  font-size: 1.4rem;
   flex-shrink: 0;
 }
 
@@ -334,21 +357,25 @@
 }
 
 .info-title {
-  font-weight: 600;color: var(--text-primary);
+  font-weight: 600;
+  color: var(--text-primary);
   margin-bottom: 2px;
+  font-size: 0.9rem;
 }
 
 .info-description {
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   color: var(--text-secondary);
+  line-height: 1.4;
 }
 
 /* Toggle Switch */
 .toggle-switch {
   position: relative;
   display: inline-block;
-  width: 50px;
-  height: 26px;
+  width: 48px;
+  height: 24px;
+  flex-shrink: 0;
 }
 
 .toggle-switch input {
@@ -363,14 +390,14 @@
   inset: 0;
   background: var(--bg-secondary);
   transition: var(--transition);
-  border-radius: 26px;
+  border-radius: 24px;
 }
 
 .toggle-slider::before {
   position: absolute;
   content: "";
-  height: 20px;
-  width: 20px;
+  height: 18px;
+  width: 18px;
   left: 3px;
   bottom: 3px;
   background: white;
@@ -393,14 +420,14 @@
 .activity-list {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 10px;
 }
 
 .activity-item {
   display: flex;
   align-items: center;
-  gap: 16px;
-  padding: 16px;
+  gap: 14px;
+  padding: 14px;
   background: var(--bg-primary);
   border-radius: var(--radius-md);
   transition: var(--transition);
@@ -411,7 +438,7 @@
 }
 
 .activity-icon {
-  font-size: 1.5rem;
+  font-size: 1.4rem;
   flex-shrink: 0;
 }
 
@@ -423,17 +450,19 @@
   font-weight: 600;
   color: var(--text-primary);
   margin-bottom: 2px;
+  font-size: 0.9rem;
 }
 
 .activity-meta {
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   color: var(--text-secondary);
+  line-height: 1.4;
 }
 
 .activity-badge {
-  padding: 4px 12px;
+  padding: 4px 10px;
   border-radius: var(--radius-sm);
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   font-weight: 600;
 }
 
@@ -444,8 +473,6 @@
 
 /* ====================================
    DANGER ZONE
-
-   
    ==================================== */
 
 .danger-zone {
@@ -459,14 +486,14 @@
 .danger-actions {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 12px;
 }
 
 .danger-item {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 20px;
+  padding: 16px;
   background: var(--danger-light);
   border-radius: var(--radius-md);
   border: 1px solid transparent;
@@ -479,17 +506,20 @@
 
 .danger-info {
   flex: 1;
+  margin-right: 16px;
 }
 
 .danger-item-title {
   font-weight: 600;
   color: var(--text-primary);
   margin-bottom: 4px;
+  font-size: 0.9rem;
 }
 
 .danger-item-description {
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   color: var(--text-secondary);
+  line-height: 1.4;
 }
 
 .danger-modal {
@@ -497,17 +527,18 @@
 }
 
 .warning-box {
-  padding: 16px;
+  padding: 14px;
   background: var(--danger-light);
   border-left: 4px solid var(--danger);
   border-radius: var(--radius-md);
-  margin-bottom: 20px;
+  margin-bottom: 16px;
 }
 
 .warning-box p {
-  margin: 8px 0;
+  margin: 6px 0;
   color: var(--text-primary);
-  font-size: 0.9rem;
+  font-size: 0.85rem;
+  line-height: 1.5;
 }
 
 .warning-box strong {
@@ -515,17 +546,33 @@
 }
 
 /* ====================================
-   RESPONSIVE
+   RESPONSIVE - TABLET
+   ==================================== */
+
+@media (max-width: 1024px) {
+  .profile-container {
+    max-width: 100%;
+  }
+
+  .profile-section {
+    padding: 20px;
+  }
+}
+
+/* ====================================
+   RESPONSIVE - MOBILE
    ==================================== */
 
 @media (max-width: 768px) {
   .profile-section {
-    padding: 20px;
+    padding: 16px;
+    margin-bottom: 16px;
   }
 
   .section-header {
     flex-direction: column;
-    gap: 16px;
+    align-items: flex-start;
+    gap: 12px;
   }
 
   .action-buttons {
@@ -543,6 +590,12 @@
   .avatar-upload {
     flex-direction: column;
     text-align: center;
+    padding: 16px;
+  }
+
+  .avatar-preview {
+    width: 90px;
+    height: 90px;
   }
 
   .avatar-actions {
@@ -550,21 +603,80 @@
     align-items: center;
   }
 
-  .avatar-actions .btn {
+  .avatar-buttons {
     width: 100%;
+    justify-content: center;
+  }
+
+  .avatar-buttons .btn {
+    flex: 1;
+    min-width: 0;
   }
 
   .profile-stats {
     grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .stat-value {
+    font-size: 1.5rem;
   }
 
   .danger-item {
     flex-direction: column;
-    gap: 16px;
+    gap: 12px;
     align-items: flex-start;
   }
 
+  .danger-info {
+    margin-right: 0;
+  }
+
   .danger-item .btn {
+    width: 100%;
+  }
+
+  .activity-item {
+    flex-wrap: wrap;
+  }
+
+  .activity-badge {
+    width: 100%;
+    text-align: center;
+  }
+}
+
+/* ====================================
+   RESPONSIVE - SMALL MOBILE
+   ==================================== */
+
+@media (max-width: 480px) {
+  .profile-section {
+    padding: 14px;
+  }
+
+  .section-title {
+    font-size: 1.1rem;
+  }
+
+  .section-description {
+    font-size: 0.8rem;
+  }
+
+  .avatar-preview {
+    width: 80px;
+    height: 80px;
+  }
+
+  .avatar-placeholder {
+    font-size: 2rem;
+  }
+
+  .avatar-buttons {
+    flex-direction: column;
+  }
+
+  .avatar-buttons .btn {
     width: 100%;
   }
 }
