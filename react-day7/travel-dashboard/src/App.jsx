@@ -11,6 +11,7 @@ import Settings from "./pages/Settings";
 import Login from "./pages/Login";
 import NotFound from "./pages/NotFound";
 import LoadingSpinner from "./components/Shared/LoadingSpinner";
+import "./styles/animations.css";
 import "./App.css";
 import "./index.css";
 
