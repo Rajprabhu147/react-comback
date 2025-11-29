@@ -1,5 +1,5 @@
 /* ====================================
-   APP LAYOUT - CORE STRUCTURE (NO CHART STYLES)
+   APP LAYOUT - CORE STRUCTURE
    ==================================== */
 
 /* ROOT LAYOUT */
@@ -237,3 +237,33 @@
 .text-muted { color: var(--text-muted); }
 .text-danger { color: var(--danger); }
 .text-success { color: var(--success); }
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .main-content {
+    padding: 20px;
+  }
+
+  .dashboard-layout {
+    gap: 20px;
+  }
+
+  .card {
+    padding: 16px;
+  }
+
+  .modal {
+    max-width: 100%;
+    margin: 0;
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+    max-height: 85vh;
+  }
+
+  .modal-footer {
+    flex-direction: column-reverse;
+  }
+
+  .modal-footer .btn {
+    width: 100%;
+  }
+}
