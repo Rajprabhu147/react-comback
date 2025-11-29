@@ -1,9 +1,5 @@
 /* ====================================
-   HEADER - CLEANED & OPTIMIZED
-   ==================================== */
-
-/* ====================================
-   HEADER CONTAINER
+   HEADER - CLEANED
    ==================================== */
 
 .header {
@@ -24,10 +20,6 @@
   align-items: center;
   justify-content: space-between;
 }
-
-/* ====================================
-   LOGO
-   ==================================== */
 
 .header-logo {
   display: flex;
@@ -59,19 +51,11 @@
   letter-spacing: -1px;
 }
 
-/* ====================================
-   HEADER ACTIONS
-   ==================================== */
-
 .header-actions {
   display: flex;
   align-items: center;
   gap: 16px;
 }
-
-/* ====================================
-   ICON BUTTONS
-   ==================================== */
 
 .header-icon-btn {
   position: relative;
@@ -111,10 +95,6 @@
   box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
   animation: pulse 2s infinite;
 }
-
-/* ====================================
-   USER PROFILE BUTTON
-   ==================================== */
 
 .header-user {
   position: relative;
@@ -185,10 +165,6 @@
   transform: translateY(2px);
 }
 
-/* ====================================
-   USER DROPDOWN
-   ==================================== */
-
 .user-dropdown {
   position: absolute;
   top: calc(100% + 12px);
@@ -254,10 +230,6 @@
   background: linear-gradient(90deg, transparent, var(--bg-secondary), transparent);
   margin: 8px 0;
 }
-
-/* ====================================
-   DROPDOWN ITEMS
-   ==================================== */
 
 .dropdown-item {
   display: flex;
@@ -335,10 +307,6 @@
   box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3);
 }
 
-/* ====================================
-   MOBILE MENU BUTTON
-   ==================================== */
-
 .mobile-menu-btn {
   display: none;
   width: 48px;
@@ -359,10 +327,7 @@
   border-color: var(--primary);
 }
 
-/* ====================================
-   RESPONSIVE
-   ==================================== */
-
+/* RESPONSIVE */
 @media (max-width: 1024px) {
   .header-container {
     padding: 12px 24px;
