@@ -5,7 +5,6 @@
 
 /* Root variables for safe fallback */
 :root {
-  --sidebar-width: 260px;
   --sidebar-bg: var(--surface);
   --sidebar-text: var(--text-primary);
   --sidebar-border: var(--bg-secondary);
