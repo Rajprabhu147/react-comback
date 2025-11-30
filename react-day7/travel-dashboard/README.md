@@ -1,16 +1,104 @@
-# React + Vite
+# Travel Dashboard — Personal Travel Organizer
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A lightweight, modular, and scalable **React + Vite** application designed for organizing personal travel information.  
+Supports trip planning, document storage, and itinerary management with a minimal and maintainable codebase.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Features
 
-## React Compiler
+### Trip Management
+- Create and manage multiple trips
+- Store destination details, dates, and notes
+- Trip overview dashboard for fast access
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### Document Management
+- Local document vault for storing travel files
+- Supports passport scans, visas, tickets, hotel confirmations
+- Structured for future integration with secure cloud storage
 
-## Expanding the ESLint configuration
+### Itinerary Builder
+- Day-by-day itinerary planner
+- Activity management with notes and timing
+- Extendable for map integrations or route visualization
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+### Offline-Ready Architecture
+- Designed as a client-side SPA for consistent offline behavior
+- Vite-optimized build ensures fast load times
+
+---
+
+## Tech Stack
+
+| Category | Technology |
+|----------|------------|
+| Framework | React 18 |
+| Build Tool | Vite |
+| Language | JavaScript (ES6+) |
+| Linting | ESLint (with React and Hooks rules) |
+| Deployment | Vercel / Netlify compatible |
+
+---
+
+## Project Structure
+
+travel-dashboard/
+│── public/
+│   └── tabIcon.png
+│
+│── src/
+│   ├── App.jsx
+│   ├── App.css
+│   ├── components/
+│   ├── pages/ (optional, if added later)
+│   ├── hooks/
+│   ├── utils/
+│   ├── assets/
+│   └── ...
+│
+│── .env               # Environment variables
+│── package.json
+│── vite.config.js
+│── eslint.config.js
+│── README.md
+
+
+---
+
+## Environment Variables
+
+Create a `.env` file:
+
+VITE_APP_NAME="Travel Dashboard"
+
+yaml
+Copy code
+
+Additional variables (e.g., Maps API keys) can be added as features expand.
+
+---
+
+🧩 Future Enhancements (Recommended Roadmap)
+Phase 1 — Core Travel UX
+
+Travel itinerary builder (drag & drop)
+
+Trip timeline view
+
+Weather + location integration
+
+Phase 2 — Storage & Sync
+
+Cloud backup for travel docs
+
+User authentication
+
+Optional offline-first PWA mode
+
+Phase 3 — Smart Features
+
+AI trip suggestions
+
+Smart packing checklist
+
+Alerts: visa expiry, check-in, flight reminders
