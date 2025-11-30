@@ -1,170 +1,183 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useRef, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useUser } from "../../context/UserContext";
+import Button from "../Shared/Button";
+import { useNotificationStore } from "../../store/notificationStore";
+import { useUIStore } from "../../store/uiStore";
+import "../../styles/components.css";
 import "../../styles/header.css";
 
-const Header = ({ onCreateItem }) => {
+const Header = () => {
+  const { user, signOut } = useUser();
   const navigate = useNavigate();
-  const { user, logout } = useUser();
-  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const location = useLocation();
+  const [showDropdown, setShowDropdown] = useState(false);
+  const dropdownRef = useRef(null);
+  const unreadCount = useNotificationStore((state) => state.unreadCount);
+  const toggleSidebar = useUIStore((state) => state.toggleSidebar);
+  const sidebarOpen = useUIStore((state) => state.sidebarOpen);
 
-  const handleLogout = async () => {
-    await logout();
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setShowDropdown(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const getShortUsername = (email) => {
+    if (!email) return "User";
+    const username = email.split("@")[0];
+    if (username.length > 15) {
+      return username.substring(0, 15) + "...";
+    }
+    return username;
+  };
+
+  const getDisplayName = (email) => {
+    if (!email) return "User";
+    const username = email.split("@")[0];
+    const cleanName = username.replace(/[0-9_.-]/g, " ").trim();
+    return cleanName.charAt(0).toUpperCase() + cleanName.slice(1);
+  };
+
+  const getInitials = (email) => {
+    if (!email) return "U";
+    const username = email.split("@")[0];
+    const parts = username.split(/[._-]/);
+    if (parts.length > 1) {
+      return (parts[0].charAt(0) + parts[1].charAt(0)).toUpperCase();
+    }
+    return username.substring(0, 2).toUpperCase();
+  };
+
+  const handleSignOut = async () => {
+    setShowDropdown(false);
+    await signOut();
     navigate("/login");
   };
 
-  // Get avatar URL from user context
-  const avatarUrl = user?.user_metadata?.avatar_url;
-  const fullName = user?.user_metadata?.full_name || "User";
-  const email = user?.email || "";
-  const initials = fullName[0]?.toUpperCase() || email[0]?.toUpperCase() || "?";
+  const handleNavigation = (path) => {
+    setShowDropdown(false);
+    navigate(path);
+  };
 
   return (
     <header className="header">
       <div className="header-container">
-        {/* Logo */}
+        {/* Mobile Menu Button */}
+        <button
+          className="mobile-menu-btn"
+          onClick={toggleSidebar}
+          aria-label="Toggle menu"
+        >
+          {sidebarOpen ? "✕" : "☰"}
+        </button>
+
         <div className="header-logo" onClick={() => navigate("/")}>
-          <span className="logo-icon">✈️</span>
-          <span className="logo-text">Smart Trip</span>
+          <span className="logo-icon">🌊</span>
+          <span className="logo-text">Travel Dashboard</span>
         </div>
 
-        {/* CENTER - CREATE BUTTON (if provided) */}
-        {onCreateItem && (
-          <div className="header-center">
-            <button className="header-create-btn" onClick={onCreateItem}>
-              <span className="btn-icon">+</span>
-              Create New Item
-            </button>
-          </div>
-        )}
-
-        {/* Right Actions */}
         <div className="header-actions">
-          {/* Notifications */}
+          {/* Notifications Bell */}
           <button
             className="header-icon-btn"
             onClick={() => navigate("/notifications")}
+            title="Notifications"
           >
-            🔔
-            <span className="notification-badge">3</span>
+            <span className="icon-wrapper">
+              🔔
+              {unreadCount > 0 && (
+                <span className="notification-badge">{unreadCount}</span>
+              )}
+            </span>
           </button>
 
-          {/* User Profile */}
-          <div className="header-user">
+          {/* User Profile Dropdown */}
+          <div className="header-user" ref={dropdownRef}>
             <button
               className="user-profile-btn"
-              onClick={() => setDropdownOpen(!dropdownOpen)}
+              onClick={() => setShowDropdown(!showDropdown)}
             >
-              {/* AVATAR - Updates when user changes it */}
-              <div className="user-avatar">
-                {avatarUrl ? (
-                  <img
-                    src={avatarUrl}
-                    alt={fullName}
-                    style={{
-                      width: "100%",
-                      height: "100%",
-                      objectFit: "cover",
-                      borderRadius: "50%",
-                    }}
-                  />
-                ) : (
-                  initials
-                )}
-              </div>
-
+              <div className="user-avatar">{getInitials(user?.email)}</div>
               <div className="user-info">
-                <span className="user-name">{fullName}</span>
-                <span className="user-email">{email}</span>
+                <span className="user-name">{getDisplayName(user?.email)}</span>
+                <span className="user-email">
+                  {getShortUsername(user?.email)}
+                </span>
               </div>
-              <span className="dropdown-arrow">▼</span>
+              <span className="dropdown-arrow">{showDropdown ? "▲" : "▼"}</span>
             </button>
 
-            {/* Dropdown Menu */}
-            {dropdownOpen && (
+            {showDropdown && (
               <div className="user-dropdown">
                 <div className="dropdown-header">
                   <div className="dropdown-avatar">
-                    {avatarUrl ? (
-                      <img
-                        src={avatarUrl}
-                        alt={fullName}
-                        style={{
-                          width: "100%",
-                          height: "100%",
-                          objectFit: "cover",
-                          borderRadius: "50%",
-                        }}
-                      />
-                    ) : (
-                      initials
-                    )}
+                    {getInitials(user?.email)}
                   </div>
                   <div className="dropdown-info">
-                    <div className="dropdown-name">{fullName}</div>
-                    <div className="dropdown-email">{email}</div>
+                    <div className="dropdown-name">
+                      {getDisplayName(user?.email)}
+                    </div>
+                    <div className="dropdown-email" title={user?.email}>
+                      {user?.email}
+                    </div>
                   </div>
                 </div>
 
                 <div className="dropdown-divider"></div>
 
                 <button
-                  className="dropdown-item"
-                  onClick={() => {
-                    navigate("/profile");
-                    setDropdownOpen(false);
-                  }}
+                  className={`dropdown-item ${
+                    location.pathname === "/profile" ? "active" : ""
+                  }`}
+                  onClick={() => handleNavigation("/profile")}
                 >
                   <span className="item-icon">👤</span>
-                  Profile Settings
+                  <span>Profile Settings</span>
                 </button>
 
                 <button
-                  className="dropdown-item"
-                  onClick={() => {
-                    navigate("/notifications");
-                    setDropdownOpen(false);
-                  }}
+                  className={`dropdown-item ${
+                    location.pathname === "/notifications" ? "active" : ""
+                  }`}
+                  onClick={() => handleNavigation("/notifications")}
                 >
                   <span className="item-icon">🔔</span>
-                  Notifications
-                  <span className="dropdown-badge">3</span>
+                  <span>Notifications</span>
+                  {unreadCount > 0 && (
+                    <span className="dropdown-badge">{unreadCount}</span>
+                  )}
                 </button>
 
                 <button
-                  className="dropdown-item"
-                  onClick={() => {
-                    navigate("/settings");
-                    setDropdownOpen(false);
-                  }}
+                  className={`dropdown-item ${
+                    location.pathname === "/settings" ? "active" : ""
+                  }`}
+                  onClick={() => handleNavigation("/settings")}
                 >
                   <span className="item-icon">⚙️</span>
-                  Settings
+                  <span>Settings</span>
                 </button>
 
                 <div className="dropdown-divider"></div>
 
-                <button className="dropdown-item danger" onClick={handleLogout}>
+                <button
+                  className="dropdown-item danger"
+                  onClick={handleSignOut}
+                >
                   <span className="item-icon">🚪</span>
-                  Logout
+                  <span>Sign Out</span>
                 </button>
               </div>
             )}
           </div>
         </div>
       </div>
-
-      {/* Click outside to close dropdown */}
-      {dropdownOpen && (
-        <div
-          style={{
-            position: "fixed",
-            inset: 0,
-            zIndex: 99,
-          }}
-          onClick={() => setDropdownOpen(false)}
-        />
-      )}
     </header>
   );
 };
