@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useUser } from "../../context/UserContext";
-import "../styles/Header.css";
+import "../../styles/header.css";
 
 const Header = ({ onCreateItem }) => {
   const navigate = useNavigate();
@@ -25,7 +25,7 @@ const Header = ({ onCreateItem }) => {
         {/* Logo */}
         <div className="header-logo" onClick={() => navigate("/")}>
           <span className="logo-icon">✈️</span>
-          <span className="logo-text">TravelHub</span>
+          <span className="logo-text">Travel Dashboard</span>
         </div>
 
         {/* CENTER - CREATE BUTTON (if provided) */}
