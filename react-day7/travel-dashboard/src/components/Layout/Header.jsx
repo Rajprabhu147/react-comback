@@ -25,7 +25,7 @@ const Header = ({ onCreateItem }) => {
         {/* Logo */}
         <div className="header-logo" onClick={() => navigate("/")}>
           <span className="logo-icon">✈️</span>
-          <span className="logo-text">Travel Dashboard</span>
+          <span className="logo-text">Smart Trip</span>
         </div>
 
         {/* CENTER - CREATE BUTTON (if provided) */}
