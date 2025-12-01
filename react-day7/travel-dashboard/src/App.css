@@ -28,11 +28,26 @@
 
 /* DASHBOARD LAYOUT */
 .dashboard-layout {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: 1fr 400px;
   gap: 32px;
   width: 100%;
 }
+
+.items-section {
+  min-width: 0;
+}
+
+.analytics-section {
+  position: sticky;
+  top: 200px;
+  height: fit-content;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+/* FILTER BAR */
 .filter-bar {
   background: #f5f5f5;
   border-bottom: 1px solid #e0e0e0;
@@ -84,11 +99,6 @@
 
 .reset-filters-btn:hover {
   background: #d0d0d0;
-}
-
-.analytics-section,
-.items-section {
-  width: 100%;
 }
 
 /* CARDS */
@@ -289,3 +299,15 @@
 .text-muted { color: var(--text-muted); }
 .text-danger { color: var(--danger); }
 .text-success { color: var(--success); }
+
+/* RESPONSIVE */
+@media (max-width: 1024px) {
+  .dashboard-layout {
+    grid-template-columns: 1fr;
+  }
+  
+  .analytics-section {
+    position: static;
+    top: auto;
+  }
+}
