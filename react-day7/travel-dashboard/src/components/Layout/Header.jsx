@@ -79,7 +79,7 @@ const Header = () => {
 
         <div className="header-logo" onClick={() => navigate("/")}>
           <span className="logo-icon">🗺️</span>
-          <span className="logo-text">Sutri Dashboard</span>
+          <span className="logo-text">Sutri</span>
         </div>
 
         <div className="header-actions">
