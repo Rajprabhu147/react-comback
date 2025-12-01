@@ -1,31 +1,30 @@
 import React from "react";
 import Header from "../components/Layout/Header";
-import Sidebar from "../components/Layout/Sidebar";
+import FilterBar from "../components/Layout/FilterBar";
 import ItemsList from "../components/Items/ItemsList";
 import ItemEditor from "../components/Items/ItemEditor";
 import AnalyticsCharts from "../components/Analytics/AnalyticsCharts";
 import { useRealtimeSubscription } from "../hooks/useRealtime";
-import { useUIStore } from "../store/uiStore";
 
 const Dashboard = () => {
   useRealtimeSubscription();
-  const sidebarOpen = useUIStore((state) => state.sidebarOpen);
-  const toggleSidebar = useUIStore((state) => state.toggleSidebar);
 
   return (
     <div className="app">
       <Header />
-      <div className="app-container">
-        <Sidebar />
-        <main className="main-content">
-          {/* Items Section - Full Width Below */}
-          <section className="items-section">
-            <ItemsList />
-          </section>
 
-          {/* New Layout: Analytics First, Then Items */}
+      {/* Filter Bar - Top Layer */}
+      <FilterBar />
+
+      <div className="app-container">
+        <main className="main-content">
           <div className="dashboard-layout">
-            {/* Analytics Section - Full Width on Top */}
+            {/* Items Section - Left Side */}
+            <section className="items-section">
+              <ItemsList />
+            </section>
+
+            {/* Analytics Section - Right Side */}
             <section className="analytics-section">
               <AnalyticsCharts />
             </section>
@@ -33,11 +32,6 @@ const Dashboard = () => {
         </main>
       </div>
       <ItemEditor />
-
-      {/* Mobile sidebar overlay */}
-      {sidebarOpen && window.innerWidth < 1024 && (
-        <div className="sidebar-overlay" onClick={toggleSidebar} />
-      )}
     </div>
   );
 };
