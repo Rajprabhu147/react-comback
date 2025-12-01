@@ -24,10 +24,10 @@ const Dashboard = () => {
               <ItemsList />
             </section>
 
-            {/* Analytics Section - Right Side */}
-            <section className="analytics-section">
+            {/* Analytics Section - Right Side (Fixed/Sticky) */}
+            <aside className="analytics-section">
               <AnalyticsCharts />
-            </section>
+            </aside>
           </div>
         </main>
       </div>
