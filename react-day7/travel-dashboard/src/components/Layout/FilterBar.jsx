@@ -1,11 +1,15 @@
 import React, { useState } from "react";
+import { X, Filter, Search } from "lucide-react";
 
 const FilterBar = () => {
   const [selectedFilters, setSelectedFilters] = useState({
     status: "all",
     priority: "all",
     assignee: "all",
+    search: "",
   });
+
+  const [isExpanded, setIsExpanded] = useState(false);
 
   const handleFilterChange = (filterType, value) => {
     setSelectedFilters((prev) => ({
@@ -14,63 +18,166 @@ const FilterBar = () => {
     }));
   };
 
+  const handleSearchChange = (value) => {
+    setSelectedFilters((prev) => ({
+      ...prev,
+      search: value,
+    }));
+  };
+
+  const handleReset = () => {
+    setSelectedFilters({
+      status: "all",
+      priority: "all",
+      assignee: "all",
+      search: "",
+    });
+    setIsExpanded(false);
+  };
+
+  const activeFiltersCount = Object.values(selectedFilters).filter(
+    (v) => v !== "all" && v !== ""
+  ).length;
+
+  const filterOptions = [
+    {
+      id: "status",
+      label: "Status",
+      icon: "📋",
+      options: [
+        { value: "all", label: "All Status" },
+        { value: "open", label: "Open" },
+        { value: "in-progress", label: "In Progress" },
+        { value: "closed", label: "Closed" },
+      ],
+    },
+    {
+      id: "priority",
+      label: "Priority",
+      icon: "⚡",
+      options: [
+        { value: "all", label: "All Priorities" },
+        { value: "low", label: "Low" },
+        { value: "medium", label: "Medium" },
+        { value: "high", label: "High" },
+      ],
+    },
+    {
+      id: "assignee",
+      label: "Assignee",
+      icon: "👤",
+      options: [
+        { value: "all", label: "All Users" },
+        { value: "me", label: "Assigned to me" },
+        { value: "unassigned", label: "Unassigned" },
+      ],
+    },
+  ];
+
   return (
-    <div className="filter-bar">
-      <div className="filter-bar-content">
-        <div className="filter-group">
-          <label htmlFor="status-filter">Status</label>
-          <select
-            id="status-filter"
-            value={selectedFilters.status}
-            onChange={(e) => handleFilterChange("status", e.target.value)}
-          >
-            <option value="all">All</option>
-            <option value="open">Open</option>
-            <option value="in-progress">In Progress</option>
-            <option value="closed">Closed</option>
-          </select>
+    <div className="filter-bar-enhanced">
+      {/* Compact View - Desktop */}
+      <div className="filter-bar-compact">
+        <div className="search-box-wrapper">
+          <Search size={18} className="search-icon" />
+          <input
+            type="text"
+            placeholder="Search tickets..."
+            value={selectedFilters.search}
+            onChange={(e) => handleSearchChange(e.target.value)}
+            className="search-input"
+          />
+          {selectedFilters.search && (
+            <button
+              className="search-clear"
+              onClick={() => handleSearchChange("")}
+            >
+              <X size={16} />
+            </button>
+          )}
         </div>
 
-        <div className="filter-group">
-          <label htmlFor="priority-filter">Priority</label>
-          <select
-            id="priority-filter"
-            value={selectedFilters.priority}
-            onChange={(e) => handleFilterChange("priority", e.target.value)}
-          >
-            <option value="all">All</option>
-            <option value="low">Low</option>
-            <option value="medium">Medium</option>
-            <option value="high">High</option>
-          </select>
+        <div className="filter-chips">
+          {filterOptions.map((filter) => (
+            <div key={filter.id} className="filter-chip">
+              <span className="chip-icon">{filter.icon}</span>
+              <select
+                value={selectedFilters[filter.id]}
+                onChange={(e) => handleFilterChange(filter.id, e.target.value)}
+                className="chip-select"
+              >
+                {filter.options.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+          ))}
         </div>
 
-        <div className="filter-group">
-          <label htmlFor="assignee-filter">Assignee</label>
-          <select
-            id="assignee-filter"
-            value={selectedFilters.assignee}
-            onChange={(e) => handleFilterChange("assignee", e.target.value)}
+        <div className="filter-actions">
+          {activeFiltersCount > 0 && (
+            <span className="active-count">{activeFiltersCount} active</span>
+          )}
+          {activeFiltersCount > 0 && (
+            <button className="btn-reset" onClick={handleReset}>
+              <X size={16} />
+              Reset
+            </button>
+          )}
+          <button
+            className="btn-advanced"
+            onClick={() => setIsExpanded(!isExpanded)}
           >
-            <option value="all">All</option>
-            <option value="me">Assigned to me</option>
-            <option value="unassigned">Unassigned</option>
-          </select>
+            <Filter size={16} />
+            More
+          </button>
         </div>
-
-        <button
-          className="reset-filters-btn"
-          onClick={() =>
-            setSelectedFilters({
-              status: "all",
-              priority: "all",
-              assignee: "all",
-            })
-          }
-        >
-          Reset
-        </button>
       </div>
+
+      {/* Expanded View */}
+      {isExpanded && (
+        <div className="filter-bar-expanded">
+          <div className="expanded-content">
+            {filterOptions.map((filter) => (
+              <div key={filter.id} className="expanded-group">
+                <label className="expanded-label">
+                  <span className="label-icon">{filter.icon}</span>
+                  {filter.label}
+                </label>
+                <div className="expanded-options">
+                  {filter.options.map((option) => (
+                    <label key={option.value} className="radio-option">
+                      <input
+                        type="radio"
+                        name={filter.id}
+                        value={option.value}
+                        checked={selectedFilters[filter.id] === option.value}
+                        onChange={(e) =>
+                          handleFilterChange(filter.id, e.target.value)
+                        }
+                      />
+                      <span className="radio-text">{option.label}</span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="expanded-footer">
+            <button className="btn-close" onClick={() => setIsExpanded(false)}>
+              Collapse
+            </button>
+            {activeFiltersCount > 0 && (
+              <button className="btn-reset-expanded" onClick={handleReset}>
+                Reset All
+              </button>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 };

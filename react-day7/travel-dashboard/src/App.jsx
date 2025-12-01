@@ -18,6 +18,8 @@ import "./index.css";
 // Core Layout & Theme
 // import "./styles/variables.css";
 import "./styles/animations.css";
+import "./styles/filterbar.css";
+
 // import "./styles/utilities.css";
 
 // Layout & Components Styles
