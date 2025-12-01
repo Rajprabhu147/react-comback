@@ -8,9 +8,7 @@
 
 .charts-container {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-    grid-column: 1 / -1;  /* Make it span both columns if needed */
-
+  grid-template-columns: 1fr 1fr;
   gap: 24px;
   width: 100%;
 }
@@ -239,6 +237,10 @@
 }
 
 @media (max-width: 768px) {
+  .charts-container {
+    grid-template-columns: 1fr;
+  }
+
   .stats-grid {
     grid-template-columns: 1fr;
     gap: 12px;
