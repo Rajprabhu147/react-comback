@@ -11,9 +11,18 @@ import Settings from "./pages/Settings";
 import Login from "./pages/Login";
 import NotFound from "./pages/NotFound";
 import LoadingSpinner from "./components/Shared/LoadingSpinner";
-import "./styles/animations.css";
-import "./App.css";
+
+// Global Styles
 import "./index.css";
+
+// Core Layout & Theme
+// import "./styles/variables.css";
+import "./styles/animations.css";
+// import "./styles/utilities.css";
+
+// Layout & Components Styles
+import "./App.css";
+import "./styles/charts.css";
 
 const queryClient = new QueryClient({
   defaultOptions: {

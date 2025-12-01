@@ -9,6 +9,8 @@
 .charts-container {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    grid-column: 1 / -1;  /* Make it span both columns if needed */
+
   gap: 24px;
   width: 100%;
 }
@@ -23,13 +25,13 @@
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(12px);
   border-radius: var(--radius-xl);
-  padding: 16px; /* reduced to better fit 100px charts */
+  padding: 16px;
   box-shadow: var(--shadow-lg);
   border: 1px solid rgba(14, 165, 233, 0.1);
   transition: var(--transition);
   position: relative;
   overflow: hidden;
-  min-height: 120px; /* lowered to match reduced chart height */
+  min-height: 120px;
 }
 
 .chart-card::before {
@@ -61,7 +63,7 @@
 .chart-title {
   font-size: 1.1rem;
   font-weight: 700;
-  margin-bottom: 12px; /* tightened spacing for compact layout */
+  margin-bottom: 12px;
   background: linear-gradient(135deg, var(--text-primary), var(--primary));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -83,11 +85,10 @@
 
 .chart-wrapper {
   width: 90%;
-  height: 100px;   /* ⬅️ updated from 300px to 100px */
+  height: 100px;
   position: relative;
 }
 
-/* Recharts specific overrides */
 .chart-wrapper .recharts-wrapper,
 .chart-wrapper .recharts-surface {
   width: 100% !important;
@@ -102,7 +103,7 @@
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 16px;
-  margin-bottom: 16px; /* tightened spacing */
+  margin-bottom: 16px;
 }
 
 .stat-card {
@@ -166,12 +167,12 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 100px;   /* ⬅️ updated to match new chart height */
+  height: 100px;
   color: var(--text-muted);
 }
 
 .chart-loading {
-  font-size: 13px; /* slightly smaller to fit */
+  font-size: 13px;
 }
 
 .chart-empty {
@@ -180,7 +181,7 @@
 }
 
 .chart-empty-icon {
-  font-size: 2.4rem; /* scaled down from 3rem */
+  font-size: 2.4rem;
   margin-bottom: 8px;
   opacity: 0.5;
 }
@@ -204,7 +205,7 @@
   border: 1px solid rgba(14, 165, 233, 0.2) !important;
   border-radius: var(--radius-md) !important;
   box-shadow: var(--shadow-lg) !important;
-  padding: 10px !important; /* tightened padding */
+  padding: 10px !important;
 }
 
 .recharts-tooltip-label {
@@ -233,7 +234,7 @@
   }
 
   .chart-wrapper {
-    height: 100px; /* keep compact on tablet */
+    height: 100px;
   }
 }
 
@@ -248,7 +249,7 @@
   }
 
   .chart-wrapper {
-    height: 100px; /* consistent small charts on mobile */
+    height: 100px;
   }
 
   .stat-value {
@@ -266,7 +267,7 @@
   }
 
   .chart-wrapper {
-    height: 80px; /* slightly smaller for very small screens */
+    height: 80px;
   }
 
   .stat-value {
