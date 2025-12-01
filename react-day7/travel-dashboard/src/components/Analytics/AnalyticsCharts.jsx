@@ -13,14 +13,33 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
+import CalendarHeatmap from "react-calendar-heatmap";
+import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import "react-calendar-heatmap/dist/styles.css";
+import "leaflet/dist/leaflet.css";
 
 import {
   useStatusStats,
   usePriorityStats,
   useEventsTimeSeries,
+  useActivityHeatmap,
+  useLocationStats,
 } from "../../hooks/useStats";
 import "../../styles/charts.css";
 import SkeletonLoader from "../Shared/SkeletonLoader";
+
+// Fix for default marker icons in Leaflet
+import L from "leaflet";
+import markerIcon from "leaflet/dist/images/marker-icon.png";
+import markerIcon2x from "leaflet/dist/images/marker-icon-2x.png";
+import markerShadow from "leaflet/dist/images/marker-shadow.png";
+
+delete L.Icon.Default.prototype._getIconUrl;
+L.Icon.Default.mergeOptions({
+  iconUrl: markerIcon,
+  iconRetinaUrl: markerIcon2x,
+  shadowUrl: markerShadow,
+});
 
 /**
  * Color palette for charts
@@ -36,30 +55,37 @@ const COLORS = {
 /**
  * AnalyticsCharts Component
  * ----------------------------------------------------------
- * Displays 3 categories of analytics using Recharts:
- *
+ * Displays 5 categories of analytics:
  * 1. Pie chart for Item Status distribution
  * 2. Bar chart for Priority distribution
  * 3. Line chart for activity events (last 7 days)
- *
- * Fetches data from custom hooks:
- * - useStatusStats()
- * - usePriorityStats()
- * - useEventsTimeSeries()
+ * 4. Calendar Heatmap for activity density
+ * 5. Map for location distribution
  */
 
 const AnalyticsCharts = () => {
-  // Load stats for status, priority, and time-series activity
+  // Load stats
   const { data: statusStats = [], isLoading: statusLoading } = useStatusStats();
   const { data: priorityStats = [], isLoading: priorityLoading } =
     usePriorityStats();
   const { data: eventsData = [], isLoading: eventsLoading } =
     useEventsTimeSeries();
+  const { data: heatmapData = [], isLoading: heatmapLoading } =
+    useActivityHeatmap();
+  const { data: locationData = [], isLoading: locationLoading } =
+    useLocationStats();
 
   // Show skeleton loaders while any dataset is loading
-  if (statusLoading || priorityLoading || eventsLoading) {
+  if (
+    statusLoading ||
+    priorityLoading ||
+    eventsLoading ||
+    heatmapLoading ||
+    locationLoading
+  ) {
     return (
       <div className="charts-container">
+        <SkeletonLoader type="chart" />
         <SkeletonLoader type="chart" />
         <SkeletonLoader type="chart" />
       </div>
@@ -72,6 +98,11 @@ const AnalyticsCharts = () => {
     medium: COLORS.sun,
     high: COLORS.danger,
   };
+
+  // Get date range for calendar (last 6 months)
+  const endDate = new Date();
+  const startDate = new Date();
+  startDate.setMonth(startDate.getMonth() - 6);
 
   return (
     <div className="charts-container">
@@ -216,6 +247,91 @@ const AnalyticsCharts = () => {
             }}
           >
             No activity data available
+          </p>
+        )}
+      </div>
+
+      {/* ========== CALENDAR HEATMAP: ACTIVITY DENSITY ========== */}
+      <div className="chart-card chart-card-wide">
+        <h3 className="chart-title">Activity Heatmap (Last 6 Months)</h3>
+
+        {heatmapData.length > 0 ? (
+          <div className="calendar-heatmap-container">
+            <CalendarHeatmap
+              startDate={startDate}
+              endDate={endDate}
+              values={heatmapData}
+              classForValue={(value) => {
+                if (!value || value.count === 0) {
+                  return "color-empty";
+                }
+                if (value.count < 3) return "color-scale-1";
+                if (value.count < 6) return "color-scale-2";
+                if (value.count < 9) return "color-scale-3";
+                return "color-scale-4";
+              }}
+              tooltipDataAttrs={(value) => {
+                if (!value || !value.date) {
+                  return null;
+                }
+                return {
+                  "data-tip": `${value.date}: ${value.count || 0} activities`,
+                };
+              }}
+              showWeekdayLabels={true}
+            />
+          </div>
+        ) : (
+          <p
+            style={{
+              textAlign: "center",
+              color: "var(--text-muted)",
+              padding: "40px 0",
+            }}
+          >
+            No activity data available
+          </p>
+        )}
+      </div>
+
+      {/* ========== MAP: LOCATION DISTRIBUTION ========== */}
+      <div className="chart-card chart-card-wide">
+        <h3 className="chart-title">Trip Locations</h3>
+
+        {locationData.length > 0 ? (
+          <div className="map-container">
+            <MapContainer
+              center={[20, 0]}
+              zoom={2}
+              style={{ height: "400px", width: "100%" }}
+            >
+              <TileLayer
+                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+              />
+              {locationData.map((location, index) => (
+                <Marker
+                  key={index}
+                  position={[location.latitude, location.longitude]}
+                >
+                  <Popup>
+                    <strong>{location.name}</strong>
+                    <br />
+                    {location.count} {location.count === 1 ? "trip" : "trips"}
+                  </Popup>
+                </Marker>
+              ))}
+            </MapContainer>
+          </div>
+        ) : (
+          <p
+            style={{
+              textAlign: "center",
+              color: "var(--text-muted)",
+              padding: "40px 0",
+            }}
+          >
+            No location data available
           </p>
         )}
       </div>

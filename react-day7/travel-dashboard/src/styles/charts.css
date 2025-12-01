@@ -1,204 +1,183 @@
-/* ====================================
-   ANALYTICS CHARTS - COMPACT & AESTHETIC
-   ==================================== */
+/* ========================================
+   CHARTS CONTAINER
+   ======================================== */
 
 .charts-container {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 16px;
-  width: 100%;
-  margin-bottom: 24px;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 1.5rem;
+  padding: 1rem;
 }
+
+/* ========================================
+   CHART CARDS
+   ======================================== */
 
 .chart-card {
-  display: flex;
-  flex-direction: column;
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(12px);
-  border-radius: var(--radius-lg);
-  padding: 12px;
-  box-shadow: var(--shadow-sm);
-  border: 1px solid rgba(14, 165, 233, 0.1);
-  transition: var(--transition);
-  position: relative;
-  overflow: hidden;
-  min-height: 100px;
-}
-
-.chart-card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 3px;
-  background: linear-gradient(90deg, var(--primary), var(--accent));
-  opacity: 0;
-  transition: var(--transition);
+  background: var(--surface, #ffffff);
+  border-radius: var(--radius-md, 12px);
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .chart-card:hover {
-  box-shadow: var(--shadow-md);
   transform: translateY(-2px);
-  border-color: rgba(14, 165, 233, 0.2);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
-.chart-card:hover::before {
-  opacity: 1;
+/* Wide cards for calendar and map */
+.chart-card-wide {
+  grid-column: 1 / -1;
 }
 
 .chart-title {
-  font-size: 0.85rem;
-  font-weight: 700;
-  margin-bottom: 8px;
-  color: var(--text-primary);
-  display: flex;
-  align-items: center;
-  gap: 6px;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--text-primary, #1a1a1a);
+  margin-bottom: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 2px solid var(--bg-secondary, #f0f0f0);
 }
 
-.chart-title::before {
-  content: '📊';
-  font-size: 1rem;
+/* ========================================
+   CALENDAR HEATMAP STYLES
+   ======================================== */
+
+.calendar-heatmap-container {
+  padding: 1rem 0;
+  overflow-x: auto;
 }
 
-.chart-wrapper {
-  width: 100%;
-  height: 80px;
-  position: relative;
+.react-calendar-heatmap {
+  font-family: inherit;
 }
 
-.chart-wrapper .recharts-wrapper,
-.chart-wrapper .recharts-surface {
-  width: 100% !important;
-  height: 100% !important;
+.react-calendar-heatmap text {
+  font-size: 10px;
+  fill: var(--text-secondary, #666);
 }
 
-.stats-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 12px;
-  margin-bottom: 12px;
+.react-calendar-heatmap .color-empty {
+  fill: var(--bg-secondary, #e0e0e0);
 }
 
-.stat-card {
-  background: linear-gradient(135deg, rgba(14, 165, 233, 0.08), rgba(6, 182, 212, 0.08));
-  border-radius: var(--radius-md);
-  padding: 10px;
-  box-shadow: var(--shadow-sm);
-  transition: var(--transition);
-  border: 2px solid transparent;
-  position: relative;
+.react-calendar-heatmap .color-scale-1 {
+  fill: #c6f6d5;
+}
+
+.react-calendar-heatmap .color-scale-2 {
+  fill: #68d391;
+}
+
+.react-calendar-heatmap .color-scale-3 {
+  fill: #38a169;
+}
+
+.react-calendar-heatmap .color-scale-4 {
+  fill: #2f855a;
+}
+
+.react-calendar-heatmap rect:hover {
+  stroke: var(--text-primary, #000);
+  stroke-width: 2px;
+  opacity: 0.8;
+}
+
+/* ========================================
+   MAP STYLES
+   ======================================== */
+
+.map-container {
+  border-radius: var(--radius-sm, 8px);
   overflow: hidden;
+  box-shadow: inset 0 0 0 1px var(--bg-secondary, #e0e0e0);
 }
 
-.stat-card:hover {
-  box-shadow: var(--shadow-md);
-  transform: translateY(-2px);
-  border-color: var(--primary);
+.leaflet-container {
+  border-radius: var(--radius-sm, 8px);
+  z-index: 1;
 }
 
-.stat-value {
-  font-size: 1.75rem;
-  font-weight: 900;
-  background: linear-gradient(135deg, var(--primary), var(--accent));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  margin-bottom: 4px;
-  line-height: 1;
+.leaflet-popup-content-wrapper {
+  border-radius: var(--radius-sm, 8px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
-.stat-label {
-  font-size: 0.7rem;
-  color: var(--text-secondary);
-  text-transform: uppercase;
-  font-weight: 700;
-  letter-spacing: 0.3px;
+.leaflet-popup-content {
+  margin: 0.75rem;
+  font-family: inherit;
+  line-height: 1.5;
 }
 
-.chart-loading,
-.chart-empty {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 80px;
-  color: var(--text-muted);
-  font-size: 12px;
-}
-
-.chart-empty {
-  flex-direction: column;
-  text-align: center;
-}
-
-.chart-empty-icon {
-  font-size: 1.5rem;
-  margin-bottom: 4px;
-  opacity: 0.5;
-}
-
-.chart-empty-text {
-  font-size: 0.75rem;
-  font-weight: 500;
-}
-
-.recharts-default-tooltip {
-  background: rgba(255, 255, 255, 0.98) !important;
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(14, 165, 233, 0.2) !important;
-  border-radius: var(--radius-md) !important;
-  box-shadow: var(--shadow-lg) !important;
-  padding: 8px !important;
-}
-
-.recharts-tooltip-label {
-  color: var(--text-primary) !important;
-  font-weight: 700 !important;
-  font-size: 11px !important;
-  margin-bottom: 4px !important;
-}
-
-.recharts-tooltip-item {
-  color: var(--text-secondary) !important;
-  font-size: 11px !important;
-}
-
-/* RESPONSIVE */
-@media (max-width: 1024px) {
-  .charts-container {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 12px;
-  }
-}
+/* ========================================
+   RESPONSIVE DESIGN
+   ======================================== */
 
 @media (max-width: 768px) {
   .charts-container {
     grid-template-columns: 1fr;
-    gap: 12px;
+    gap: 1rem;
+    padding: 0.5rem;
   }
 
-  .stats-grid {
-    grid-template-columns: 1fr;
-    gap: 8px;
-  }
-
-  .stat-value {
-    font-size: 1.5rem;
+  .chart-card {
+    padding: 1rem;
   }
 
   .chart-title {
-    font-size: 0.8rem;
+    font-size: 1.1rem;
+  }
+
+  .calendar-heatmap-container {
+    overflow-x: scroll;
+  }
+
+  .map-container {
+    height: 300px !important;
   }
 }
 
 @media (max-width: 480px) {
-  .chart-wrapper {
-    height: 60px;
+  .charts-container {
+    gap: 0.75rem;
   }
 
-  .chart-loading,
-  .chart-empty {
-    height: 60px;
+  .chart-card {
+    padding: 0.75rem;
+  }
+
+  .chart-title {
+    font-size: 1rem;
+    margin-bottom: 0.75rem;
+  }
+}
+
+/* ========================================
+   DARK MODE SUPPORT
+   ======================================== */
+
+@media (prefers-color-scheme: dark) {
+  .chart-card {
+    background: var(--surface-dark, #2a2a2a);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  }
+
+  .chart-title {
+    color: var(--text-primary-dark, #f0f0f0);
+    border-bottom-color: var(--bg-secondary-dark, #3a3a3a);
+  }
+
+  .react-calendar-heatmap text {
+    fill: var(--text-secondary-dark, #aaa);
+  }
+
+  .react-calendar-heatmap .color-empty {
+    fill: var(--bg-secondary-dark, #3a3a3a);
+  }
+
+  .leaflet-popup-content-wrapper {
+    background: var(--surface-dark, #2a2a2a);
+    color: var(--text-primary-dark, #f0f0f0);
   }
 }
