@@ -18,16 +18,16 @@ const Dashboard = () => {
       <div className="app-container">
         <Sidebar />
         <main className="main-content">
+          {/* Items Section - Full Width Below */}
+          <section className="items-section">
+            <ItemsList />
+          </section>
+
           {/* New Layout: Analytics First, Then Items */}
           <div className="dashboard-layout">
             {/* Analytics Section - Full Width on Top */}
             <section className="analytics-section">
               <AnalyticsCharts />
-            </section>
-
-            {/* Items Section - Full Width Below */}
-            <section className="items-section">
-              <ItemsList />
             </section>
           </div>
         </main>

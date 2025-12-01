@@ -167,8 +167,8 @@ const Login = () => {
     <div className="login-container">
       <div className="login-card">
         <div className="login-header">
-          <div className="login-icon">🌊</div>
-          <h1 className="login-title">Travel Dashboard</h1>
+          <div className="login-icon">🗺️</div>
+          <h1 className="login-title">Sutri</h1>
           <p className="login-subtitle">
             {showForgotPassword
               ? "Reset your password"

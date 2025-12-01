@@ -78,8 +78,8 @@ const Header = () => {
         </button>
 
         <div className="header-logo" onClick={() => navigate("/")}>
-          <span className="logo-icon">🌊</span>
-          <span className="logo-text">Travel Dashboard</span>
+          <span className="logo-icon">🗺️</span>
+          <span className="logo-text">Sutri Dashboard</span>
         </div>
 
         <div className="header-actions">
