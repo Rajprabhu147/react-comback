@@ -20,7 +20,17 @@ const CATEGORIES = [
 ];
 
 const ItineraryItemsList = () => {
-  const [items, setItems] = useState([]);
+  // Load items from localStorage on first render
+  const [items, setItems] = useState(() => {
+    try {
+      const saved = localStorage.getItem("tripItineraryItems");
+      return saved ? JSON.parse(saved) : [];
+    } catch (error) {
+      console.error("Error loading items from localStorage:", error);
+      return [];
+    }
+  });
+
   const [searchQuery, setSearchQuery] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("all");
   const [dayFilter, setDayFilter] = useState("all");
@@ -62,6 +72,20 @@ const ItineraryItemsList = () => {
     return grouped;
   }, [filteredItems]);
 
+  // Check if any filters are active
+  const hasActiveFilters =
+    searchQuery || categoryFilter !== "all" || dayFilter !== "all";
+
+  // Save items to localStorage whenever they change
+  const updateItems = (newItems) => {
+    setItems(newItems);
+    try {
+      localStorage.setItem("tripItineraryItems", JSON.stringify(newItems));
+    } catch (error) {
+      console.error("Error saving items to localStorage:", error);
+    }
+  };
+
   const handleAddNewItem = () => {
     setEditingItem(null);
     setIsEditorOpen(true);
@@ -73,18 +97,20 @@ const ItineraryItemsList = () => {
   };
 
   const handleDeleteItem = (itemId) => {
-    setItems(items.filter((item) => item.id !== itemId));
+    const newItems = items.filter((item) => item.id !== itemId);
+    updateItems(newItems);
   };
 
   const handleSaveItem = (itemData) => {
     if (editingItem) {
       // Update existing item
-      setItems(
-        items.map((item) => (item.id === editingItem.id ? itemData : item))
+      const newItems = items.map((item) =>
+        item.id === editingItem.id ? itemData : item
       );
+      updateItems(newItems);
     } else {
       // Add new item
-      setItems([...items, itemData]);
+      updateItems([...items, itemData]);
     }
     setIsEditorOpen(false);
   };
@@ -94,14 +120,18 @@ const ItineraryItemsList = () => {
     setEditingItem(null);
   };
 
+  const handleToggleComplete = (itemId, isCompleted) => {
+    const newItems = items.map((item) =>
+      item.id === itemId ? { ...item, completed: isCompleted } : item
+    );
+    updateItems(newItems);
+  };
+
   const handleResetFilters = () => {
     setSearchQuery("");
     setCategoryFilter("all");
     setDayFilter("all");
   };
-
-  const hasActiveFilters =
-    searchQuery || categoryFilter !== "all" || dayFilter !== "all";
 
   return (
     <div className="itinerary-items-list">
@@ -187,6 +217,7 @@ const ItineraryItemsList = () => {
                         item={item}
                         onEdit={handleEditItem}
                         onDelete={handleDeleteItem}
+                        onToggleComplete={handleToggleComplete}
                       />
                     ))}
                 </div>
