@@ -1,19 +1,25 @@
 import React from "react";
 import Header from "../components/Layout/Header";
 import FilterBar from "../components/Layout/FilterBar";
-import ItemsList from "../components/Items/ItemsList";
-import ItemEditor from "../components/Items/ItemEditor";
+import ItineraryItemsList from "../components/Itinerary/ItineraryItemsList";
 import AnalyticsCharts from "../components/Analytics/AnalyticsCharts";
 import TripsCalendar from "../components/Calendar/TripsCalendar";
 import { useRealtimeSubscription } from "../hooks/useRealtime";
 import "../styles/dashboard.css";
 
+/**
+ * Dashboard Component
+ * Three-column layout:
+ * - Left: Items/Itinerary (wider)
+ * - Right Top: Calendar
+ * - Right Bottom: Analytics Charts
+ */
+
 const Dashboard = () => {
   useRealtimeSubscription();
 
-  // Assuming you have trips data available
-  // You may need to fetch this or get it from context/state management
-  const trips = []; // Replace with your actual trips data
+  // Trips data (replace with actual data source)
+  const trips = [];
 
   return (
     <div className="app">
@@ -25,12 +31,12 @@ const Dashboard = () => {
       <div className="app-container">
         <main className="main-content">
           <div className="dashboard-layout">
-            {/* Items Section - Left Column (Spanning Full Height) */}
+            {/* Left Column - Itinerary Items */}
             <section className="items-section">
-              <ItemsList />
+              <ItineraryItemsList />
             </section>
 
-            {/* Right Column - Calendar and Analytics Stacked */}
+            {/* Right Column - Calendar & Analytics */}
             <div className="right-panel">
               {/* Calendar Section */}
               <section className="calendar-section">
@@ -45,8 +51,6 @@ const Dashboard = () => {
           </div>
         </main>
       </div>
-
-      <ItemEditor />
     </div>
   );
 };

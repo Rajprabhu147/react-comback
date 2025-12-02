@@ -2,7 +2,7 @@ import React, { useState, useMemo } from "react";
 import ItineraryItemsRow from "./ItineraryItemsRow";
 import ItineraryItemEditor from "./ItineraryItemEditor";
 import { Search, Plus, Filter } from "lucide-react";
-import "../../styles/itinerary-list.css";
+import "../../styles/itinenary-list.css";
 
 /**
  * ItineraryItemsList Component
@@ -43,7 +43,8 @@ const ItineraryItemsList = () => {
       const matchesCategory =
         categoryFilter === "all" || item.category === categoryFilter;
 
-      const matchesDay = dayFilter === "all" || item.day === parseInt(dayFilter);
+      const matchesDay =
+        dayFilter === "all" || item.day === parseInt(dayFilter);
 
       return matchesSearch && matchesCategory && matchesDay;
     });
