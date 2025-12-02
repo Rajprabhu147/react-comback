@@ -175,27 +175,35 @@
 .activity-checklist {
   display: flex;
   flex-direction: column;
-  gap: 6px;
-  margin-top: 4px;
-  padding: 8px;
-  background: rgba(5, 102, 141, 0.05);
-  border-radius: 4px;
-  border-left: 3px solid var(--primary);
+  gap: 8px;
+  margin-top: 8px;
+  margin-left: -12px;
+  margin-right: -12px;
+  margin-bottom: -12px;
+  padding: 12px;
+  background: linear-gradient(135deg, rgba(5, 102, 141, 0.08), rgba(2, 195, 154, 0.05));
+  border-radius: 0 0 var(--radius-sm) var(--radius-sm);
+  border-left: 4px solid var(--primary);
+  border-top: 1px solid rgba(5, 102, 141, 0.2);
+  width: calc(100% + 24px);
 }
 
 .checklist-item {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
   font-size: 13px;
   color: var(--text-secondary);
   cursor: pointer;
   transition: all 0.2s ease;
+  padding: 6px 8px;
+  border-radius: 4px;
+  margin: -6px -8px;
 }
 
 .checklist-item input[type="checkbox"] {
-  width: 16px;
-  height: 16px;
+  width: 18px;
+  height: 18px;
   cursor: pointer;
   accent-color: var(--primary);
   flex-shrink: 0;
@@ -208,18 +216,23 @@
   user-select: none;
   word-break: break-word;
   transition: all 0.2s ease;
+  font-size: 13px;
+  color: var(--text-secondary);
 }
 
 .checklist-item input[type="checkbox"]:checked + label {
   text-decoration: line-through;
   color: var(--text-muted);
-  opacity: 0.7;
+  opacity: 0.6;
 }
 
 .checklist-item:hover {
-  background: rgba(5, 102, 141, 0.05);
-  padding-left: 4px;
-  border-radius: 2px;
+  background: rgba(5, 102, 141, 0.1);
+  border-radius: 4px;
+}
+
+.checklist-item:hover label {
+  color: var(--text-primary);
 }
 
 .itinerary-row.completed .checklist-item input[type="checkbox"] {
