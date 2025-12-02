@@ -295,6 +295,10 @@ const AnalyticsCharts = () => {
           </p>
         )}
       </div>
+      {/* ========== TRAVEL CHECKLIST ========== */}
+      <div className="chart-card">
+        <TravelChecklist />
+      </div>
 
       {/* ========== MAP: LOCATION DISTRIBUTION ========== */}
       <div className="chart-card chart-card-wide">
@@ -336,11 +340,6 @@ const AnalyticsCharts = () => {
             No location data available
           </p>
         )}
-      </div>
-
-      {/* ========== TRAVEL CHECKLIST ========== */}
-      <div className="chart-card">
-        <TravelChecklist />
       </div>
     </div>
   );

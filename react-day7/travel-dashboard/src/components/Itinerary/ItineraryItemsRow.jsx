@@ -1,10 +1,18 @@
-import React from "react";
-import { Clock, MapPin, DollarSign, Users, Trash2, Edit2 } from "lucide-react";
+import React, { useState } from "react";
+import {
+  Clock,
+  MapPin,
+  DollarSign,
+  Users,
+  Trash2,
+  Edit2,
+  Check,
+} from "lucide-react";
 import "../../styles/itinerary-row.css";
 
 /**
  * ItineraryItemsRow Component
- * Displays a single itinerary activity with all details
+ * Displays a single itinerary activity with checkbox functionality
  */
 
 const CATEGORY_COLORS = {
@@ -25,7 +33,18 @@ const CATEGORY_ICONS = {
   activity: "⚡",
 };
 
-const ItineraryItemsRow = ({ item, onEdit, onDelete }) => {
+const ItineraryItemsRow = ({ item, onEdit, onDelete, onToggleComplete }) => {
+  const [isChecked, setIsChecked] = useState(item.completed || false);
+
+  const handleCheckboxChange = (e) => {
+    e.stopPropagation();
+    const newState = !isChecked;
+    setIsChecked(newState);
+    if (onToggleComplete) {
+      onToggleComplete(item.id, newState);
+    }
+  };
+
   const handleEdit = (e) => {
     e.stopPropagation();
     onEdit(item);
@@ -42,7 +61,24 @@ const ItineraryItemsRow = ({ item, onEdit, onDelete }) => {
   const categoryColor = CATEGORY_COLORS[item.category] || "#05668d";
 
   return (
-    <div className="itinerary-row" style={{ borderLeftColor: categoryColor }}>
+    <div
+      className={`itinerary-row ${isChecked ? "completed" : ""}`}
+      style={{ borderLeftColor: categoryColor }}
+    >
+      {/* Checkbox */}
+      <div className="row-checkbox">
+        <input
+          type="checkbox"
+          checked={isChecked}
+          onChange={handleCheckboxChange}
+          className="checkbox-input"
+          id={`checkbox-${item.id}`}
+        />
+        <label htmlFor={`checkbox-${item.id}`} className="checkbox-label">
+          <Check size={14} />
+        </label>
+      </div>
+
       {/* Category Icon & Time */}
       <div className="row-left">
         <span className="category-icon">{categoryIcon}</span>
@@ -81,7 +117,16 @@ const ItineraryItemsRow = ({ item, onEdit, onDelete }) => {
           )}
         </div>
 
-        {item.notes && <p className="activity-notes">{item.notes}</p>}
+        {item.notes && (
+          <div className="activity-checklist">
+            {item.notes.split("\n").map((line, idx) => (
+              <div key={idx} className="checklist-item">
+                <input type="checkbox" id={`note-${item.id}-${idx}`} />
+                <label htmlFor={`note-${item.id}-${idx}`}>{line}</label>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
 
       {/* Actions */}
