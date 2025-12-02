@@ -25,6 +25,7 @@ import {
   useActivityHeatmap,
   useLocationStats,
 } from "../../hooks/useStats";
+import TravelChecklist from "../Checklist/TravelChecklist";
 import "../../styles/charts.css";
 import SkeletonLoader from "../Shared/SkeletonLoader";
 
@@ -55,12 +56,13 @@ const COLORS = {
 /**
  * AnalyticsCharts Component
  * ----------------------------------------------------------
- * Displays 5 categories of analytics:
+ * Displays 6 categories of analytics:
  * 1. Pie chart for Item Status distribution
  * 2. Bar chart for Priority distribution
  * 3. Line chart for activity events (last 7 days)
  * 4. Calendar Heatmap for activity density
  * 5. Map for location distribution
+ * 6. Pre-Trip Checklist
  */
 
 const AnalyticsCharts = () => {
@@ -334,6 +336,11 @@ const AnalyticsCharts = () => {
             No location data available
           </p>
         )}
+      </div>
+
+      {/* ========== TRAVEL CHECKLIST ========== */}
+      <div className="chart-card">
+        <TravelChecklist />
       </div>
     </div>
   );

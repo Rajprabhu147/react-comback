@@ -24,22 +24,24 @@ const Dashboard = () => {
 
       <div className="app-container">
         <main className="main-content">
-          {/* Calendar Section - Full Width at Top */}
-          <section className="calendar-section">
-            <TripsCalendar trips={trips} />
-          </section>
-
-          {/* Main Content Row - Items on Left, Analytics on Right */}
           <div className="dashboard-layout">
-            {/* Items Section - Left Side */}
+            {/* Items Section - Left Column (Spanning Full Height) */}
             <section className="items-section">
               <ItemsList />
             </section>
 
-            {/* Analytics Section - Right Side (Fixed/Sticky) */}
-            <aside className="analytics-section">
-              <AnalyticsCharts />
-            </aside>
+            {/* Right Column - Calendar and Analytics Stacked */}
+            <div className="right-panel">
+              {/* Calendar Section */}
+              <section className="calendar-section">
+                <TripsCalendar trips={trips} />
+              </section>
+
+              {/* Analytics Section */}
+              <aside className="analytics-section">
+                <AnalyticsCharts />
+              </aside>
+            </div>
           </div>
         </main>
       </div>
