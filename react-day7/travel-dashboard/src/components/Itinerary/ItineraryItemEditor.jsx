@@ -1,5 +1,5 @@
 // src/components/Itinerary/ItineraryItemEditor.jsx
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState } from "react";
 import { Clock, MapPin, DollarSign, Users, X } from "lucide-react";
 import "../../styles/itinerary-editor.css";
 
@@ -29,28 +29,11 @@ const CATEGORIES = [
 ];
 
 const ItineraryItemEditor = ({ item, onSave, onClose }) => {
-  // Initialize from incoming prop once (on first render)
+  // Initialize local state from incoming prop on mount (no effect)
   const [formData, setFormData] = useState(() =>
     item ? { ...item } : { ...DEFAULT_FORM }
   );
   const [errors, setErrors] = useState({});
-
-  // Keep a ref of the last-applied incoming data so we only set state when real changes arrive.
-  const lastIncomingRef = useRef(
-    item ? JSON.stringify(item) : JSON.stringify(DEFAULT_FORM)
-  );
-
-  useEffect(() => {
-    const incoming = item ? { ...item } : { ...DEFAULT_FORM };
-    const incomingStr = JSON.stringify(incoming);
-
-    if (incomingStr !== lastIncomingRef.current) {
-      lastIncomingRef.current = incomingStr;
-      setFormData(incoming);
-      setErrors({});
-    }
-    // intentionally only depends on `item` to avoid render loops
-  }, [item]);
 
   const validate = () => {
     const newErrors = {};
