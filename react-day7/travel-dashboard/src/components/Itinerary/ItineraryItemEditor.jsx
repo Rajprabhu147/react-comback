@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+// src/components/Itinerary/ItineraryItemEditor.jsx
+import React, { useState, useEffect, useRef } from "react";
 import { Clock, MapPin, DollarSign, Users, X } from "lucide-react";
 import "../../styles/itinerary-editor.css";
 
@@ -28,27 +29,32 @@ const CATEGORIES = [
 ];
 
 const ItineraryItemEditor = ({ item, onSave, onClose }) => {
-  const [formData, setFormData] = useState(() => {
-    if (item) {
-      return { ...item };
-    }
-    return { ...DEFAULT_FORM };
-  });
-
+  // Initialize from incoming prop once (on first render)
+  const [formData, setFormData] = useState(() =>
+    item ? { ...item } : { ...DEFAULT_FORM }
+  );
   const [errors, setErrors] = useState({});
 
+  // Keep a ref of the last-applied incoming data so we only set state when real changes arrive.
+  const lastIncomingRef = useRef(
+    item ? JSON.stringify(item) : JSON.stringify(DEFAULT_FORM)
+  );
+
   useEffect(() => {
-    if (item) {
-      setFormData({ ...item });
-    } else {
-      setFormData({ ...DEFAULT_FORM });
+    const incoming = item ? { ...item } : { ...DEFAULT_FORM };
+    const incomingStr = JSON.stringify(incoming);
+
+    if (incomingStr !== lastIncomingRef.current) {
+      lastIncomingRef.current = incomingStr;
+      setFormData(incoming);
+      setErrors({});
     }
-    setErrors({});
+    // intentionally only depends on `item` to avoid render loops
   }, [item]);
 
   const validate = () => {
     const newErrors = {};
-    if (!formData.activity.trim()) {
+    if (!formData.activity || !formData.activity.trim()) {
       newErrors.activity = "Activity name is required";
     }
     if (!formData.time) {
@@ -92,12 +98,12 @@ const ItineraryItemEditor = ({ item, onSave, onClose }) => {
           <h2 className="modal-title">
             {isEditing ? "Edit Activity" : "Add Activity"}
           </h2>
-          <button onClick={onClose} className="close-btn">
+          <button onClick={onClose} className="close-btn" aria-label="Close">
             <X size={24} />
           </button>
         </div>
 
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} noValidate>
           <div className="modal-body">
             {/* Day and Time Row */}
             <div className="form-row">
