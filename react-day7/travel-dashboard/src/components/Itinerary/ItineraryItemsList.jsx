@@ -1,12 +1,12 @@
 import React, { useState, useMemo } from "react";
-import KanbanItineraryCard from "./KanbanItineraryCard";
+import ItineraryItemsRow from "./ItineraryItemsRow";
 import ItineraryItemEditor from "./ItineraryItemEditor";
-import { Search, Plus, Filter, Calendar } from "lucide-react";
-import "../../styles/kanban-card.css";
+import { Search, Plus, Filter } from "lucide-react";
+import "../../styles/itinenary-list.css";
 
 /**
- * ItineraryItemsList Component - Kanban Board Style
- * Displays itinerary as day-based columns with draggable cards
+ * ItineraryItemsList Component
+ * Displays all trip itinerary activities with filtering and search
  */
 
 const CATEGORIES = [
@@ -33,6 +33,7 @@ const ItineraryItemsList = () => {
 
   const [searchQuery, setSearchQuery] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("all");
+  const [dayFilter, setDayFilter] = useState("all");
   const [editingItem, setEditingItem] = useState(null);
   const [isEditorOpen, setIsEditorOpen] = useState(false);
 
@@ -41,7 +42,7 @@ const ItineraryItemsList = () => {
     return [...new Set(items.map((item) => item.day))].sort((a, b) => a - b);
   }, [items]);
 
-  // Filter items based on search and category
+  // Filter items based on search, category, and day
   const filteredItems = useMemo(() => {
     return items.filter((item) => {
       const matchesSearch =
@@ -52,9 +53,12 @@ const ItineraryItemsList = () => {
       const matchesCategory =
         categoryFilter === "all" || item.category === categoryFilter;
 
-      return matchesSearch && matchesCategory;
+      const matchesDay =
+        dayFilter === "all" || item.day === parseInt(dayFilter);
+
+      return matchesSearch && matchesCategory && matchesDay;
     });
-  }, [items, searchQuery, categoryFilter]);
+  }, [items, searchQuery, categoryFilter, dayFilter]);
 
   // Group filtered items by day
   const itemsByDay = useMemo(() => {
@@ -65,17 +69,14 @@ const ItineraryItemsList = () => {
       }
       grouped[item.day].push(item);
     });
-    // Sort items within each day by time
-    Object.keys(grouped).forEach((day) => {
-      grouped[day].sort((a, b) => a.time.localeCompare(b.time));
-    });
     return grouped;
   }, [filteredItems]);
 
   // Check if any filters are active
-  const hasActiveFilters = searchQuery || categoryFilter !== "all";
+  const hasActiveFilters =
+    searchQuery || categoryFilter !== "all" || dayFilter !== "all";
 
-  // Save items to localStorage
+  // Save items to localStorage whenever they change
   const updateItems = (newItems) => {
     setItems(newItems);
     try {
@@ -102,11 +103,13 @@ const ItineraryItemsList = () => {
 
   const handleSaveItem = (itemData) => {
     if (editingItem) {
+      // Update existing item
       const newItems = items.map((item) =>
         item.id === editingItem.id ? itemData : item
       );
       updateItems(newItems);
     } else {
+      // Add new item
       updateItems([...items, itemData]);
     }
     setIsEditorOpen(false);
@@ -127,32 +130,30 @@ const ItineraryItemsList = () => {
   const handleResetFilters = () => {
     setSearchQuery("");
     setCategoryFilter("all");
+    setDayFilter("all");
   };
 
   return (
-    <div className="kanban-board-container">
+    <div className="itinerary-items-list">
       {/* Header */}
-      <div className="board-header">
+      <div className="list-header">
         <div className="header-title">
-          <Calendar size={24} />
-          <div className="title-text">
-            <h2>Trip Itinerary</h2>
-            <p>{filteredItems.length} activities</p>
-          </div>
+          <h2>Trip Itinerary</h2>
+          <span className="count-badge">{filteredItems.length}</span>
         </div>
-        <button onClick={handleAddNewItem} className="add-activity-btn">
+        <button onClick={handleAddNewItem} className="add-btn">
           <Plus size={18} />
           Add Activity
         </button>
       </div>
 
       {/* Search & Filter Bar */}
-      <div className="board-filters">
+      <div className="search-filter-bar">
         <div className="search-box">
           <Search size={18} />
           <input
             type="text"
-            placeholder="Search activities..."
+            placeholder="Search activities, locations..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="search-input"
@@ -171,11 +172,24 @@ const ItineraryItemsList = () => {
           ))}
         </select>
 
+        <select
+          value={dayFilter}
+          onChange={(e) => setDayFilter(e.target.value)}
+          className="filter-select"
+        >
+          <option value="all">All Days</option>
+          {uniqueDays.map((day) => (
+            <option key={day} value={day}>
+              Day {day}
+            </option>
+          ))}
+        </select>
+
         {hasActiveFilters && (
           <button
             onClick={handleResetFilters}
-            className="reset-filter-btn"
-            title="Reset filters"
+            className="reset-btn"
+            title="Reset all filters"
           >
             <Filter size={16} />
             Reset
@@ -183,33 +197,34 @@ const ItineraryItemsList = () => {
         )}
       </div>
 
-      {/* Kanban Board */}
-      <div className="kanban-board">
+      {/* Activities List */}
+      <div className="activities-container">
         {Object.keys(itemsByDay).length > 0 ? (
-          uniqueDays.map((day) => (
-            <div key={day} className="kanban-column">
-              <div className="column-header">
-                <h3 className="column-title">Day {day}</h3>
-                <span className="column-count">
-                  {itemsByDay[day]?.length || 0}
-                </span>
+          Object.entries(itemsByDay)
+            .sort(([dayA], [dayB]) => parseInt(dayA) - parseInt(dayB))
+            .map(([day, dayItems]) => (
+              <div key={day} className="day-section">
+                <h3 className="day-title">
+                  Day {day}
+                  <span className="day-count">{dayItems.length}</span>
+                </h3>
+                <div className="day-activities">
+                  {dayItems
+                    .sort((a, b) => a.time.localeCompare(b.time))
+                    .map((item) => (
+                      <ItineraryItemsRow
+                        key={item.id}
+                        item={item}
+                        onEdit={handleEditItem}
+                        onDelete={handleDeleteItem}
+                        onToggleComplete={handleToggleComplete}
+                      />
+                    ))}
+                </div>
               </div>
-
-              <div className="column-cards">
-                {itemsByDay[day]?.map((item) => (
-                  <KanbanItineraryCard
-                    key={item.id}
-                    item={item}
-                    onEdit={handleEditItem}
-                    onDelete={handleDeleteItem}
-                    onToggleComplete={handleToggleComplete}
-                  />
-                )) || null}
-              </div>
-            </div>
-          ))
+            ))
         ) : (
-          <div className="empty-board">
+          <div className="empty-state">
             <div className="empty-icon">✈️</div>
             <h3>No activities found</h3>
             <p>
@@ -217,8 +232,7 @@ const ItineraryItemsList = () => {
                 ? "Try adjusting your filters"
                 : "Start planning your trip!"}
             </p>
-            <button onClick={handleAddNewItem} className="empty-action-btn">
-              <Plus size={18} />
+            <button onClick={handleAddNewItem} className="empty-btn">
               Add First Activity
             </button>
           </div>

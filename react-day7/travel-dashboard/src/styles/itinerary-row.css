@@ -55,7 +55,7 @@
    ==================================== */
 
 .row-checkbox {
-  display: flex;
+  display: none;
   align-items: center;
   justify-content: center;
   width: 32px;
@@ -126,12 +126,12 @@
   align-items: center;
   justify-content: flex-start;
   gap: 12px;
-  min-width: 70px;
+  /* min-width: 70px; */
   flex-shrink: 0;
 }
 
 .category-icon {
-  font-size: 32px;
+  /* font-size: 32px; */
   line-height: 1;
   filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
 }
@@ -146,7 +146,7 @@
   border: 1px solid rgba(5, 102, 141, 0.2);
   border-radius: 8px;
   font-size: 12px;
-  font-weight: 700;
+  /* font-weight: 700; */
   color: var(--primary);
   white-space: nowrap;
   box-shadow: 0 2px 6px rgba(5, 102, 141, 0.08);
