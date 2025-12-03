@@ -215,6 +215,7 @@
 
 .activity-checklist {
   display: flex;
+  
   flex-direction: column;
   gap: 8px;
   margin-top: 8px;
@@ -226,7 +227,7 @@
   border-radius: 0 0 var(--radius-md) var(--radius-md);
   border-left: 5px solid var(--primary);
   border-top: 1px solid rgba(5, 102, 141, 0.15);
-  width: calc(100% + 32px);
+  width: calc(90% + 32px);
   box-shadow: inset 0 2px 4px rgba(5, 102, 141, 0.05);
 }
 
@@ -240,7 +241,7 @@
   transition: all 0.2s ease;
   padding: 8px 10px;
   border-radius: 6px;
-  margin: -8px -10px;
+  /* margin: -8px -10px; */
 }
 
 .checklist-item input[type="checkbox"] {

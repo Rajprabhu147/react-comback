@@ -127,24 +127,23 @@ const ItineraryItemsRow = ({ item, onEdit, onDelete, onToggleComplete }) => {
             ))}
           </div>
         )}
-      </div>
-
-      {/* Actions */}
-      <div className="row-actions">
-        <button
-          onClick={handleEdit}
-          className="action-btn edit"
-          title="Edit activity"
-        >
-          <Edit2 size={16} />
-        </button>
-        <button
-          onClick={handleDelete}
-          className="action-btn delete"
-          title="Delete activity"
-        >
-          <Trash2 size={16} />
-        </button>
+        {/* Actions */}
+        <div className="row-actions">
+          <button
+            onClick={handleEdit}
+            className="action-btn edit"
+            title="Edit activity"
+          >
+            <Edit2 size={10} />
+          </button>
+          <button
+            onClick={handleDelete}
+            className="action-btn delete"
+            title="Delete activity"
+          >
+            <Trash2 size={10} />
+          </button>
+        </div>
       </div>
     </div>
   );
