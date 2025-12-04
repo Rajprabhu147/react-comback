@@ -1,159 +1,139 @@
-import React, { useContext, useMemo, useState } from "react";
-import { ItineraryContext } from "../../context/ItineraryContext";
+import React, { useState } from "react";
 import "../../styles/calendar.css";
 
-const categoryColorMap = {
-  sightseeing: "#0ea5a4",
-  dining: "#f59e0b",
-  transport: "#3b82f6",
-  lodging: "#8b5cf6",
-  default: "#64748b",
-};
+/**
+ * TripsCalendar Component
+ * Displays trips on a calendar with event indicators
+ */
+const TripsCalendar = ({ trips = [] }) => {
+  const [currentDate, setCurrentDate] = useState(new Date());
 
-function groupEventsByDate(items, dayToISO) {
-  const map = {};
-  items.forEach((it) => {
-    const date =
-      it.date ??
-      (it.day && typeof it.day !== "string"
-        ? dayToISO(it.day)
-        : it.day ?? null) ??
-      null;
-    if (!date) return;
-    if (!map[date]) map[date] = [];
-    map[date].push(it);
+  // Get trips organized by date (YYYY-MM-DD)
+  const tripsByDate = trips.reduce((acc, trip) => {
+    if (trip.date) {
+      const dateStr = new Date(trip.date).toISOString().split("T")[0];
+      if (!acc[dateStr]) acc[dateStr] = [];
+      acc[dateStr].push(trip);
+    }
+    return acc;
+  }, {});
+
+  const monthYear = currentDate.toLocaleDateString("en-US", {
+    month: "long",
+    year: "numeric",
   });
-  return map;
-}
 
-const TripsCalendar = ({
-  year: propYear,
-  month: propMonth,
-  onOpenItem,
-  onCreateAtDate,
-}) => {
-  const { items, openEditor, dayToISO } = useContext(ItineraryContext);
-  const today = new Date();
-  const year = propYear ?? today.getFullYear();
-  const month = propMonth ?? today.getMonth();
-
-  const eventsByDate = useMemo(
-    () => groupEventsByDate(items, dayToISO),
-    [items, dayToISO]
+  const firstDay = new Date(
+    currentDate.getFullYear(),
+    currentDate.getMonth(),
+    1
   );
+  const lastDay = new Date(
+    currentDate.getFullYear(),
+    currentDate.getMonth() + 1,
+    0
+  );
+  const daysInMonth = lastDay.getDate();
+  const startingDayOfWeek = firstDay.getDay();
 
-  const [selectedDate, setSelectedDate] = useState(null);
-
-  const first = new Date(year, month, 1);
-  const startDay = first.getDay();
-  const daysInMonth = new Date(year, month + 1, 0).getDate();
-  const cells = [];
-
-  for (let i = 0; i < startDay; i++) cells.push(null);
-  for (let d = 1; d <= daysInMonth; d++) cells.push(new Date(year, month, d));
-
-  function iso(dt) {
-    return dt.toISOString().slice(0, 10);
+  const days = [];
+  for (let i = 0; i < startingDayOfWeek; i++) {
+    days.push(null);
+  }
+  for (let i = 1; i <= daysInMonth; i++) {
+    days.push(i);
   }
 
-  function handleOpen(id) {
-    if (onOpenItem) onOpenItem(id);
-    else openEditor(id);
-  }
+  const handlePrevMonth = () => {
+    setCurrentDate(
+      new Date(currentDate.getFullYear(), currentDate.getMonth() - 1)
+    );
+  };
 
-  function handleCreate(dateISO) {
-    if (onCreateAtDate) onCreateAtDate(dateISO);
-    else openEditor(null);
-  }
+  const handleNextMonth = () => {
+    setCurrentDate(
+      new Date(currentDate.getFullYear(), currentDate.getMonth() + 1)
+    );
+  };
+
+  const handleToday = () => {
+    setCurrentDate(new Date());
+  };
+
+  const getTripsForDay = (day) => {
+    if (!day) return [];
+    const dateStr = new Date(
+      currentDate.getFullYear(),
+      currentDate.getMonth(),
+      day
+    )
+      .toISOString()
+      .split("T")[0];
+    return tripsByDate[dateStr] || [];
+  };
 
   return (
-    <div className="trips-calendar card">
+    <div className="trips-calendar">
       <div className="calendar-header">
-        <h4>
-          {first.toLocaleString(undefined, { month: "long" }) + " " + year}
-        </h4>
+        <button onClick={handlePrevMonth} className="nav-btn">
+          ←
+        </button>
+        <h3 className="month-year">{monthYear}</h3>
+        <button onClick={handleNextMonth} className="nav-btn">
+          →
+        </button>
+        <button onClick={handleToday} className="today-btn">
+          Today
+        </button>
+      </div>
+
+      <div className="calendar-weekdays">
+        {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day) => (
+          <div key={day} className="weekday">
+            {day}
+          </div>
+        ))}
       </div>
 
       <div className="calendar-grid">
-        <div className="calendar-weekdays">
-          {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((w) => (
-            <div key={w} className="calendar-weekday">
-              {w}
-            </div>
-          ))}
-        </div>
+        {days.map((day, index) => {
+          const tripsOnDay = day ? getTripsForDay(day) : [];
+          const isToday =
+            day &&
+            day === new Date().getDate() &&
+            currentDate.getMonth() === new Date().getMonth() &&
+            currentDate.getFullYear() === new Date().getFullYear();
 
-        <div className="calendar-cells">
-          {cells.map((cell, i) => {
-            if (!cell)
-              return <div key={i} className="calendar-cell empty"></div>;
-
-            const dateISO = iso(cell);
-            const events = eventsByDate[dateISO] ?? [];
-
-            return (
-              <div key={dateISO} className="calendar-cell">
-                <div className="calendar-day-header">
-                  <span className="calendar-day-number">{cell.getDate()}</span>
-                  <button
-                    className="calendar-add-btn"
-                    onClick={() => handleCreate(dateISO)}
-                  >
-                    +
-                  </button>
-                </div>
-
-                <div className="calendar-dots">
-                  {events.slice(0, 3).map((ev) => {
-                    const color =
-                      categoryColorMap[ev.category] ?? categoryColorMap.default;
-                    return (
-                      <button
-                        key={ev.id}
-                        className="trip-dot"
-                        style={{ background: color }}
-                        title={ev.activity}
-                        onClick={() => handleOpen(ev.id)}
-                      />
-                    );
-                  })}
-
-                  {events.length > 3 && (
-                    <button
-                      className="more-trips"
-                      onClick={() => setSelectedDate(dateISO)}
-                    >
-                      +{events.length - 3}
-                    </button>
+          return (
+            <div
+              key={index}
+              className={`calendar-day ${!day ? "empty" : ""} ${
+                isToday ? "today" : ""
+              } ${tripsOnDay.length > 0 ? "has-trips" : ""}`}
+            >
+              {day && (
+                <>
+                  <div className="day-number">{day}</div>
+                  {tripsOnDay.length > 0 && (
+                    <div className="trip-indicators">
+                      {tripsOnDay.slice(0, 3).map((trip, idx) => (
+                        <div key={idx} className="trip-dot" title={trip.name}>
+                          {trip.name.charAt(0)}
+                        </div>
+                      ))}
+                      {tripsOnDay.length > 3 && (
+                        <span className="more-trips">
+                          +{tripsOnDay.length - 3}
+                        </span>
+                      )}
+                    </div>
                   )}
-                </div>
-              </div>
-            );
-          })}
-        </div>
+                </>
+              )}
+            </div>
+          );
+        })}
       </div>
-
-      {selectedDate && (
-        <div className="calendar-popover">
-          <div className="popover-header">
-            <strong>{selectedDate}</strong>
-            <button onClick={() => setSelectedDate(null)}>Close</button>
-          </div>
-          <div className="popover-body">
-            {(eventsByDate[selectedDate] ?? []).map((ev) => (
-              <div key={ev.id} className="popover-row">
-                <div>
-                  <div className="popover-title">{ev.activity}</div>
-                  <div className="popover-meta">
-                    {ev.time} • {ev.location}
-                  </div>
-                </div>
-                <button onClick={() => handleOpen(ev.id)}>Edit</button>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
     </div>
   );
 };

@@ -168,11 +168,11 @@
 
   .month-year {
     font-size: 16px;
-    min-width: 120px;
+    /* min-width: 120px; */
   }
 
   .calendar-day {
-    min-height: 80px;
+    /* min-height: 80px; */
     padding: 8px;
   }
 
