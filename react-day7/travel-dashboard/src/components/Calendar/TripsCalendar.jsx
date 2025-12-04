@@ -6,12 +6,9 @@ import "../../styles/calendar.css";
  *
  * - Reads items from localStorage key "tripItineraryItems"
  * - Listens for 'itinerary-updated' events to refresh items
- * - Clicking on a calendar day prompts the user to add a new activity
- *   (simple prompt flow). Created item is saved to localStorage and an
- *   'itinerary-updated' event is dispatched so the list updates.
- *
- * Note: this implementation uses browser prompts for a lightweight add flow.
- * You can replace prompt() with a nicer modal component later.
+ * - Clicking on a calendar day dispatches 'itinerary-open-editor' with { dateISO, day }
+ *   so the ItineraryItemsList opens its editor prefilled.
+ * - Hovering a date shows a small inline popover listing activities for that date.
  */
 
 const STORAGE_KEY = "tripItineraryItems";
@@ -28,6 +25,8 @@ const TripsCalendar = ({ trips = [] }) => {
       return trips || [];
     }
   });
+
+  const [hoveredDate, setHoveredDate] = useState(null);
 
   // Keep in sync when parent passes trips prop (optional)
   useEffect(() => {
@@ -123,26 +122,8 @@ const TripsCalendar = ({ trips = [] }) => {
     return tripsByDate[dateStr] || [];
   };
 
-  // Lightweight save: push item into localStorage and dispatch event
-  const saveNewItem = (item) => {
-    try {
-      const raw = localStorage.getItem(STORAGE_KEY);
-      const list = raw ? JSON.parse(raw) : [];
-      const newList = [...list, item];
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(newList));
-      // update our local state immediately
-      setLocalTrips(newList);
-      // notify other components
-      window.dispatchEvent(
-        new CustomEvent("itinerary-updated", { detail: { source: "calendar" } })
-      );
-    } catch (e) {
-      console.error("Failed to save new itinerary item", e);
-    }
-  };
-
-  // When user clicks a date we ask for activity and time (simple prompt flow)
-  const handleAddOnDate = async (day) => {
+  // When user clicks a date, dispatch an event so the list opens editor prefilled
+  const handleOpenEditorForDate = (day) => {
     if (!day) return;
     const dateISO = new Date(
       currentDate.getFullYear(),
@@ -151,50 +132,31 @@ const TripsCalendar = ({ trips = [] }) => {
     )
       .toISOString()
       .split("T")[0];
-
-    // Prompt for activity title
-    const title = window.prompt(
-      `Add activity for ${dateISO}\nEnter activity title:`
+    window.dispatchEvent(
+      new CustomEvent("itinerary-open-editor", { detail: { dateISO, day } })
     );
-    if (!title || !title.trim()) return;
-
-    // Optional: prompt for time
-    const time = window.prompt("Enter time (HH:MM) or leave empty:", "");
-
-    // Optional: category selection basic
-    const category = window.prompt(
-      "Enter category (sightseeing/dining/transport/activity) or leave empty:",
-      "activity"
-    );
-
-    // Create item with shape your list expects
-    const newItem = {
-      id: Date.now(),
-      date: dateISO, // ISO date
-      // keep 'day' numeric (this is what your ItineraryItemsList groups by)
-      day: day,
-      time: (time || "").trim(),
-      activity: title.trim(),
-      location: "",
-      category: category || "activity",
-      notes: "",
-      completed: false,
-    };
-
-    saveNewItem(newItem);
+    // Optionally focus the list area — left as an exercise for UX
   };
 
   return (
     <div className="trips-calendar">
       <div className="calendar-header">
         <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-          <button onClick={handlePrevMonth} className="nav-btn">
+          <button
+            onClick={handlePrevMonth}
+            className="nav-btn"
+            aria-label="Previous month"
+          >
             ←
           </button>
           <h3 className="month-year" style={{ margin: 0 }}>
             {monthYear}
           </h3>
-          <button onClick={handleNextMonth} className="nav-btn">
+          <button
+            onClick={handleNextMonth}
+            className="nav-btn"
+            aria-label="Next month"
+          >
             →
           </button>
         </div>
@@ -213,7 +175,7 @@ const TripsCalendar = ({ trips = [] }) => {
         ))}
       </div>
 
-      <div className="calendar-grid">
+      <div className="calendar-grid" role="grid" aria-label="Trip calendar">
         {days.map((day, index) => {
           const tripsOnDay = day ? getTripsForDay(day) : [];
           const isToday =
@@ -222,30 +184,54 @@ const TripsCalendar = ({ trips = [] }) => {
             currentDate.getMonth() === new Date().getMonth() &&
             currentDate.getFullYear() === new Date().getFullYear();
 
+          // build a small tooltip text fallback
+          const titleText =
+            tripsOnDay.length > 0
+              ? tripsOnDay
+                  .map((t) => `${t.time ? t.time + " • " : ""}${t.activity}`)
+                  .join("\n")
+              : "";
+
           return (
             <div
               key={index}
               className={`calendar-day ${!day ? "empty" : ""} ${
                 isToday ? "today" : ""
               } ${tripsOnDay.length > 0 ? "has-trips" : ""}`}
-              onClick={() => day && handleAddOnDate(day)}
+              onClick={() => handleOpenEditorForDate(day)}
               role={day ? "button" : "presentation"}
               tabIndex={day ? 0 : -1}
               onKeyDown={(e) => {
                 if (day && (e.key === "Enter" || e.key === " "))
-                  handleAddOnDate(day);
+                  handleOpenEditorForDate(day);
               }}
               aria-label={
                 day
                   ? `Day ${day}. ${tripsOnDay.length} activities`
                   : "Empty cell"
               }
+              onMouseEnter={() =>
+                setHoveredDate(
+                  day
+                    ? new Date(
+                        currentDate.getFullYear(),
+                        currentDate.getMonth(),
+                        day
+                      )
+                        .toISOString()
+                        .split("T")[0]
+                    : null
+                )
+              }
+              onMouseLeave={() => setHoveredDate(null)}
+              title={titleText}
             >
               {day && (
                 <>
                   <div className="day-number">{day}</div>
+
                   {tripsOnDay.length > 0 && (
-                    <div className="trip-indicators">
+                    <div className="trip-indicators" aria-hidden>
                       {tripsOnDay.slice(0, 3).map((trip, idx) => (
                         <div
                           key={idx}
@@ -262,6 +248,31 @@ const TripsCalendar = ({ trips = [] }) => {
                           +{tripsOnDay.length - 3}
                         </span>
                       )}
+                    </div>
+                  )}
+
+                  {/* Inline hover popover */}
+                  {hoveredDate ===
+                    new Date(
+                      currentDate.getFullYear(),
+                      currentDate.getMonth(),
+                      day
+                    )
+                      .toISOString()
+                      .split("T")[0] && (
+                    <div
+                      className="calendar-hover-popover"
+                      role="dialog"
+                      aria-hidden
+                    >
+                      {(tripsOnDay || []).map((t, i) => (
+                        <div className="popover-row" key={i}>
+                          <div className="popover-title">
+                            {t.activity || "Untitled"}
+                          </div>
+                          <div className="popover-time">{t.time || "—"}</div>
+                        </div>
+                      ))}
                     </div>
                   )}
                 </>
