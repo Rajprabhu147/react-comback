@@ -8,9 +8,8 @@ import "../../styles/itinenary-list.css";
  * ItineraryItemsList Component
  * Displays all trip itinerary activities with filtering and search
  *
- * NOTE: This component dispatches a 'itinerary-updated' CustomEvent
- * whenever it writes to localStorage. It also listens for the same
- * event so that external changes (calendar adds) update the list.
+ * - Listens for 'itinerary-open-editor' to open the editor with a prefilled date/day
+ * - Dispatches 'itinerary-updated' after changes so calendar refreshes
  */
 
 const STORAGE_KEY = "tripItineraryItems";
@@ -56,6 +55,34 @@ const ItineraryItemsList = () => {
     window.addEventListener("itinerary-updated", handleExternalUpdate);
     return () =>
       window.removeEventListener("itinerary-updated", handleExternalUpdate);
+  }, []);
+
+  // Listen for calendar open-editor event to prefill editor with date/day
+  useEffect(() => {
+    function handleOpenEditor(e) {
+      try {
+        const { dateISO, day } = e.detail || {};
+        // Prefill a new item (id left undefined so save logic adds it)
+        const prefill = {
+          id: undefined,
+          date: dateISO || "",
+          day: day ?? "",
+          time: "",
+          activity: "",
+          location: "",
+          category: "activity",
+          notes: "",
+          completed: false,
+        };
+        setEditingItem(prefill);
+        setIsEditorOpen(true);
+      } catch (err) {
+        console.error("Invalid itinerary-open-editor event detail", err);
+      }
+    }
+    window.addEventListener("itinerary-open-editor", handleOpenEditor);
+    return () =>
+      window.removeEventListener("itinerary-open-editor", handleOpenEditor);
   }, []);
 
   // Get unique days from items
@@ -129,20 +156,23 @@ const ItineraryItemsList = () => {
   };
 
   const handleSaveItem = (itemData) => {
-    if (!itemData.id) {
-      // add id if missing
-      itemData.id = Date.now();
-    }
-
-    if (editingItem) {
-      // Update existing item
-      const newItems = items.map((item) =>
-        item.id === editingItem.id ? { ...itemData } : item
-      );
-      saveItemsAndNotify(newItems);
-    } else {
-      // Add new item
-      saveItemsAndNotify([...items, { ...itemData }]);
+    // Decide whether to update or add by checking presence of id in stored items
+    try {
+      const exists =
+        itemData.id != null && items.some((it) => it.id === itemData.id);
+      if (exists) {
+        // Update existing
+        const newItems = items.map((it) =>
+          it.id === itemData.id ? { ...itemData } : it
+        );
+        saveItemsAndNotify(newItems);
+      } else {
+        // Add new (ensure id)
+        const toAdd = { ...itemData, id: itemData.id ?? Date.now() };
+        saveItemsAndNotify([...items, toAdd]);
+      }
+    } catch (err) {
+      console.error("Error saving item", err);
     }
     setIsEditorOpen(false);
     setEditingItem(null);
