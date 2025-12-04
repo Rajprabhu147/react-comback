@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   BarChart,
   Bar,
@@ -11,334 +11,273 @@ import {
   YAxis,
   CartesianGrid,
   Tooltip,
+  Legend,
   ResponsiveContainer,
 } from "recharts";
-import CalendarHeatmap from "react-calendar-heatmap";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
-import "react-calendar-heatmap/dist/styles.css";
 import "leaflet/dist/leaflet.css";
-
-import {
-  useStatusStats,
-  usePriorityStats,
-  useEventsTimeSeries,
-  useActivityHeatmap,
-  useLocationStats,
-} from "../../hooks/useStats";
-import TravelChecklist from "../Checklist/TravelChecklist";
+import DailyExpenseLogger from "../Expense/DailyExpenseLogger.jsx";
 import "../../styles/charts.css";
-import SkeletonLoader from "../Shared/SkeletonLoader";
-
-// Fix for default marker icons in Leaflet
-import L from "leaflet";
-import markerIcon from "leaflet/dist/images/marker-icon.png";
-import markerIcon2x from "leaflet/dist/images/marker-icon-2x.png";
-import markerShadow from "leaflet/dist/images/marker-shadow.png";
-
-delete L.Icon.Default.prototype._getIconUrl;
-L.Icon.Default.mergeOptions({
-  iconUrl: markerIcon,
-  iconRetinaUrl: markerIcon2x,
-  shadowUrl: markerShadow,
-});
 
 /**
- * Color palette for charts
+ * Enhanced Analytics Charts Component
+ * Integrates Daily Expense Logger with expense analytics
  */
+
 const COLORS = {
   primary: "#05668d",
   accent: "#02c39a",
   sun: "#ffd166",
   danger: "#ef4444",
   success: "#10b981",
+  purple: "#8b5cf6",
 };
 
-/**
- * AnalyticsCharts Component
- * ----------------------------------------------------------
- * Displays 6 categories of analytics:
- * 1. Pie chart for Item Status distribution
- * 2. Bar chart for Priority distribution
- * 3. Line chart for activity events (last 7 days)
- * 4. Calendar Heatmap for activity density
- * 5. Map for location distribution
- * 6. Pre-Trip Checklist
- */
+const EXPENSE_CATEGORY_COLORS = {
+  food: "#ffd166",
+  transport: "#ef4444",
+  accommodation: "#02c39a",
+  activities: "#8b5cf6",
+  shopping: "#10b981",
+  other: "#05668d",
+};
 
 const AnalyticsCharts = () => {
-  // Load stats
-  const { data: statusStats = [], isLoading: statusLoading } = useStatusStats();
-  const { data: priorityStats = [], isLoading: priorityLoading } =
-    usePriorityStats();
-  const { data: eventsData = [], isLoading: eventsLoading } =
-    useEventsTimeSeries();
-  const { data: heatmapData = [], isLoading: heatmapLoading } =
-    useActivityHeatmap();
-  const { data: locationData = [], isLoading: locationLoading } =
-    useLocationStats();
+  // Load expenses from localStorage
+  const [expenses, setExpenses] = useState(() => {
+    try {
+      const saved = localStorage.getItem("dailyExpenses");
+      return saved ? JSON.parse(saved) : [];
+    } catch {
+      return [];
+    }
+  });
 
-  // Show skeleton loaders while any dataset is loading
-  if (
-    statusLoading ||
-    priorityLoading ||
-    eventsLoading ||
-    heatmapLoading ||
-    locationLoading
-  ) {
-    return (
-      <div className="charts-container">
-        <SkeletonLoader type="chart" />
-        <SkeletonLoader type="chart" />
-        <SkeletonLoader type="chart" />
-      </div>
-    );
-  }
-
-  // Colors for priority chart
-  const priorityColors = {
-    low: COLORS.success,
-    medium: COLORS.sun,
-    high: COLORS.danger,
+  // Handle expense updates from logger
+  const handleExpenseChange = (newExpenses) => {
+    setExpenses(newExpenses);
   };
 
-  // Get date range for calendar (last 6 months)
-  const endDate = new Date();
-  const startDate = new Date();
-  startDate.setMonth(startDate.getMonth() - 6);
+  // Calculate expense distribution by category
+  const expenseByCategory = expenses.reduce((acc, exp) => {
+    const existing = acc.find((e) => e.category === exp.category);
+    if (existing) {
+      existing.amount += exp.amount;
+      existing.count += 1;
+    } else {
+      acc.push({
+        category: exp.category,
+        amount: exp.amount,
+        count: 1,
+      });
+    }
+    return acc;
+  }, []);
+
+  // Format category names
+  const formattedCategoryExpenses = expenseByCategory.map((exp) => {
+    const categoryMap = {
+      food: "🍽️ Food",
+      transport: "🚗 Transport",
+      accommodation: "🏨 Accommodation",
+      activities: "⚡ Activities",
+      shopping: "🛍️ Shopping",
+      other: "📌 Other",
+    };
+    return {
+      ...exp,
+      name: categoryMap[exp.category] || exp.category,
+    };
+  });
+
+  // Calculate daily expenses
+  const dailyExpenses = expenses.reduce((acc, exp) => {
+    const existing = acc.find((d) => d.day === exp.day);
+    if (existing) {
+      existing.amount += exp.amount;
+      existing.count += 1;
+    } else {
+      acc.push({
+        day: `Day ${exp.day}`,
+        amount: exp.amount,
+        count: 1,
+      });
+    }
+    return acc;
+  }, []);
+
+  // Sort by day
+  const sortedDailyExpenses = dailyExpenses.sort((a, b) => {
+    const dayA = parseInt(a.day.split(" ")[1]);
+    const dayB = parseInt(b.day.split(" ")[1]);
+    return dayA - dayB;
+  });
+
+  // Calculate category breakdown for pie chart
+  const pieChartData = formattedCategoryExpenses.sort(
+    (a, b) => b.amount - a.amount
+  );
+
+  const totalExpenses = expenses.reduce((sum, e) => sum + e.amount, 0);
+  const pieColors = [
+    EXPENSE_CATEGORY_COLORS.food,
+    EXPENSE_CATEGORY_COLORS.transport,
+    EXPENSE_CATEGORY_COLORS.accommodation,
+    EXPENSE_CATEGORY_COLORS.activities,
+    EXPENSE_CATEGORY_COLORS.shopping,
+    EXPENSE_CATEGORY_COLORS.other,
+  ];
 
   return (
     <div className="charts-container">
-      {/* ========== PIE CHART: STATUS DISTRIBUTION ========== */}
+      {/* ========== TRIP TYPE DISTRIBUTION (PIE) ========== */}
       <div className="chart-card">
-        <h3 className="chart-title">Items by Status</h3>
-
-        {statusStats.length > 0 ? (
-          <ResponsiveContainer width="100%" height={250}>
+        <h3 className="chart-title">💰 Expense by Category</h3>
+        {pieChartData.length > 0 ? (
+          <ResponsiveContainer width="100%" height={280}>
             <PieChart>
               <Pie
-                data={statusStats}
-                dataKey="count"
-                nameKey="status"
+                data={pieChartData}
+                dataKey="amount"
+                nameKey="name"
                 cx="50%"
                 cy="50%"
-                outerRadius={80}
-                label={(entry) => `${entry.status}: ${entry.count}`}
+                outerRadius={90}
+                label={(entry) => `${entry.name}: $${entry.amount.toFixed(0)}`}
               >
-                {statusStats.map((entry, index) => (
+                {pieChartData.map((entry, index) => (
                   <Cell
                     key={`cell-${index}`}
-                    fill={
-                      Object.values(COLORS)[
-                        index % Object.values(COLORS).length
-                      ]
-                    }
+                    fill={pieColors[index % pieColors.length]}
                   />
                 ))}
               </Pie>
-              <Tooltip />
+              <Tooltip formatter={(value) => `$${value.toFixed(2)}`} />
+              <Legend />
             </PieChart>
           </ResponsiveContainer>
         ) : (
-          <p
-            style={{
-              textAlign: "center",
-              color: "var(--text-muted)",
-              padding: "40px 0",
-            }}
-          >
-            No data available
-          </p>
+          <p className="no-data">No expense data available</p>
         )}
       </div>
 
-      {/* ========== BAR CHART: PRIORITY DISTRIBUTION ========== */}
+      {/* ========== EXPENSE BY CATEGORY (BAR) ========== */}
       <div className="chart-card">
-        <h3 className="chart-title">Items by Priority</h3>
-
-        {priorityStats.length > 0 ? (
-          <ResponsiveContainer width="100%" height={250}>
-            <BarChart data={priorityStats}>
+        <h3 className="chart-title">📊 Expense Breakdown</h3>
+        {formattedCategoryExpenses.length > 0 ? (
+          <ResponsiveContainer width="100%" height={280}>
+            <BarChart data={formattedCategoryExpenses}>
               <CartesianGrid
                 strokeDasharray="3 3"
                 stroke="var(--bg-secondary)"
               />
-              <XAxis dataKey="priority" stroke="var(--text-secondary)" />
+              <XAxis dataKey="name" stroke="var(--text-secondary)" />
               <YAxis stroke="var(--text-secondary)" />
-
               <Tooltip
                 contentStyle={{
                   background: "var(--surface)",
                   border: "1px solid var(--bg-secondary)",
                   borderRadius: "var(--radius-sm)",
                 }}
+                formatter={(value) => `$${value.toFixed(2)}`}
               />
-
-              <Bar dataKey="count" radius={[8, 8, 0, 0]}>
-                {priorityStats.map((entry, index) => (
+              <Bar dataKey="amount" radius={[8, 8, 0, 0]}>
+                {formattedCategoryExpenses.map((entry, index) => (
                   <Cell
                     key={`cell-${index}`}
-                    fill={priorityColors[entry.priority] || COLORS.primary}
+                    fill={pieColors[index % pieColors.length]}
                   />
                 ))}
               </Bar>
             </BarChart>
           </ResponsiveContainer>
         ) : (
-          <p
-            style={{
-              textAlign: "center",
-              color: "var(--text-muted)",
-              padding: "40px 0",
-            }}
-          >
-            No data available
-          </p>
+          <p className="no-data">No expense data available</p>
         )}
       </div>
 
-      {/* ========== LINE CHART: EVENT ACTIVITY (LAST 7 DAYS) ========== */}
+      {/* ========== DAILY EXPENSES (LINE) ========== */}
       <div className="chart-card">
-        <h3 className="chart-title">Activity (Last 7 Days)</h3>
-
-        {eventsData.length > 0 ? (
-          <ResponsiveContainer width="100%" height={250}>
-            <LineChart data={eventsData}>
+        <h3 className="chart-title">📈 Daily Expense Trend</h3>
+        {sortedDailyExpenses.length > 0 ? (
+          <ResponsiveContainer width="100%" height={280}>
+            <LineChart data={sortedDailyExpenses}>
               <CartesianGrid
                 strokeDasharray="3 3"
                 stroke="var(--bg-secondary)"
               />
-
-              <XAxis
-                dataKey="day"
-                stroke="var(--text-secondary)"
-                tickFormatter={(value) =>
-                  new Date(value).toLocaleDateString("en-US", {
-                    month: "short",
-                    day: "numeric",
-                  })
-                }
-              />
-
+              <XAxis dataKey="day" stroke="var(--text-secondary)" />
               <YAxis stroke="var(--text-secondary)" />
-
               <Tooltip
                 contentStyle={{
                   background: "var(--surface)",
                   border: "1px solid var(--bg-secondary)",
                   borderRadius: "var(--radius-sm)",
                 }}
-                labelFormatter={(value) => new Date(value).toLocaleDateString()}
+                formatter={(value) => `$${value.toFixed(2)}`}
               />
-
               <Line
                 type="monotone"
-                dataKey="event_count"
-                stroke={COLORS.primary}
-                strokeWidth={2}
-                dot={{ fill: COLORS.primary, r: 4 }}
-                activeDot={{ r: 6 }}
+                dataKey="amount"
+                stroke={COLORS.accent}
+                strokeWidth={3}
+                dot={{ fill: COLORS.accent, r: 5 }}
+                activeDot={{ r: 7 }}
+                name="Daily Expenses"
               />
             </LineChart>
           </ResponsiveContainer>
         ) : (
-          <p
-            style={{
-              textAlign: "center",
-              color: "var(--text-muted)",
-              padding: "40px 0",
-            }}
-          >
-            No activity data available
-          </p>
+          <p className="no-data">No expense data available</p>
         )}
       </div>
 
-      {/* ========== CALENDAR HEATMAP: ACTIVITY DENSITY ========== */}
+      {/* ========== DAILY EXPENSE LOGGER ========== */}
       <div className="chart-card chart-card-wide">
-        <h3 className="chart-title">Activity Heatmap (Last 6 Months)</h3>
-
-        {heatmapData.length > 0 ? (
-          <div className="calendar-heatmap-container">
-            <CalendarHeatmap
-              startDate={startDate}
-              endDate={endDate}
-              values={heatmapData}
-              classForValue={(value) => {
-                if (!value || value.count === 0) {
-                  return "color-empty";
-                }
-                if (value.count < 3) return "color-scale-1";
-                if (value.count < 6) return "color-scale-2";
-                if (value.count < 9) return "color-scale-3";
-                return "color-scale-4";
-              }}
-              tooltipDataAttrs={(value) => {
-                if (!value || !value.date) {
-                  return null;
-                }
-                return {
-                  "data-tip": `${value.date}: ${value.count || 0} activities`,
-                };
-              }}
-              showWeekdayLabels={true}
-            />
-          </div>
-        ) : (
-          <p
-            style={{
-              textAlign: "center",
-              color: "var(--text-muted)",
-              padding: "40px 0",
-            }}
-          >
-            No activity data available
-          </p>
-        )}
+        <DailyExpenseLogger onExpenseChange={handleExpenseChange} />
       </div>
-      {/* ========== TRAVEL CHECKLIST ========== */}
+
+      {/* ========== EXPENSE SUMMARY ========== */}
       <div className="chart-card">
-        <TravelChecklist />
+        <h3 className="chart-title">💵 Total Expenses</h3>
+        <div className="summary-card">
+          <div className="summary-value">${totalExpenses.toFixed(2)}</div>
+          <div className="summary-label">Total Trip Spending</div>
+          <div className="summary-meta">
+            <span>{expenses.length} transactions</span>
+            <span>{formattedCategoryExpenses.length} categories</span>
+          </div>
+        </div>
       </div>
 
-      {/* ========== MAP: LOCATION DISTRIBUTION ========== */}
-      <div className="chart-card chart-card-wide">
-        <h3 className="chart-title">Trip Locations</h3>
-
-        {locationData.length > 0 ? (
-          <div className="map-container">
-            <MapContainer
-              center={[20, 0]}
-              zoom={2}
-              style={{ height: "400px", width: "100%" }}
-            >
-              <TileLayer
-                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-              />
-              {locationData.map((location, index) => (
-                <Marker
-                  key={index}
-                  position={[location.latitude, location.longitude]}
-                >
-                  <Popup>
-                    <strong>{location.name}</strong>
-                    <br />
-                    {location.count} {location.count === 1 ? "trip" : "trips"}
-                  </Popup>
-                </Marker>
-              ))}
-            </MapContainer>
+      {/* ========== HIGHEST SPENDING CATEGORY ========== */}
+      <div className="chart-card">
+        <h3 className="chart-title">🏆 Highest Spending</h3>
+        {pieChartData.length > 0 ? (
+          <div className="highest-spending">
+            <div className="highest-item">
+              <span className="highest-category">{pieChartData[0].name}</span>
+              <span className="highest-amount">
+                ${pieChartData[0].amount.toFixed(2)}
+              </span>
+            </div>
+            <div className="spending-percentage">
+              <div className="percentage-bar">
+                <div
+                  className="percentage-fill"
+                  style={{
+                    width: `${(pieChartData[0].amount / totalExpenses) * 100}%`,
+                  }}
+                />
+              </div>
+              <span className="percentage-text">
+                {((pieChartData[0].amount / totalExpenses) * 100).toFixed(1)}%
+                of total
+              </span>
+            </div>
           </div>
         ) : (
-          <p
-            style={{
-              textAlign: "center",
-              color: "var(--text-muted)",
-              padding: "40px 0",
-            }}
-          >
-            No location data available
-          </p>
+          <p className="no-data">No expense data available</p>
         )}
       </div>
     </div>

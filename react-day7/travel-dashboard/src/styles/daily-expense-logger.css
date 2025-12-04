@@ -1,0 +1,377 @@
+/* ====================================
+   DAILY EXPENSE LOGGER
+   ==================================== */
+
+.daily-expense-logger {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 0;
+}
+
+/* Header */
+.logger-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.logger-title {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.header-stats {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.stat-badge {
+  padding: 6px 12px;
+  background: linear-gradient(135deg, rgba(5, 102, 141, 0.1), rgba(2, 195, 154, 0.08));
+  color: var(--primary);
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  border: 1px solid rgba(5, 102, 141, 0.2);
+}
+
+/* Day Selector */
+.day-selector {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.day-buttons {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.day-btn {
+  padding: 8px 12px;
+  background: var(--bg-primary);
+  border: 1px solid var(--bg-secondary);
+  border-radius: 6px;
+  color: var(--text-secondary);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.day-btn:hover {
+  border-color: var(--primary);
+  background: var(--bg-secondary);
+}
+
+.day-btn.active {
+  background: var(--primary);
+  color: white;
+  border-color: var(--primary);
+  box-shadow: 0 2px 8px rgba(5, 102, 141, 0.2);
+}
+
+/* Expense Input Section */
+.expense-input-section {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.expense-input,
+.expense-select {
+  flex: 1;
+  min-width: 100px;
+  padding: 10px 12px;
+  border: 1px solid var(--bg-secondary);
+  border-radius: 6px;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-size: 13px;
+  font-family: inherit;
+  transition: all 0.2s ease;
+}
+
+.expense-input.amount {
+  min-width: 80px;
+}
+
+.expense-input:focus,
+.expense-select:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 2px rgba(5, 102, 141, 0.1);
+}
+
+.expense-input::placeholder {
+  color: var(--text-secondary);
+}
+
+.add-expense-btn {
+  padding: 10px 12px;
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(5, 102, 141, 0.2);
+}
+
+.add-expense-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(5, 102, 141, 0.3);
+}
+
+.add-expense-btn:active {
+  transform: translateY(0);
+}
+
+/* Expenses List */
+.expenses-list-container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 250px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.expenses-list-container::-webkit-scrollbar {
+  width: 6px;
+}
+
+.expenses-list-container::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.expenses-list-container::-webkit-scrollbar-thumb {
+  background: var(--bg-secondary);
+  border-radius: 3px;
+}
+
+.expenses-list-container::-webkit-scrollbar-thumb:hover {
+  background: var(--text-secondary);
+}
+
+.expenses-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.expense-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  background: var(--bg-primary);
+  border: 1px solid var(--bg-secondary);
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+
+.expense-item:hover {
+  background: var(--bg-hover);
+  border-color: var(--primary);
+  box-shadow: 0 2px 8px rgba(5, 102, 141, 0.1);
+}
+
+.expense-icon {
+  font-size: 18px;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.expense-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  min-width: 0;
+}
+
+.expense-name {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-primary);
+  word-break: break-word;
+}
+
+.expense-category {
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+
+.expense-amount {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--primary);
+  min-width: 60px;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.delete-btn {
+  width: 28px;
+  height: 28px;
+  padding: 4px;
+  background: transparent;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.delete-btn:hover {
+  color: var(--danger);
+  background: rgba(239, 68, 68, 0.1);
+}
+
+/* Day Total */
+.day-total {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 12px;
+  background: linear-gradient(135deg, rgba(5, 102, 141, 0.08), rgba(2, 195, 154, 0.04));
+  border: 1px solid var(--bg-secondary);
+  border-radius: 6px;
+  margin-top: 4px;
+}
+
+.day-total span {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.day-total strong {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+/* Empty State */
+.empty-expenses {
+  text-align: center;
+  color: var(--text-secondary);
+  font-size: 12px;
+  padding: 20px 12px;
+  margin: 0;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .daily-expense-logger {
+    gap: 12px;
+  }
+
+  .logger-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .header-stats {
+    justify-content: space-between;
+  }
+
+  .expense-input-section {
+    gap: 6px;
+  }
+
+  .expense-input,
+  .expense-select {
+    min-width: 80px;
+    padding: 8px 10px;
+    font-size: 12px;
+  }
+
+  .expense-item {
+    padding: 8px 10px;
+    gap: 8px;
+  }
+
+  .expense-icon {
+    font-size: 16px;
+  }
+
+  .expense-name {
+    font-size: 11px;
+  }
+
+  .expense-amount {
+    font-size: 11px;
+    min-width: 50px;
+  }
+
+  .day-total {
+    padding: 8px 10px;
+    font-size: 11px;
+  }
+}
+
+@media (max-width: 480px) {
+  .daily-expense-logger {
+    gap: 10px;
+  }
+
+  .logger-title {
+    font-size: 14px;
+  }
+
+  .stat-badge {
+    font-size: 11px;
+    padding: 4px 8px;
+  }
+
+  .day-buttons {
+    gap: 4px;
+  }
+
+  .day-btn {
+    padding: 6px 10px;
+    font-size: 11px;
+  }
+
+  .expense-input-section {
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .expense-input,
+  .expense-select,
+  .add-expense-btn {
+    width: 100%;
+  }
+
+  .expense-item {
+    padding: 8px;
+    gap: 8px;
+  }
+
+  .expense-name {
+    font-size: 10px;
+  }
+
+  .expense-amount {
+    font-size: 10px;
+    min-width: 45px;
+  }
+}

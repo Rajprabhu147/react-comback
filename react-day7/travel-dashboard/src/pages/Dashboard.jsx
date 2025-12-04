@@ -39,13 +39,13 @@ const Dashboard = () => {
             {/* Right Column - Calendar & Analytics */}
             <div className="right-panel">
               {/* Calendar Section */}
-              <section className="calendar-section">
-                <TripsCalendar trips={trips} />
-              </section>
 
               {/* Analytics Section */}
               <aside className="analytics-section">
                 <AnalyticsCharts />
+                <section className="calendar-section">
+                  <TripsCalendar trips={trips} />
+                </section>
               </aside>
             </div>
           </div>
