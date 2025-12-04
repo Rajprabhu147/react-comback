@@ -190,15 +190,15 @@
 @media (max-width: 480px) {
   .calendar-header {
     flex-direction: column;
-    width: 100%;
+    /* width: 100%; */
   }
 
   .month-year {
-    width: 100%;
+    /* width: 100%; */
   }
 
   .calendar-day {
-    min-height: 60px;
+    /* min-height: 60px; */
     padding: 6px;
   }
 
