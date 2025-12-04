@@ -161,54 +161,6 @@
   transition: width 0.3s ease;
 }
 
-.percentage-fill[data-percentage="0"] {
-  width: 0%;
-}
-
-.percentage-fill[data-percentage="1"] {
-  width: 1%;
-}
-
-.percentage-fill[data-percentage="10"] {
-  width: 10%;
-}
-
-.percentage-fill[data-percentage="20"] {
-  width: 20%;
-}
-
-.percentage-fill[data-percentage="30"] {
-  width: 30%;
-}
-
-.percentage-fill[data-percentage="40"] {
-  width: 40%;
-}
-
-.percentage-fill[data-percentage="50"] {
-  width: 50%;
-}
-
-.percentage-fill[data-percentage="60"] {
-  width: 60%;
-}
-
-.percentage-fill[data-percentage="70"] {
-  width: 70%;
-}
-
-.percentage-fill[data-percentage="80"] {
-  width: 80%;
-}
-
-.percentage-fill[data-percentage="90"] {
-  width: 90%;
-}
-
-.percentage-fill[data-percentage="100"] {
-  width: 100%;
-}
-
 .percentage-text {
   font-size: 10px;
   color: var(--text-secondary);
