@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import ItineraryItemsRow from "./ItineraryItemsRow";
 import ItineraryItemEditor from "./ItineraryItemEditor";
 import { Search, Plus, Filter } from "lucide-react";
@@ -7,7 +7,13 @@ import "../../styles/itinenary-list.css";
 /**
  * ItineraryItemsList Component
  * Displays all trip itinerary activities with filtering and search
+ *
+ * NOTE: This component dispatches a 'itinerary-updated' CustomEvent
+ * whenever it writes to localStorage. It also listens for the same
+ * event so that external changes (calendar adds) update the list.
  */
+
+const STORAGE_KEY = "tripItineraryItems";
 
 const CATEGORIES = [
   { value: "all", label: "All Activities" },
@@ -23,7 +29,7 @@ const ItineraryItemsList = () => {
   // Load items from localStorage on first render
   const [items, setItems] = useState(() => {
     try {
-      const saved = localStorage.getItem("tripItineraryItems");
+      const saved = localStorage.getItem(STORAGE_KEY);
       return saved ? JSON.parse(saved) : [];
     } catch (error) {
       console.error("Error loading items from localStorage:", error);
@@ -37,6 +43,21 @@ const ItineraryItemsList = () => {
   const [editingItem, setEditingItem] = useState(null);
   const [isEditorOpen, setIsEditorOpen] = useState(false);
 
+  // When external components dispatch 'itinerary-updated', reload items
+  useEffect(() => {
+    function handleExternalUpdate() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        setItems(raw ? JSON.parse(raw) : []);
+      } catch (e) {
+        console.error("Failed to reload itinerary after external update", e);
+      }
+    }
+    window.addEventListener("itinerary-updated", handleExternalUpdate);
+    return () =>
+      window.removeEventListener("itinerary-updated", handleExternalUpdate);
+  }, []);
+
   // Get unique days from items
   const uniqueDays = useMemo(() => {
     return [...new Set(items.map((item) => item.day))].sort((a, b) => a - b);
@@ -45,10 +66,12 @@ const ItineraryItemsList = () => {
   // Filter items based on search, category, and day
   const filteredItems = useMemo(() => {
     return items.filter((item) => {
+      const q = searchQuery.trim().toLowerCase();
       const matchesSearch =
-        item.activity.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        item.location.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        item.notes.toLowerCase().includes(searchQuery.toLowerCase());
+        !q ||
+        (item.activity && item.activity.toLowerCase().includes(q)) ||
+        (item.location && item.location.toLowerCase().includes(q)) ||
+        (item.notes && item.notes.toLowerCase().includes(q));
 
       const matchesCategory =
         categoryFilter === "all" || item.category === categoryFilter;
@@ -64,9 +87,7 @@ const ItineraryItemsList = () => {
   const itemsByDay = useMemo(() => {
     const grouped = {};
     filteredItems.forEach((item) => {
-      if (!grouped[item.day]) {
-        grouped[item.day] = [];
-      }
+      if (!grouped[item.day]) grouped[item.day] = [];
       grouped[item.day].push(item);
     });
     return grouped;
@@ -76,11 +97,17 @@ const ItineraryItemsList = () => {
   const hasActiveFilters =
     searchQuery || categoryFilter !== "all" || dayFilter !== "all";
 
-  // Save items to localStorage whenever they change
-  const updateItems = (newItems) => {
+  // Save items to localStorage whenever they change via this helper
+  const saveItemsAndNotify = (newItems) => {
     setItems(newItems);
     try {
-      localStorage.setItem("tripItineraryItems", JSON.stringify(newItems));
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(newItems));
+      // notify others (calendar) that itinerary changed
+      window.dispatchEvent(
+        new CustomEvent("itinerary-updated", {
+          detail: { source: "itinerary-list" },
+        })
+      );
     } catch (error) {
       console.error("Error saving items to localStorage:", error);
     }
@@ -98,21 +125,27 @@ const ItineraryItemsList = () => {
 
   const handleDeleteItem = (itemId) => {
     const newItems = items.filter((item) => item.id !== itemId);
-    updateItems(newItems);
+    saveItemsAndNotify(newItems);
   };
 
   const handleSaveItem = (itemData) => {
+    if (!itemData.id) {
+      // add id if missing
+      itemData.id = Date.now();
+    }
+
     if (editingItem) {
       // Update existing item
       const newItems = items.map((item) =>
-        item.id === editingItem.id ? itemData : item
+        item.id === editingItem.id ? { ...itemData } : item
       );
-      updateItems(newItems);
+      saveItemsAndNotify(newItems);
     } else {
       // Add new item
-      updateItems([...items, itemData]);
+      saveItemsAndNotify([...items, { ...itemData }]);
     }
     setIsEditorOpen(false);
+    setEditingItem(null);
   };
 
   const handleCloseEditor = () => {
@@ -124,7 +157,7 @@ const ItineraryItemsList = () => {
     const newItems = items.map((item) =>
       item.id === itemId ? { ...item, completed: isCompleted } : item
     );
-    updateItems(newItems);
+    saveItemsAndNotify(newItems);
   };
 
   const handleResetFilters = () => {
@@ -210,14 +243,16 @@ const ItineraryItemsList = () => {
                 </h3>
                 <div className="day-activities">
                   {dayItems
-                    .sort((a, b) => a.time.localeCompare(b.time))
+                    .sort((a, b) => (a.time || "").localeCompare(b.time || ""))
                     .map((item) => (
                       <ItineraryItemsRow
                         key={item.id}
                         item={item}
-                        onEdit={handleEditItem}
-                        onDelete={handleDeleteItem}
-                        onToggleComplete={handleToggleComplete}
+                        onEdit={() => handleEditItem(item)}
+                        onDelete={() => handleDeleteItem(item.id)}
+                        onToggleComplete={(val) =>
+                          handleToggleComplete(item.id, val)
+                        }
                       />
                     ))}
                 </div>

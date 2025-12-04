@@ -33,7 +33,10 @@ const Dashboard = () => {
           <div className="dashboard-layout">
             {/* Left Column - Itinerary Items */}
             <section className="items-section">
-              <ItineraryItemsList />
+              <ItineraryItemsList />{" "}
+              <section className="calendar-section">
+                <TripsCalendar trips={trips} />
+              </section>
             </section>
 
             {/* Right Column - Calendar & Analytics */}
@@ -43,9 +46,6 @@ const Dashboard = () => {
               {/* Analytics Section */}
               <aside className="analytics-section">
                 <AnalyticsCharts />
-                <section className="calendar-section">
-                  <TripsCalendar trips={trips} />
-                </section>
               </aside>
             </div>
           </div>
