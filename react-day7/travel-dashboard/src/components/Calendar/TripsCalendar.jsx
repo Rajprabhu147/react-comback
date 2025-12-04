@@ -1,20 +1,20 @@
-import React, { useEffect, useState, useMemo } from "react";
+import React, { useEffect, useRef, useState, useMemo } from "react";
 import "../../styles/calendar.css";
 
 /**
- * TripsCalendar Component
+ * TripsCalendar Component (hover popover version)
  *
- * - Reads items from localStorage key "tripItineraryItems"
- * - Listens for 'itinerary-updated' events to refresh items
- * - Clicking on a calendar day dispatches 'itinerary-open-editor' with { dateISO, day }
- *   so the ItineraryItemsList opens its editor prefilled.
- * - Hovering a date shows a small inline popover listing activities for that date.
+ * - Hovering a day with activities shows a floating overlay with the day's activities.
+ * - The overlay is absolutely positioned inside the calendar container so it doesn't
+ *   affect layout or push other elements.
+ * - Clicking a day still dispatches 'itinerary-open-editor' with { dateISO, day }.
  */
 
 const STORAGE_KEY = "tripItineraryItems";
 
 const TripsCalendar = ({ trips = [] }) => {
-  // We allow optional incoming `trips` prop; but primary source is localStorage
+  const containerRef = useRef(null);
+
   const [currentDate, setCurrentDate] = useState(new Date());
   const [localTrips, setLocalTrips] = useState(() => {
     try {
@@ -26,9 +26,10 @@ const TripsCalendar = ({ trips = [] }) => {
     }
   });
 
-  const [hoveredDate, setHoveredDate] = useState(null);
+  // Hover state holds data and rect for the hovered cell
+  const [hovered, setHovered] = useState(null);
+  // hovered: { dateISO: "2025-12-01", items: [...], rect: DOMRect }
 
-  // Keep in sync when parent passes trips prop (optional)
   useEffect(() => {
     if (Array.isArray(trips) && trips.length > 0) {
       setLocalTrips(trips);
@@ -52,12 +53,10 @@ const TripsCalendar = ({ trips = [] }) => {
   // Build tripsByDate map from localTrips (date in ISO yyyy-mm-dd expected; fallback to day)
   const tripsByDate = useMemo(() => {
     return localTrips.reduce((acc, trip) => {
-      // prefer trip.date (ISO), else if trip.day present create ISO from current month/year
       let dateStr = null;
       if (trip.date) {
         dateStr = new Date(trip.date).toISOString().split("T")[0];
       } else if (typeof trip.day !== "undefined" && trip.day !== null) {
-        // try to map 'day' (1..n) to the current month year shown in calendar
         const d = new Date(
           currentDate.getFullYear(),
           currentDate.getMonth(),
@@ -135,11 +134,78 @@ const TripsCalendar = ({ trips = [] }) => {
     window.dispatchEvent(
       new CustomEvent("itinerary-open-editor", { detail: { dateISO, day } })
     );
-    // Optionally focus the list area — left as an exercise for UX
+  };
+
+  // Mouse enter handler to compute rect and set hovered data
+  const handleMouseEnterCell = (e, day) => {
+    if (!day) return;
+    const cell = e.currentTarget;
+    const rect = cell.getBoundingClientRect();
+    const containerRect = containerRef.current
+      ? containerRef.current.getBoundingClientRect()
+      : { left: 0, top: 0 };
+    const dateISO = new Date(
+      currentDate.getFullYear(),
+      currentDate.getMonth(),
+      day
+    )
+      .toISOString()
+      .split("T")[0];
+    const items = getTripsForDay(day);
+    // compute position relative to container
+    const relative = {
+      top: rect.top - containerRect.top,
+      left: rect.left - containerRect.left,
+      width: rect.width,
+      height: rect.height,
+      pageLeft: rect.left,
+      pageTop: rect.top,
+    };
+    setHovered({ dateISO, items, rect: relative });
+  };
+
+  const handleMouseLeaveCell = () => {
+    setHovered(null);
+  };
+
+  // Popover positioning (clamped inside container)
+  const computePopoverStyle = () => {
+    if (!hovered || !containerRef.current) return { display: "none" };
+    const containerRect = containerRef.current.getBoundingClientRect();
+    const popoverWidth = 260; // px (approx)
+    const popoverHeight = Math.min(240, 48 + hovered.items.length * 40); // dynamic
+    // default: place above the cell if enough space, else below
+    const preferredTop =
+      hovered.rect.pageTop - containerRect.top - popoverHeight - 8; // above
+    const fallbackTop =
+      hovered.rect.pageTop - containerRect.top + hovered.rect.height + 8; // below
+    const canPlaceAbove = preferredTop >= 0;
+    const top = canPlaceAbove ? preferredTop : fallbackTop;
+
+    // horizontally center popover on cell; clamp within container width
+    const cellCenter = hovered.rect.left + hovered.rect.width / 2;
+    const leftUnclamped = cellCenter - popoverWidth / 2;
+    const maxLeft = containerRect.width - popoverWidth - 8;
+    const leftClamped = Math.max(8, Math.min(leftUnclamped, maxLeft));
+
+    return {
+      display: "block",
+      position: "absolute",
+      top: `${top}px`,
+      left: `${leftClamped}px`,
+      width: `${popoverWidth}px`,
+      maxHeight: `${popoverHeight}px`,
+      overflowY: "auto",
+      zIndex: 60,
+    };
   };
 
   return (
-    <div className="trips-calendar">
+    <div
+      className="trips-calendar"
+      ref={containerRef}
+      style={{ position: "relative" }}
+    >
       <div className="calendar-header">
         <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
           <button
@@ -184,7 +250,7 @@ const TripsCalendar = ({ trips = [] }) => {
             currentDate.getMonth() === new Date().getMonth() &&
             currentDate.getFullYear() === new Date().getFullYear();
 
-          // build a small tooltip text fallback
+          // fallback title
           const titleText =
             tripsOnDay.length > 0
               ? tripsOnDay
@@ -210,20 +276,8 @@ const TripsCalendar = ({ trips = [] }) => {
                   ? `Day ${day}. ${tripsOnDay.length} activities`
                   : "Empty cell"
               }
-              onMouseEnter={() =>
-                setHoveredDate(
-                  day
-                    ? new Date(
-                        currentDate.getFullYear(),
-                        currentDate.getMonth(),
-                        day
-                      )
-                        .toISOString()
-                        .split("T")[0]
-                    : null
-                )
-              }
-              onMouseLeave={() => setHoveredDate(null)}
+              onMouseEnter={(e) => handleMouseEnterCell(e, day)}
+              onMouseLeave={handleMouseLeaveCell}
               title={titleText}
             >
               {day && (
@@ -250,37 +304,38 @@ const TripsCalendar = ({ trips = [] }) => {
                       )}
                     </div>
                   )}
-
-                  {/* Inline hover popover */}
-                  {hoveredDate ===
-                    new Date(
-                      currentDate.getFullYear(),
-                      currentDate.getMonth(),
-                      day
-                    )
-                      .toISOString()
-                      .split("T")[0] && (
-                    <div
-                      className="calendar-hover-popover"
-                      role="dialog"
-                      aria-hidden
-                    >
-                      {(tripsOnDay || []).map((t, i) => (
-                        <div className="popover-row" key={i}>
-                          <div className="popover-title">
-                            {t.activity || "Untitled"}
-                          </div>
-                          <div className="popover-time">{t.time || "—"}</div>
-                        </div>
-                      ))}
-                    </div>
-                  )}
                 </>
               )}
             </div>
           );
         })}
       </div>
+
+      {/* Floating popover overlay (absolutely positioned inside container) */}
+      {hovered && hovered.items && hovered.items.length > 0 && (
+        <div
+          className="calendar-hover-popover floating"
+          style={computePopoverStyle()}
+          role="dialog"
+          aria-hidden="false"
+          onMouseEnter={() => {
+            /* keep popover visible while hovering popover itself */
+            // Prevent premature hide by setting hovered to same value if needed.
+          }}
+        >
+          <div className="popover-header">
+            <strong>{hovered.dateISO}</strong>
+          </div>
+          <div className="popover-body">
+            {hovered.items.map((t, idx) => (
+              <div key={idx} className="popover-row">
+                <div className="popover-title">{t.activity || "Untitled"}</div>
+                <div className="popover-time">{t.time || "—"}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 };

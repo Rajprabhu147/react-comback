@@ -1,15 +1,21 @@
 // src/components/Itinerary/ItineraryItemEditor.jsx
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Clock, MapPin, DollarSign, Users, X } from "lucide-react";
 import "../../styles/itinerary-editor.css";
 
 /**
  * ItineraryItemEditor
  * Modal for creating or editing itinerary activities
+ *
+ * Enhancements:
+ * - Adds a mini date selector (date input + month/year dropdowns)
+ * - Keeps `date` (ISO) and numeric `day` synchronized
+ * - Saves both `date` and `day` so calendar + list can use either
  */
 
 const DEFAULT_FORM = {
   day: 1,
+  date: "", // ISO yyyy-mm-dd (optional)
   time: "09:00",
   activity: "",
   location: "",
@@ -28,12 +34,124 @@ const CATEGORIES = [
   { value: "activity", label: "⚡ Activity", color: "#8b5cf6" },
 ];
 
+const monthNames = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
+];
+
+const YEAR_RANGE = 3; // years before/after current for dropdown
+
 const ItineraryItemEditor = ({ item, onSave, onClose }) => {
-  // Initialize local state from incoming prop on mount (no effect)
   const [formData, setFormData] = useState(() =>
-    item ? { ...item } : { ...DEFAULT_FORM }
+    item ? { ...DEFAULT_FORM, ...item } : { ...DEFAULT_FORM }
   );
   const [errors, setErrors] = useState({});
+
+  // Populate date components from existing date if present
+  useEffect(() => {
+    if (item) {
+      const merged = { ...DEFAULT_FORM, ...item };
+      setFormData((prev) => ({ ...merged }));
+    } else {
+      setFormData({ ...DEFAULT_FORM });
+    }
+    setErrors({});
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [item]);
+
+  // Helpers to parse and build ISO date
+  const isoFromParts = (y, mIndex, d) => {
+    if (!y || typeof mIndex === "undefined" || !d) return "";
+    const paddedM = String(mIndex + 1).padStart(2, "0");
+    const paddedD = String(d).padStart(2, "0");
+    return `${y}-${paddedM}-${paddedD}`;
+  };
+
+  const parseISO = (iso) => {
+    if (!iso) return null;
+    const parts = iso.split("-");
+    if (parts.length !== 3) return null;
+    const y = parseInt(parts[0], 10);
+    const m = parseInt(parts[1], 10) - 1;
+    const d = parseInt(parts[2], 10);
+    if (isNaN(y) || isNaN(m) || isNaN(d)) return null;
+    return { year: y, monthIndex: m, day: d };
+  };
+
+  // When user changes the date input, sync day/month/year
+  const handleDateInputChange = (e) => {
+    const val = e.target.value; // yyyy-mm-dd
+    setFormData((prev) => {
+      const parsed = parseISO(val);
+      return {
+        ...prev,
+        date: val,
+        day: parsed ? parsed.day : prev.day,
+      };
+    });
+    if (errors.date) setErrors((p) => ({ ...p, date: undefined }));
+  };
+
+  // When user changes the numeric day, update date if possible (use current month/year or existing date)
+  const handleDayChange = (e) => {
+    let dayVal = e.target.value;
+    // prevent negative / zero
+    if (dayVal === "") {
+      setFormData((p) => ({ ...p, day: "" }));
+      return;
+    }
+    dayVal = Math.max(1, Number(dayVal));
+    // find month/year from existing date or fallback to today
+    const parsed = parseISO(formData.date);
+    const baseYear = parsed ? parsed.year : new Date().getFullYear();
+    const baseMonth = parsed ? parsed.monthIndex : new Date().getMonth();
+    const newIso = isoFromParts(baseYear, baseMonth, dayVal);
+    setFormData((prev) => ({
+      ...prev,
+      day: dayVal,
+      date: newIso,
+    }));
+    if (errors.day) setErrors((p) => ({ ...p, day: undefined }));
+  };
+
+  // Month change: update date using selected month and current day/year
+  const handleMonthChange = (e) => {
+    const monthIndex = Number(e.target.value);
+    const parsed = parseISO(formData.date);
+    const year = parsed ? parsed.year : new Date().getFullYear();
+    const day = formData.day || (parsed ? parsed.day : 1);
+    const newIso = isoFromParts(year, monthIndex, day);
+    setFormData((prev) => ({ ...prev, date: newIso }));
+    if (errors.date) setErrors((p) => ({ ...p, date: undefined }));
+  };
+
+  // Year change: update date using selected year and current month/day
+  const handleYearChange = (e) => {
+    const year = Number(e.target.value);
+    const parsed = parseISO(formData.date);
+    const monthIndex = parsed ? parsed.monthIndex : new Date().getMonth();
+    const day = formData.day || (parsed ? parsed.day : 1);
+    const newIso = isoFromParts(year, monthIndex, day);
+    setFormData((prev) => ({ ...prev, date: newIso }));
+    if (errors.date) setErrors((p) => ({ ...p, date: undefined }));
+  };
+
+  // Generic change for other inputs
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+    if (errors[name]) setErrors((p) => ({ ...p, [name]: undefined }));
+  };
 
   const validate = () => {
     const newErrors = {};
@@ -43,6 +161,15 @@ const ItineraryItemEditor = ({ item, onSave, onClose }) => {
     if (!formData.time) {
       newErrors.time = "Time is required";
     }
+    // Ensure day is a positive integer
+    if (!formData.day || Number(formData.day) < 1) {
+      newErrors.day = "Day must be 1 or greater";
+    }
+    // If date exists, validate it
+    if (formData.date) {
+      const parsed = parseISO(formData.date);
+      if (!parsed) newErrors.date = "Invalid date";
+    }
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -51,31 +178,36 @@ const ItineraryItemEditor = ({ item, onSave, onClose }) => {
     e.preventDefault();
     if (!validate()) return;
 
-    onSave({
+    // Ensure item has id (use existing if editing)
+    const payload = {
       ...formData,
       id: item?.id || Date.now(),
-    });
-  };
+    };
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-
-    if (errors[name]) {
-      setErrors((prev) => ({ ...prev, [name]: undefined }));
-    }
+    onSave(payload);
   };
 
   const isEditing = !!item?.id;
+
+  // derive month/year dropdown values from date or fallback to today
+  const parsed = parseISO(formData.date);
+  const selectedYear = parsed ? parsed.year : new Date().getFullYear();
+  const selectedMonthIndex = parsed ? parsed.monthIndex : new Date().getMonth();
+
+  // build year options
+  const curYear = new Date().getFullYear();
+  const yearOptions = Array.from(
+    { length: YEAR_RANGE * 2 + 1 },
+    (_, i) => curYear - YEAR_RANGE + i
+  );
 
   return (
     <div className="modal-overlay" onClick={onClose}>
       <div
         className="modal itinerary-modal"
         onClick={(e) => e.stopPropagation()}
+        role="dialog"
+        aria-modal="true"
       >
         <div className="modal-header">
           <h2 className="modal-title">
@@ -88,19 +220,70 @@ const ItineraryItemEditor = ({ item, onSave, onClose }) => {
 
         <form onSubmit={handleSubmit} noValidate>
           <div className="modal-body">
-            {/* Day and Time Row */}
+            {/* Date selector row: Date input + Month + Year + Day */}
             <div className="form-row">
-              <div className="form-group">
+              <div className="form-group" style={{ flex: 1 }}>
+                <label className="form-label">Date</label>
+                <input
+                  type="date"
+                  name="date"
+                  value={formData.date || ""}
+                  onChange={handleDateInputChange}
+                  className="form-input"
+                />
+                {errors.date && (
+                  <span className="error-text">{errors.date}</span>
+                )}
+              </div>
+
+              <div className="form-group" style={{ minWidth: 120 }}>
+                <label className="form-label">Month</label>
+                <select
+                  name="month"
+                  value={selectedMonthIndex}
+                  onChange={handleMonthChange}
+                  className="form-select"
+                >
+                  {monthNames.map((m, idx) => (
+                    <option key={m} value={idx}>
+                      {m}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="form-group" style={{ minWidth: 120 }}>
+                <label className="form-label">Year</label>
+                <select
+                  name="year"
+                  value={selectedYear}
+                  onChange={handleYearChange}
+                  className="form-select"
+                >
+                  {yearOptions.map((y) => (
+                    <option key={y} value={y}>
+                      {y}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="form-group" style={{ minWidth: 100 }}>
                 <label className="form-label">Day *</label>
                 <input
                   type="number"
                   name="day"
                   value={formData.day}
-                  onChange={handleChange}
+                  onChange={handleDayChange}
                   min="1"
                   className="form-input"
                 />
+                {errors.day && <span className="error-text">{errors.day}</span>}
               </div>
+            </div>
+
+            {/* Time */}
+            <div className="form-row">
               <div className="form-group">
                 <label className="form-label">
                   <Clock size={16} /> Time *
