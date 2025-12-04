@@ -179,7 +179,7 @@ const AnalyticsCharts = () => {
               <div className="percentage-bar">
                 <div
                   className="percentage-fill"
-                  data-percentage={highestSpendingPercent}
+                  style={{ width: `${highestSpendingPercent}%` }}
                 />
               </div>
               <span className="percentage-text">

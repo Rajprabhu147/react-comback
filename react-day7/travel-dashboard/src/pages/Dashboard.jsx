@@ -38,8 +38,6 @@ const Dashboard = () => {
 
             {/* Right Column - Calendar & Analytics */}
             <div className="right-panel">
-              {/* Calendar Section */}
-
               {/* Analytics Section */}
               <aside className="analytics-section">
                 <AnalyticsCharts />
