@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   BarChart,
   Bar,
@@ -14,8 +14,6 @@ import {
   Legend,
   ResponsiveContainer,
 } from "recharts";
-import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
-import "leaflet/dist/leaflet.css";
 import DailyExpenseLogger from "../Expense/DailyExpenseLogger.jsx";
 import "../../styles/charts.css";
 
@@ -128,9 +126,87 @@ const AnalyticsCharts = () => {
     EXPENSE_CATEGORY_COLORS.other,
   ];
 
+  // Calculate average daily expense
+  const averageDailyExpense =
+    sortedDailyExpenses.length > 0
+      ? totalExpenses / sortedDailyExpenses.length
+      : 0;
+
+  // Get highest spending info
+  const highestSpending = pieChartData.length > 0 ? pieChartData[0] : null;
+  const highestSpendingPercent =
+    highestSpending && totalExpenses > 0
+      ? (highestSpending.amount / totalExpenses) * 100
+      : 0;
+
   return (
     <div className="charts-container">
-      {/* ========== TRIP TYPE DISTRIBUTION (PIE) ========== */}
+      {/* ========== DAILY EXPENSE LOGGER - FULL WIDTH TOP ========== */}
+      <div className="chart-card chart-card-wide">
+        <DailyExpenseLogger onExpenseChange={handleExpenseChange} />
+      </div>
+
+      {/* ========== INFO CARDS ROW ========== */}
+      <div className="info-cards-row">
+        {/* Total Expenses Card */}
+        <div className="info-card total-expenses-card">
+          <div className="info-card-icon">💵</div>
+          <div className="info-card-content">
+            <div className="info-card-label">Total Expenses</div>
+            <div className="info-card-value">${totalExpenses.toFixed(2)}</div>
+            <div className="info-card-meta">
+              <span className="meta-item">{expenses.length} transactions</span>
+              <span className="meta-divider">•</span>
+              <span className="meta-item">
+                {formattedCategoryExpenses.length} categories
+              </span>
+            </div>
+          </div>
+        </div>
+
+        {/* Highest Spending Card */}
+        <div className="info-card highest-spending-card">
+          <div className="info-card-icon">🏆</div>
+          <div className="info-card-content">
+            <div className="info-card-label">Highest Spending</div>
+            <div className="info-card-value">
+              {highestSpending ? highestSpending.name : "No data"}
+            </div>
+            <div className="info-card-amount">
+              ${highestSpending ? highestSpending.amount.toFixed(2) : "0.00"}
+            </div>
+            <div className="percentage-bar-container">
+              <div className="percentage-bar">
+                <div
+                  className="percentage-fill"
+                  data-percentage={highestSpendingPercent}
+                />
+              </div>
+              <span className="percentage-text">
+                {highestSpendingPercent.toFixed(1)}% of total
+              </span>
+            </div>
+          </div>
+        </div>
+
+        {/* Average Daily Expense Card */}
+        <div className="info-card average-spending-card">
+          <div className="info-card-icon">📊</div>
+          <div className="info-card-content">
+            <div className="info-card-label">Avg Daily Expense</div>
+            <div className="info-card-value">
+              ${averageDailyExpense.toFixed(2)}
+            </div>
+            <div className="info-card-meta">
+              <span className="meta-item">
+                {sortedDailyExpenses.length} days
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* ========== PIE CHART: EXPENSE BY CATEGORY ========== */}
       <div className="chart-card">
         <h3 className="chart-title">💰 Expense by Category</h3>
         {pieChartData.length > 0 ? (
@@ -227,55 +303,6 @@ const AnalyticsCharts = () => {
               />
             </LineChart>
           </ResponsiveContainer>
-        ) : (
-          <p className="no-data">No expense data available</p>
-        )}
-      </div>
-
-      {/* ========== DAILY EXPENSE LOGGER ========== */}
-      <div className="chart-card chart-card-wide">
-        <DailyExpenseLogger onExpenseChange={handleExpenseChange} />
-      </div>
-
-      {/* ========== EXPENSE SUMMARY ========== */}
-      <div className="chart-card">
-        <h3 className="chart-title">💵 Total Expenses</h3>
-        <div className="summary-card">
-          <div className="summary-value">${totalExpenses.toFixed(2)}</div>
-          <div className="summary-label">Total Trip Spending</div>
-          <div className="summary-meta">
-            <span>{expenses.length} transactions</span>
-            <span>{formattedCategoryExpenses.length} categories</span>
-          </div>
-        </div>
-      </div>
-
-      {/* ========== HIGHEST SPENDING CATEGORY ========== */}
-      <div className="chart-card">
-        <h3 className="chart-title">🏆 Highest Spending</h3>
-        {pieChartData.length > 0 ? (
-          <div className="highest-spending">
-            <div className="highest-item">
-              <span className="highest-category">{pieChartData[0].name}</span>
-              <span className="highest-amount">
-                ${pieChartData[0].amount.toFixed(2)}
-              </span>
-            </div>
-            <div className="spending-percentage">
-              <div className="percentage-bar">
-                <div
-                  className="percentage-fill"
-                  style={{
-                    width: `${(pieChartData[0].amount / totalExpenses) * 100}%`,
-                  }}
-                />
-              </div>
-              <span className="percentage-text">
-                {((pieChartData[0].amount / totalExpenses) * 100).toFixed(1)}%
-                of total
-              </span>
-            </div>
-          </div>
         ) : (
           <p className="no-data">No expense data available</p>
         )}
