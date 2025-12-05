@@ -13,6 +13,8 @@ import {
   X,
   Calendar,
 } from "lucide-react";
+import LocationAutocomplete from "../../components/Calendar/LocationAutocomplete.jsx";
+
 import "../../styles/trip-planner.css";
 
 const TripPlanner = () => {
@@ -470,6 +472,11 @@ const ActivityEditor = ({
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
+  const handleLocationChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
   const handleSubmit = () => {
     if (!formData.activity.trim()) {
       alert("Please enter an activity name");
@@ -529,13 +536,10 @@ const ActivityEditor = ({
 
           <div className="editor-form-group">
             <label className="editor-label">Location</label>
-            <input
-              type="text"
-              name="location"
-              placeholder="e.g., Paris, France"
+            <LocationAutocomplete
               value={formData.location}
-              onChange={handleChange}
-              className="editor-input"
+              onChange={handleLocationChange}
+              placeholder="Search for a place..."
             />
           </div>
 

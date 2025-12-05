@@ -5,7 +5,7 @@ import { MapPin, X } from "lucide-react";
 import {
   getLocationSuggestions,
   formatLocationString,
-} from "../services/locationService";
+} from "../../services/locationService.js";
 import "../../styles/location-autocomplete.css";
 
 const LocationAutocomplete = ({
