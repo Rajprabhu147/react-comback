@@ -179,13 +179,14 @@
   border: 1px solid #e2e8f0;
   border-radius: var(--radius-md);
   padding: 14px;
-  min-height: 140px;
+  aspect-ratio: 1 / 1.2;
   cursor: pointer;
   position: relative;
   display: flex;
   flex-direction: column;
   transition: all 0.2s ease;
   box-shadow: var(--shadow-sm);
+  min-height: auto;
 }
 
 .calendar-day-cell:hover:not(.empty-day) {
