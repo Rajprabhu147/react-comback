@@ -176,7 +176,7 @@ const TripPlanner = () => {
       <div className="trip-planner-container">
         {/* Header */}
         <div className="planner-header">
-          <h1 className="planner-title">✈️ Trip Planner</h1>
+          <h2 className="planner-title">✈️ Trip Planner</h2>
           <p className="planner-subtitle">Organize your adventures with ease</p>
         </div>
 

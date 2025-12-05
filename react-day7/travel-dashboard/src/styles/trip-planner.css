@@ -178,15 +178,15 @@
   background: #ffffff;
   border: 1px solid #e2e8f0;
   border-radius: var(--radius-md);
-  padding: 14px;
-  aspect-ratio: 1 / 1.2;
+  padding: 12px;
+  height: 100px;
   cursor: pointer;
   position: relative;
   display: flex;
   flex-direction: column;
   transition: all 0.2s ease;
   box-shadow: var(--shadow-sm);
-  min-height: auto;
+  overflow: hidden;
 }
 
 .calendar-day-cell:hover:not(.empty-day) {
@@ -215,9 +215,10 @@
 
 .day-number {
   font-weight: 700;
-  font-size: 16px;
+  font-size: 14px;
   color: var(--text-primary);
-  margin-bottom: 10px;
+  margin-bottom: 6px;
+  line-height: 1;
 }
 
 .calendar-day-cell.today-day .day-number {
@@ -227,23 +228,26 @@
 .day-activities {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 4px;
   flex: 1;
   justify-content: flex-start;
+  overflow: hidden;
 }
 
 .activity-badge {
   background: var(--accent);
   color: white;
-  padding: 6px 8px;
-  border-radius: 4px;
-  font-size: 12px;
+  padding: 4px 6px;
+  border-radius: 3px;
+  font-size: 11px;
   font-weight: 600;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   cursor: pointer;
   transition: all 0.2s ease;
+  line-height: 1.2;
+  min-height: 18px;
 }
 
 .activity-badge:hover {
@@ -252,10 +256,11 @@
 }
 
 .more-activities-badge {
-  font-size: 11px;
+  font-size: 10px;
   color: var(--text-secondary);
   font-weight: 600;
-  padding: 4px 0;
+  padding: 2px 0;
+  line-height: 1;
 }
 
 /* Activity Popover */
@@ -271,7 +276,7 @@
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
   padding: 0;
   min-width: 340px;
-  z-index: 1000;
+  z-index: 50;
   margin-top: 10px;
   animation: popoverSlideDown 0.2s ease-out;
   pointer-events: auto;
@@ -820,8 +825,8 @@
 
 @media (max-width: 1024px) {
   .calendar-day-cell {
-    min-height: 100px;
-    padding: 10px;
+    min-height: 90px;
+    padding: 8px;
   }
 
   .calendar-month-title {
