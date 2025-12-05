@@ -33,7 +33,7 @@ const Dashboard = () => {
           <div className="dashboard-layout">
             {/* Left Column - Itinerary Items */}
             <section className="items-section">
-              <ItineraryItemsList />{" "}
+              {/* <ItineraryItemsList />{" "} */}
               <section className="calendar-section">
                 <TripsCalendar trips={trips} />
               </section>

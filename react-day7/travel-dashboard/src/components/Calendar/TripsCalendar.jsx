@@ -13,7 +13,7 @@ import {
   X,
   Calendar,
 } from "lucide-react";
-import "./trip-planner.css";
+import "../../styles/trip-planner.css";
 
 const TripPlanner = () => {
   const [currentMonth, setCurrentMonth] = useState(new Date(2024, 11, 1));
