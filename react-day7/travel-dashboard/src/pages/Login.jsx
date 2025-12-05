@@ -287,7 +287,7 @@ const Login = () => {
                     Forgot password?
                   </button>
 
-                  <div className="checkbox-label">
+                  <div className="checkbox">
                     <input
                       type="checkbox"
                       id="remember-me"
