@@ -13,6 +13,7 @@ import {
   X,
   Calendar,
 } from "lucide-react";
+import ItineraryMap from "../components/ItineraryMap";
 import LocationAutocomplete from "../../components/Calendar/LocationAutocomplete.jsx";
 
 import "../../styles/trip-planner.css";
@@ -176,7 +177,12 @@ const TripPlanner = () => {
   return (
     <div className="trip-planner-wrapper">
       <div className="trip-planner-container">
-        {/* Header */}
+        {/* ========== TRIP ROUTE MAP ========== */}
+        <div className="planner-map-section">
+          <ItineraryMap activities={activities} />
+        </div>
+
+        {/* Original planner-grid content below */}
         <div className="planner-grid">
           {/* Calendar Section */}
           <div className="planner-calendar-section">
@@ -431,18 +437,18 @@ const TripPlanner = () => {
             </div>
           </div>
         </div>
-      </div>
 
-      {/* Editor Modal */}
-      {showEditor && (
-        <ActivityEditor
-          activity={editingItem}
-          selectedDay={selectedDate}
-          categories={CATEGORIES}
-          onSave={handleSaveActivity}
-          onClose={() => setShowEditor(false)}
-        />
-      )}
+        {/* Editor Modal */}
+        {showEditor && (
+          <ActivityEditor
+            activity={editingItem}
+            selectedDay={selectedDate}
+            categories={CATEGORIES}
+            onSave={handleSaveActivity}
+            onClose={() => setShowEditor(false)}
+          />
+        )}
+      </div>
     </div>
   );
 };
