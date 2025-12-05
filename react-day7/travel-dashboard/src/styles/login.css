@@ -1,5 +1,5 @@
 /* ====================================
-   LOGIN PAGE - CLEANED
+   LOGIN PAGE - IMPROVED
    ==================================== */
 
 /* ====================================
@@ -38,12 +38,14 @@
   font-size: 3rem;
   margin-bottom: 16px;
   animation: wave 3s ease-in-out infinite;
+  display: inline-block;
 }
 
 .login-title {
   font-size: 1.75rem;
   font-weight: 700;
   margin-bottom: 8px;
+  margin-top: 0;
   background: linear-gradient(135deg, var(--primary), var(--accent));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -53,6 +55,7 @@
 .login-subtitle {
   color: var(--text-secondary);
   font-size: 14px;
+  margin: 0;
 }
 
 /* ====================================
@@ -68,32 +71,49 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 20px;
+  margin-top: 16px;
   gap: 16px;
 }
 
 /* ====================================
-   CHECKBOX
+   CHECKBOX - FIXED ALIGNMENT
    ==================================== */
 
 .checkbox-label {
   display: flex;
-  align-items: center;
-  gap: 8px;
+  /* align-items: center; */
+  gap: 10px;
   cursor: pointer;
-  user-select: none;
+  margin: 0;
+  padding: 4px 0;
 }
 
 .checkbox-input {
-  width: 18px;
-  height: 18px;
+  width: 20px;
+  height: 20px;
+  min-width: 20px;
+  min-height: 20px;
   cursor: pointer;
   accent-color: var(--primary);
+  margin: 0;
+  padding: 0;
+  flex-shrink: 0;
+  border: 2px solid var(--bg-secondary);
+  border-radius: 4px;
+}
+
+.checkbox-input:checked {
+  background-color: var(--primary);
+  border-color: var(--primary);
 }
 
 .checkbox-text {
-  font-size: 14px;
-  font-weight: 500;
+  font-size: 12px;
+  font-weight: 400;
   color: var(--text-primary);
+  /* line-height: 20px; */
+  /* margin-left: 100px; */
+  padding: 0;
 }
 
 /* ====================================
@@ -104,12 +124,15 @@
   background: none;
   border: none;
   padding: 0;
+  margin: 0;
   font-size: 14px;
   font-weight: 600;
   color: var(--primary);
   text-decoration: none;
   cursor: pointer;
   transition: var(--transition);
+  white-space: nowrap;
+  line-height: 1.4;
 }
 
 .forgot-password:hover:not(:disabled) {
@@ -122,6 +145,12 @@
   cursor: not-allowed;
 }
 
+.forgot-password:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
 /* ====================================
    BUTTONS
    ==================================== */
@@ -129,6 +158,7 @@
 .submit-btn {
   width: 100%;
   margin-bottom: 0;
+  margin-top: 0;
 }
 
 .google-btn {
@@ -138,10 +168,18 @@
   justify-content: center;
   gap: 10px;
   border: 2px solid var(--bg-secondary);
+  transition: all 0.2s ease;
 }
 
-.google-btn:hover {
+.google-btn:hover:not(:disabled) {
   border-color: var(--primary);
+  background: var(--primary-light);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.google-btn:active:not(:disabled) {
+  transform: translateY(0);
 }
 
 /* ====================================
@@ -175,9 +213,11 @@
 .divider-text {
   padding: 0 12px;
   font-size: 12px;
+  font-weight: 600;
   color: var(--text-muted);
   background: var(--surface);
   position: relative;
+  letter-spacing: 0.5px;
 }
 
 /* ====================================
@@ -198,10 +238,12 @@
   font-weight: 600;
   cursor: pointer;
   margin-left: 6px;
+  padding: 0;
   transition: var(--transition);
+  font-size: 14px;
 }
 
-.toggle-btn:hover {
+.toggle-btn:hover:not(:disabled) {
   color: var(--accent);
   text-decoration: underline;
 }
@@ -209,6 +251,12 @@
 .toggle-btn:disabled {
   opacity: 0.6;
   cursor: not-allowed;
+}
+
+.toggle-btn:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+  border-radius: 2px;
 }
 
 /* ====================================
@@ -220,16 +268,29 @@
   text-align: center;
   font-size: 12px;
   color: var(--text-muted);
+  line-height: 1.5;
+}
+
+.privacy-notice p {
+  margin: 0;
 }
 
 .privacy-notice a {
   color: var(--primary);
   text-decoration: none;
   transition: var(--transition);
+  font-weight: 500;
 }
 
 .privacy-notice a:hover {
   text-decoration: underline;
+  color: var(--accent);
+}
+
+.privacy-notice a:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+  border-radius: 2px;
 }
 
 /* ====================================
@@ -266,7 +327,7 @@
   border: 2px solid var(--bg-secondary);
   border-radius: var(--radius-md);
   cursor: pointer;
-  transition: var(--transition);
+  transition: all 0.2s ease;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -277,11 +338,21 @@
   color: var(--primary);
   border-color: var(--primary);
   background: var(--primary-light);
+  transform: translateY(-1px);
+}
+
+.back-btn:active:not(:disabled) {
+  transform: translateY(0);
 }
 
 .back-btn:disabled {
   opacity: 0.6;
   cursor: not-allowed;
+}
+
+.back-btn:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
 }
 
 /* ====================================
@@ -299,6 +370,7 @@
   font-size: 14px;
   font-weight: 500;
   animation: fadeIn 0.3s ease-out;
+  line-height: 1.4;
 }
 
 .success-banner {
@@ -318,6 +390,64 @@
 .error-icon {
   font-size: 18px;
   flex-shrink: 0;
+  line-height: 1;
+}
+
+/* ====================================
+   ANIMATIONS
+   ==================================== */
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes wave {
+  0%, 100% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(-10deg);
+  }
+  75% {
+    transform: rotate(10deg);
+  }
+}
+
+@keyframes shake {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  10%, 30%, 50%, 70%, 90% {
+    transform: translateX(-4px);
+  }
+  20%, 40%, 60%, 80% {
+    transform: translateX(4px);
+  }
+}
+
+/* ====================================
+   FOCUS STYLES
+   ==================================== */
+
+.checkbox-input:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
 }
 
 /* ====================================
@@ -333,13 +463,32 @@
     font-size: 1.5rem;
   }
 
+  .login-icon {
+    font-size: 2.5rem;
+  }
+
   .form-options {
     flex-direction: column;
     align-items: flex-start;
     gap: 12px;
   }
 
+  .checkbox-label {
+    width: 100%;
+  }
+
   .forgot-password {
     align-self: flex-end;
+    width: auto;
+  }
+}
+
+@media (max-width: 360px) {
+  .login-card {
+    padding: 24px 20px;
+  }
+
+  .login-title {
+    font-size: 1.375rem;
   }
 }

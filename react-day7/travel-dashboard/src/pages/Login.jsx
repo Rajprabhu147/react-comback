@@ -256,8 +256,9 @@ const Login = () => {
 
               {!isSignUp && (
                 <div className="form-options">
-                  <label className="checkbox-label">
+                  <label className="checkbox-label" htmlFor="rememberMe">
                     <input
+                      id="rememberMe"
                       type="checkbox"
                       checked={rememberMe}
                       onChange={(e) => setRememberMe(e.target.checked)}
