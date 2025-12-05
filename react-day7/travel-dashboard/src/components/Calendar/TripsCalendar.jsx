@@ -175,14 +175,13 @@ const TripPlanner = () => {
     <div className="trip-planner-wrapper">
       <div className="trip-planner-container">
         {/* Header */}
-        <div className="planner-header">
-          <h2 className="planner-title">✈️ Trip Planner</h2>
-          <p className="planner-subtitle">Organize your adventures with ease</p>
-        </div>
-
         <div className="planner-grid">
           {/* Calendar Section */}
           <div className="planner-calendar-section">
+            <div className="planner-header">
+              <h3 className="planner-title">✈️ Trip Planner</h3>
+            </div>
+
             <div className="calendar-controls">
               <h2 className="calendar-month-title">
                 {monthNames[currentMonth.getMonth()]}{" "}
