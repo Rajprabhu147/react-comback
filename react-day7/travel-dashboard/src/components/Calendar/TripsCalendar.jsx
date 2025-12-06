@@ -13,7 +13,7 @@ import {
   X,
   Calendar,
 } from "lucide-react";
-import ItineraryMap from "../components/ItineraryMap";
+import ItineraryMap from "../../components/Calendar/TripsCalendar";
 import LocationAutocomplete from "../../components/Calendar/LocationAutocomplete.jsx";
 
 import "../../styles/trip-planner.css";
