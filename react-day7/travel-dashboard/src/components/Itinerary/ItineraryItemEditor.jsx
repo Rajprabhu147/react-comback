@@ -61,12 +61,11 @@ const ItineraryItemEditor = ({ item, onSave, onClose }) => {
   useEffect(() => {
     if (item) {
       const merged = { ...DEFAULT_FORM, ...item };
-      setFormData((prev) => ({ ...merged }));
+      setFormData(merged);
     } else {
       setFormData({ ...DEFAULT_FORM });
     }
     setErrors({});
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [item]);
 
   // Helpers to parse and build ISO date
