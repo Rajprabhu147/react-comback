@@ -1,23 +1,11 @@
-import React, {
-  createContext,
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
+// src/context/ItineraryProvider.jsx
+
+import React, { useCallback, useEffect, useMemo, useState } from "react";
+import ItineraryContext from "./ItineraryContext";
 
 const LOCAL_KEY = "tripItineraryItems";
 
-export const ItineraryContext = createContext({
-  items: [],
-  addItem: () => {},
-  updateItem: () => {},
-  deleteItem: () => {},
-  toggleComplete: () => {},
-  openEditor: () => {},
-});
-
-export const ItineraryProvider = ({ children, tripStartISO = null }) => {
+const ItineraryProvider = ({ children, tripStartISO = null }) => {
   const [items, setItems] = useState(() => {
     try {
       const raw = localStorage.getItem(LOCAL_KEY);

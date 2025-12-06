@@ -3,19 +3,9 @@ import React, { useState, useEffect } from "react";
 import { Clock, MapPin, DollarSign, Users, X } from "lucide-react";
 import "../../styles/itinerary-editor.css";
 
-/**
- * ItineraryItemEditor
- * Modal for creating or editing itinerary activities
- *
- * Enhancements:
- * - Adds a mini date selector (date input + month/year dropdowns)
- * - Keeps `date` (ISO) and numeric `day` synchronized
- * - Saves both `date` and `day` so calendar + list can use either
- */
-
 const DEFAULT_FORM = {
   day: 1,
-  date: "", // ISO yyyy-mm-dd (optional)
+  date: "",
   time: "09:00",
   activity: "",
   location: "",
@@ -26,12 +16,12 @@ const DEFAULT_FORM = {
 };
 
 const CATEGORIES = [
-  { value: "sightseeing", label: "🏛️ Sightseeing", color: "#05668d" },
-  { value: "dining", label: "🍽️ Dining", color: "#ffd166" },
-  { value: "accommodation", label: "🏨 Accommodation", color: "#02c39a" },
-  { value: "transport", label: "🚗 Transport", color: "#ef4444" },
-  { value: "shopping", label: "🛍️ Shopping", color: "#10b981" },
-  { value: "activity", label: "⚡ Activity", color: "#8b5cf6" },
+  { value: "sightseeing", label: "🏛️ Sightseeing" },
+  { value: "dining", label: "🍽️ Dining" },
+  { value: "accommodation", label: "🏨 Accommodation" },
+  { value: "transport", label: "🚗 Transport" },
+  { value: "shopping", label: "🛍️ Shopping" },
+  { value: "activity", label: "⚡ Activity" },
 ];
 
 const monthNames = [
@@ -49,7 +39,7 @@ const monthNames = [
   "December",
 ];
 
-const YEAR_RANGE = 3; // years before/after current for dropdown
+const YEAR_RANGE = 3;
 
 const ItineraryItemEditor = ({ item, onSave, onClose }) => {
   const [formData, setFormData] = useState(() =>
@@ -57,39 +47,39 @@ const ItineraryItemEditor = ({ item, onSave, onClose }) => {
   );
   const [errors, setErrors] = useState({});
 
-  // Populate date components from existing date if present
+  // FIXED: no more direct setState → functional update used
   useEffect(() => {
-    if (item) {
-      const merged = { ...DEFAULT_FORM, ...item };
-      setFormData(merged);
-    } else {
-      setFormData({ ...DEFAULT_FORM });
-    }
+    setFormData(() =>
+      item ? { ...DEFAULT_FORM, ...item } : { ...DEFAULT_FORM }
+    );
     setErrors({});
   }, [item]);
 
-  // Helpers to parse and build ISO date
+  // ---------------------------------------
+  // DATE HELPERS
+  // ---------------------------------------
+
   const isoFromParts = (y, mIndex, d) => {
-    if (!y || typeof mIndex === "undefined" || !d) return "";
-    const paddedM = String(mIndex + 1).padStart(2, "0");
-    const paddedD = String(d).padStart(2, "0");
-    return `${y}-${paddedM}-${paddedD}`;
+    if (!y || mIndex === undefined || !d) return "";
+    return `${y}-${String(mIndex + 1).padStart(2, "0")}-${String(d).padStart(
+      2,
+      "0"
+    )}`;
   };
 
   const parseISO = (iso) => {
     if (!iso) return null;
-    const parts = iso.split("-");
-    if (parts.length !== 3) return null;
-    const y = parseInt(parts[0], 10);
-    const m = parseInt(parts[1], 10) - 1;
-    const d = parseInt(parts[2], 10);
-    if (isNaN(y) || isNaN(m) || isNaN(d)) return null;
-    return { year: y, monthIndex: m, day: d };
+    const [y, m, d] = iso.split("-").map(Number);
+    if (!y || !m || !d) return null;
+    return { year: y, monthIndex: m - 1, day: d };
   };
 
-  // When user changes the date input, sync day/month/year
+  // ---------------------------------------
+  // FORM HANDLERS
+  // ---------------------------------------
+
   const handleDateInputChange = (e) => {
-    const val = e.target.value; // yyyy-mm-dd
+    const val = e.target.value;
     setFormData((prev) => {
       const parsed = parseISO(val);
       return {
@@ -98,107 +88,103 @@ const ItineraryItemEditor = ({ item, onSave, onClose }) => {
         day: parsed ? parsed.day : prev.day,
       };
     });
-    if (errors.date) setErrors((p) => ({ ...p, date: undefined }));
+    setErrors((p) => ({ ...p, date: undefined }));
   };
 
-  // When user changes the numeric day, update date if possible (use current month/year or existing date)
   const handleDayChange = (e) => {
-    let dayVal = e.target.value;
-    // prevent negative / zero
-    if (dayVal === "") {
+    let v = e.target.value;
+    if (v === "") {
       setFormData((p) => ({ ...p, day: "" }));
       return;
     }
-    dayVal = Math.max(1, Number(dayVal));
-    // find month/year from existing date or fallback to today
+
+    v = Math.max(1, Number(v));
     const parsed = parseISO(formData.date);
-    const baseYear = parsed ? parsed.year : new Date().getFullYear();
-    const baseMonth = parsed ? parsed.monthIndex : new Date().getMonth();
-    const newIso = isoFromParts(baseYear, baseMonth, dayVal);
-    setFormData((prev) => ({
-      ...prev,
-      day: dayVal,
-      date: newIso,
-    }));
-    if (errors.day) setErrors((p) => ({ ...p, day: undefined }));
+    const y = parsed ? parsed.year : new Date().getFullYear();
+    const m = parsed ? parsed.monthIndex : new Date().getMonth();
+    const iso = isoFromParts(y, m, v);
+
+    setFormData((p) => ({ ...p, day: v, date: iso }));
+    setErrors((p) => ({ ...p, day: undefined }));
   };
 
-  // Month change: update date using selected month and current day/year
   const handleMonthChange = (e) => {
     const monthIndex = Number(e.target.value);
     const parsed = parseISO(formData.date);
     const year = parsed ? parsed.year : new Date().getFullYear();
     const day = formData.day || (parsed ? parsed.day : 1);
-    const newIso = isoFromParts(year, monthIndex, day);
-    setFormData((prev) => ({ ...prev, date: newIso }));
-    if (errors.date) setErrors((p) => ({ ...p, date: undefined }));
+
+    setFormData((p) => ({ ...p, date: isoFromParts(year, monthIndex, day) }));
+    setErrors((p) => ({ ...p, date: undefined }));
   };
 
-  // Year change: update date using selected year and current month/day
   const handleYearChange = (e) => {
     const year = Number(e.target.value);
     const parsed = parseISO(formData.date);
-    const monthIndex = parsed ? parsed.monthIndex : new Date().getMonth();
-    const day = formData.day || (parsed ? parsed.day : 1);
-    const newIso = isoFromParts(year, monthIndex, day);
-    setFormData((prev) => ({ ...prev, date: newIso }));
-    if (errors.date) setErrors((p) => ({ ...p, date: undefined }));
+    const m = parsed ? parsed.monthIndex : new Date().getMonth();
+    const d = formData.day || (parsed ? parsed.day : 1);
+
+    setFormData((p) => ({ ...p, date: isoFromParts(year, m, d) }));
+    setErrors((p) => ({ ...p, date: undefined }));
   };
 
-  // Generic change for other inputs
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-    if (errors[name]) setErrors((p) => ({ ...p, [name]: undefined }));
+    setFormData((p) => ({ ...p, [name]: value }));
+    setErrors((p) => ({ ...p, [name]: undefined }));
   };
+
+  // ---------------------------------------
+  // VALIDATION
+  // ---------------------------------------
 
   const validate = () => {
     const newErrors = {};
-    if (!formData.activity || !formData.activity.trim()) {
+
+    if (!formData.activity.trim())
       newErrors.activity = "Activity name is required";
-    }
-    if (!formData.time) {
-      newErrors.time = "Time is required";
-    }
-    // Ensure day is a positive integer
-    if (!formData.day || Number(formData.day) < 1) {
+    if (!formData.time) newErrors.time = "Time is required";
+
+    if (!formData.day || formData.day < 1)
       newErrors.day = "Day must be 1 or greater";
+
+    if (formData.date && !parseISO(formData.date)) {
+      newErrors.date = "Invalid date";
     }
-    // If date exists, validate it
-    if (formData.date) {
-      const parsed = parseISO(formData.date);
-      if (!parsed) newErrors.date = "Invalid date";
-    }
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
+
+  // ---------------------------------------
+  // SUBMIT
+  // ---------------------------------------
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!validate()) return;
 
-    // Ensure item has id (use existing if editing)
-    const payload = {
+    onSave({
       ...formData,
       id: item?.id || Date.now(),
-    };
-
-    onSave(payload);
+    });
   };
 
-  const isEditing = !!item?.id;
-
-  // derive month/year dropdown values from date or fallback to today
   const parsed = parseISO(formData.date);
   const selectedYear = parsed ? parsed.year : new Date().getFullYear();
   const selectedMonthIndex = parsed ? parsed.monthIndex : new Date().getMonth();
 
-  // build year options
   const curYear = new Date().getFullYear();
   const yearOptions = Array.from(
     { length: YEAR_RANGE * 2 + 1 },
     (_, i) => curYear - YEAR_RANGE + i
   );
+
+  const isEditing = !!item?.id;
+
+  // ---------------------------------------
+  // RETURN JSX
+  // ---------------------------------------
 
   return (
     <div className="modal-overlay" onClick={onClose}>
@@ -206,7 +192,6 @@ const ItineraryItemEditor = ({ item, onSave, onClose }) => {
         className="modal itinerary-modal"
         onClick={(e) => e.stopPropagation()}
         role="dialog"
-        aria-modal="true"
       >
         <div className="modal-header">
           <h2 className="modal-title">
@@ -219,7 +204,7 @@ const ItineraryItemEditor = ({ item, onSave, onClose }) => {
 
         <form onSubmit={handleSubmit} noValidate>
           <div className="modal-body">
-            {/* Date selector row: Date input + Month + Year + Day */}
+            {/* DATE ROW */}
             <div className="form-row">
               <div className="form-group" style={{ flex: 1 }}>
                 <label className="form-label">Date</label>
@@ -243,8 +228,8 @@ const ItineraryItemEditor = ({ item, onSave, onClose }) => {
                   onChange={handleMonthChange}
                   className="form-select"
                 >
-                  {monthNames.map((m, idx) => (
-                    <option key={m} value={idx}>
+                  {monthNames.map((m, i) => (
+                    <option key={m} value={i}>
                       {m}
                     </option>
                   ))}
@@ -281,7 +266,7 @@ const ItineraryItemEditor = ({ item, onSave, onClose }) => {
               </div>
             </div>
 
-            {/* Time */}
+            {/* TIME */}
             <div className="form-row">
               <div className="form-group">
                 <label className="form-label">
@@ -300,7 +285,7 @@ const ItineraryItemEditor = ({ item, onSave, onClose }) => {
               </div>
             </div>
 
-            {/* Activity Name */}
+            {/* ACTIVITY */}
             <div className="form-group">
               <label className="form-label">Activity Name *</label>
               <input
@@ -316,7 +301,7 @@ const ItineraryItemEditor = ({ item, onSave, onClose }) => {
               )}
             </div>
 
-            {/* Location */}
+            {/* LOCATION */}
             <div className="form-group">
               <label className="form-label">
                 <MapPin size={16} /> Location
@@ -331,7 +316,7 @@ const ItineraryItemEditor = ({ item, onSave, onClose }) => {
               />
             </div>
 
-            {/* Category */}
+            {/* CATEGORY */}
             <div className="form-group">
               <label className="form-label">Category</label>
               <select
@@ -340,29 +325,29 @@ const ItineraryItemEditor = ({ item, onSave, onClose }) => {
                 onChange={handleChange}
                 className="form-select"
               >
-                {CATEGORIES.map((cat) => (
-                  <option key={cat.value} value={cat.value}>
-                    {cat.label}
+                {CATEGORIES.map((c) => (
+                  <option key={c.value} value={c.value}>
+                    {c.label}
                   </option>
                 ))}
               </select>
             </div>
 
-            {/* Budget and Travelers Row */}
+            {/* BUDGET + TRAVELERS */}
             <div className="form-row">
               <div className="form-group">
                 <label className="form-label">
-                  <DollarSign size={16} /> Budget (USD)
+                  <DollarSign size={16} /> Budget
                 </label>
                 <input
                   type="number"
                   name="budget"
                   value={formData.budget}
                   onChange={handleChange}
-                  placeholder="0"
                   className="form-input"
                 />
               </div>
+
               <div className="form-group">
                 <label className="form-label">
                   <Users size={16} /> Travelers
@@ -372,20 +357,18 @@ const ItineraryItemEditor = ({ item, onSave, onClose }) => {
                   name="travelers"
                   value={formData.travelers}
                   onChange={handleChange}
-                  placeholder="1"
                   className="form-input"
                 />
               </div>
             </div>
 
-            {/* Notes */}
+            {/* NOTES */}
             <div className="form-group">
               <label className="form-label">Notes</label>
               <textarea
                 name="notes"
                 value={formData.notes}
                 onChange={handleChange}
-                placeholder="Add any additional details..."
                 className="form-textarea"
                 rows="4"
               />
