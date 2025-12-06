@@ -3,7 +3,7 @@ import Header from "../components/Layout/Header";
 import FilterBar from "../components/Layout/FilterBar";
 import ItineraryItemsList from "../components/Itinerary/ItineraryItemsList";
 import AnalyticsCharts from "../components/Analytics/AnalyticsCharts";
-import TripPlanner from "../components/Calendar/TripPlanner";
+import TripPlanner from "../pages/TripPlanner";
 import { useRealtimeSubscription } from "../hooks/useRealtime";
 import "../styles/dashboard.css";
 

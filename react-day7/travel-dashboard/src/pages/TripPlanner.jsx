@@ -17,7 +17,7 @@ import {
 } from "lucide-react";
 import LocationAutocomplete from "../components/Calendar/LocationAutocomplete";
 import ItineraryMap from "../components/Calendar/ItineraryMap";
-import "../../styles/trip-planner.css";
+import "../styles/trip-planner.css";
 
 const TripPlanner = () => {
   const [currentMonth, setCurrentMonth] = useState(new Date(2024, 11, 1));
