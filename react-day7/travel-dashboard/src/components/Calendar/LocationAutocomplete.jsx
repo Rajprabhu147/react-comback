@@ -1,11 +1,11 @@
-// components/LocationAutocomplete.jsx
+// src/components/Calendar/LocationAutocomplete.jsx
 
 import React, { useState, useEffect, useRef } from "react";
 import { MapPin, X } from "lucide-react";
 import {
   getLocationSuggestions,
   formatLocationString,
-} from "../../services/locationService.js";
+} from "../../services/locationService";
 import "../../styles/location-autocomplete.css";
 
 const LocationAutocomplete = ({

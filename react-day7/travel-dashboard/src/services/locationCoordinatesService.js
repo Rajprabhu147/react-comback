@@ -1,9 +1,4 @@
-// services/locationCoordinatesService.js
-
-/**
- * Location coordinates database for popular travel destinations
- * Maps location names to latitude and longitude
- */
+// src/services/locationCoordinatesService.js
 
 const LOCATION_COORDINATES = {
   // Paris
@@ -76,7 +71,7 @@ export const getCoordinates = (locationName) => {
     return LOCATION_COORDINATES[locationName];
   }
 
-  // Try partial match (for formatted strings like "Eiffel Tower, Paris, France")
+  // Try partial match
   for (const [key, coords] of Object.entries(LOCATION_COORDINATES)) {
     if (locationName.toLowerCase().includes(key.toLowerCase())) {
       return coords;

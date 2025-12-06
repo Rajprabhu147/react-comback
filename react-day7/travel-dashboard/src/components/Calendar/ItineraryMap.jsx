@@ -1,24 +1,41 @@
-// components/ItineraryMap.jsx
-
+// src/components/Calendar/ItineraryMap.jsx
 import React, { useEffect, useRef, useState } from "react";
 import { MapPin, Maximize2, Navigation } from "lucide-react";
 import {
   getActivitiesCoordinates,
   calculateBounds,
-} from "../services/locationCoordinatesService";
+} from "../../services/locationCoordinatesService";
 import "../../styles/itinerary-map.css";
 
 const ItineraryMap = ({ activities }) => {
   const mapContainer = useRef(null);
   const map = useRef(null);
   const [isLoaded, setIsLoaded] = useState(false);
-  const [selectedMarker, setSelectedMarker] = useState(null);
+  // removed selectedMarker because it was unused
 
-  // Get coordinates for all activities
-  const activitiesWithCoords = getActivitiesCoordinates(activities);
+  // Get coordinates for all activities (pure function)
+  const activitiesWithCoords = getActivitiesCoordinates(activities || []);
+
+  // initializeMap is declared before the effect that references it
+  function initializeMap() {
+    if (!mapContainer.current || map.current) return;
+    const L = window.L;
+    if (!L) return;
+
+    // Initialize map with default center
+    map.current = L.map(mapContainer.current).setView([20, 0], 2);
+
+    // Add OpenStreetMap tiles
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      attribution: "© OpenStreetMap contributors",
+      maxZoom: 19,
+    }).addTo(map.current);
+
+    setIsLoaded(true);
+  }
 
   useEffect(() => {
-    // Load Leaflet library dynamically
+    // Load Leaflet library dynamically if needed
     if (!window.L) {
       const leafletCss = document.createElement("link");
       leafletCss.rel = "stylesheet";
@@ -35,33 +52,21 @@ const ItineraryMap = ({ activities }) => {
     } else {
       initializeMap();
     }
-  }, []);
 
-  const initializeMap = () => {
-    if (!mapContainer.current || map.current) return;
+    // cleanup is optional — we don't remove the script here so other components can reuse it
+    // return () => { /* optional cleanup */ };
+  }, []); // run once
 
-    const L = window.L;
-
-    // Initialize map with default center
-    map.current = L.map(mapContainer.current).setView([20, 0], 2);
-
-    // Add OpenStreetMap tiles
-    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-      attribution: "© OpenStreetMap contributors",
-      maxZoom: 19,
-    }).addTo(map.current);
-
-    setIsLoaded(true);
-  };
-
-  // Update markers when activities change
+  // Update markers and route whenever map is ready and activities change
   useEffect(() => {
     if (!isLoaded || !map.current || activitiesWithCoords.length === 0) return;
 
     const L = window.L;
+    if (!L) return;
 
-    // Clear existing markers and layers
+    // Remove previous markers and polylines (only the ones we added)
     map.current.eachLayer((layer) => {
+      // Leaflet classes: Marker and Polyline
       if (layer instanceof L.Marker || layer instanceof L.Polyline) {
         map.current.removeLayer(layer);
       }
@@ -84,12 +89,12 @@ const ItineraryMap = ({ activities }) => {
         className: `custom-marker ${iconClass}`,
         html: `<div class="marker-content" style="background-color: ${color};">${dayNumber}</div>`,
         iconSize: [40, 40],
-        className: "",
       });
     };
 
     // Add markers for each activity
     activitiesWithCoords.forEach((activity, index) => {
+      if (!activity?.coordinates) return;
       const isFirst = index === 0;
       const isLast = index === activitiesWithCoords.length - 1;
       const icon = createIcon(activity.day, isFirst, isLast);
@@ -105,12 +110,10 @@ const ItineraryMap = ({ activities }) => {
         <div class="map-popup">
           <div class="popup-header">
             <span class="popup-day">Day ${activity.day}</span>
-            <span class="popup-time">${activity.time}</span>
+            <span class="popup-time">${activity.time || ""}</span>
           </div>
-          <div class="popup-activity">${activity.activity}</div>
-          <div class="popup-location">
-            <MapPin size={12} /> ${activity.location}
-          </div>
+          <div class="popup-activity">${activity.activity || ""}</div>
+          <div class="popup-location">📍 ${activity.location || ""}</div>
           ${
             activity.budget
               ? `<div class="popup-budget">💵 $${activity.budget}</div>`
@@ -125,17 +128,17 @@ const ItineraryMap = ({ activities }) => {
       `;
 
       marker.bindPopup(popupContent);
-      marker.on("click", () => setSelectedMarker(activity.id));
+      // if you want to track clicked marker later, you can setState here
+      // marker.on("click", () => setSelectedMarker(activity.id));
     });
 
-    // Draw polyline connecting all markers
+    // Draw polyline connecting all markers (no unused variable)
     if (activitiesWithCoords.length > 1) {
       const polylinePoints = activitiesWithCoords.map((activity) => [
         activity.coordinates.lat,
         activity.coordinates.lng,
       ]);
-
-      const polyline = L.polyline(polylinePoints, {
+      L.polyline(polylinePoints, {
         color: "#0ea5e9",
         weight: 3,
         opacity: 0.7,
@@ -148,7 +151,6 @@ const ItineraryMap = ({ activities }) => {
       activitiesWithCoords.map((a) => a.coordinates)
     );
     if (bounds) {
-      const L = window.L;
       const mapBounds = L.latLngBounds(
         [bounds.bounds.minLat, bounds.bounds.minLng],
         [bounds.bounds.maxLat, bounds.bounds.maxLng]

@@ -1,4 +1,6 @@
-import React, { useState, useEffect } from "react";
+// src/pages/TripPlanner.jsx
+
+import React, { useState } from "react";
 import {
   ChevronLeft,
   ChevronRight,
@@ -13,8 +15,8 @@ import {
   X,
   Calendar,
 } from "lucide-react";
-import LocationAutocomplete from "../../components/Calendar/LocationAutocomplete.jsx";
-
+import LocationAutocomplete from "../Calendar/LocationAutocomplete";
+import ItineraryMap from "../Calendar/ItineraryMap";
 import "../../styles/trip-planner.css";
 
 const TripPlanner = () => {
@@ -176,7 +178,7 @@ const TripPlanner = () => {
   return (
     <div className="trip-planner-wrapper">
       <div className="trip-planner-container">
-        {/* Header */}
+        {/* Calendar and Itinerary at Top */}
         <div className="planner-grid">
           {/* Calendar Section */}
           <div className="planner-calendar-section">
@@ -430,6 +432,11 @@ const TripPlanner = () => {
               )}
             </div>
           </div>
+        </div>
+
+        {/* Trip Route Map at Bottom - Full Width */}
+        <div className="planner-map-section">
+          <ItineraryMap activities={activities} />
         </div>
       </div>
 

@@ -3,7 +3,7 @@ import Header from "../components/Layout/Header";
 import FilterBar from "../components/Layout/FilterBar";
 import ItineraryItemsList from "../components/Itinerary/ItineraryItemsList";
 import AnalyticsCharts from "../components/Analytics/AnalyticsCharts";
-import TripsCalendar from "../components/Calendar/TripsCalendar";
+import TripPlanner from "../components/Calendar/TripPlanner";
 import { useRealtimeSubscription } from "../hooks/useRealtime";
 import "../styles/dashboard.css";
 
@@ -35,7 +35,7 @@ const Dashboard = () => {
             <section className="items-section">
               {/* <ItineraryItemsList />{" "} */}
               <section className="calendar-section">
-                <TripsCalendar trips={trips} />
+                <TripPlanner trips={trips} />
               </section>
             </section>
 
