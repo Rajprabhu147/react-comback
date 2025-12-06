@@ -1,4 +1,5 @@
 // src/components/Calendar/ItineraryMap.jsx
+
 import React, { useEffect, useRef, useState } from "react";
 import { MapPin, Maximize2, Navigation } from "lucide-react";
 import {
@@ -11,31 +12,13 @@ const ItineraryMap = ({ activities }) => {
   const mapContainer = useRef(null);
   const map = useRef(null);
   const [isLoaded, setIsLoaded] = useState(false);
-  // removed selectedMarker because it was unused
+  const [selectedMarker, setSelectedMarker] = useState(null);
 
-  // Get coordinates for all activities (pure function)
-  const activitiesWithCoords = getActivitiesCoordinates(activities || []);
-
-  // initializeMap is declared before the effect that references it
-  function initializeMap() {
-    if (!mapContainer.current || map.current) return;
-    const L = window.L;
-    if (!L) return;
-
-    // Initialize map with default center
-    map.current = L.map(mapContainer.current).setView([20, 0], 2);
-
-    // Add OpenStreetMap tiles
-    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-      attribution: "© OpenStreetMap contributors",
-      maxZoom: 19,
-    }).addTo(map.current);
-
-    setIsLoaded(true);
-  }
+  // Get coordinates for all activities
+  const activitiesWithCoords = getActivitiesCoordinates(activities);
 
   useEffect(() => {
-    // Load Leaflet library dynamically if needed
+    // Load Leaflet library dynamically
     if (!window.L) {
       const leafletCss = document.createElement("link");
       leafletCss.rel = "stylesheet";
@@ -52,41 +35,56 @@ const ItineraryMap = ({ activities }) => {
     } else {
       initializeMap();
     }
+  }, []);
 
-    // cleanup is optional — we don't remove the script here so other components can reuse it
-    // return () => { /* optional cleanup */ };
-  }, []); // run once
-
-  // Update markers and route whenever map is ready and activities change
-  useEffect(() => {
-    if (!isLoaded || !map.current || activitiesWithCoords.length === 0) return;
+  const initializeMap = () => {
+    if (!mapContainer.current || map.current) return;
 
     const L = window.L;
-    if (!L) return;
 
-    // Remove previous markers and polylines (only the ones we added)
+    // Initialize map with default center
+    map.current = L.map(mapContainer.current).setView([20, 0], 2);
+
+    // Add OpenStreetMap tiles
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      attribution: "© OpenStreetMap contributors",
+      maxZoom: 19,
+    }).addTo(map.current);
+
+    setIsLoaded(true);
+  };
+
+  // Update markers when activities change
+  useEffect(() => {
+    if (!isLoaded || !map.current) return;
+
+    const L = window.L;
+
+    // Clear existing markers and layers
     map.current.eachLayer((layer) => {
-      // Leaflet classes: Marker and Polyline
       if (layer instanceof L.Marker || layer instanceof L.Polyline) {
         map.current.removeLayer(layer);
       }
     });
 
+    // If no activities with coordinates, show default view
+    if (activitiesWithCoords.length === 0) {
+      map.current.setView([20, 0], 2);
+      return;
+    }
+
     // Create custom icon for markers
     const createIcon = (dayNumber, isFirst, isLast) => {
       let color = "#05668d";
-      let iconClass = "";
 
       if (isFirst) {
         color = "#10b981";
-        iconClass = "start-marker";
       } else if (isLast) {
         color = "#ef4444";
-        iconClass = "end-marker";
       }
 
       return L.divIcon({
-        className: `custom-marker ${iconClass}`,
+        className: `custom-marker`,
         html: `<div class="marker-content" style="background-color: ${color};">${dayNumber}</div>`,
         iconSize: [40, 40],
       });
@@ -94,7 +92,6 @@ const ItineraryMap = ({ activities }) => {
 
     // Add markers for each activity
     activitiesWithCoords.forEach((activity, index) => {
-      if (!activity?.coordinates) return;
       const isFirst = index === 0;
       const isLast = index === activitiesWithCoords.length - 1;
       const icon = createIcon(activity.day, isFirst, isLast);
@@ -110,10 +107,10 @@ const ItineraryMap = ({ activities }) => {
         <div class="map-popup">
           <div class="popup-header">
             <span class="popup-day">Day ${activity.day}</span>
-            <span class="popup-time">${activity.time || ""}</span>
+            <span class="popup-time">${activity.time}</span>
           </div>
-          <div class="popup-activity">${activity.activity || ""}</div>
-          <div class="popup-location">📍 ${activity.location || ""}</div>
+          <div class="popup-activity">${activity.activity}</div>
+          <div class="popup-location">📍 ${activity.location}</div>
           ${
             activity.budget
               ? `<div class="popup-budget">💵 $${activity.budget}</div>`
@@ -128,16 +125,16 @@ const ItineraryMap = ({ activities }) => {
       `;
 
       marker.bindPopup(popupContent);
-      // if you want to track clicked marker later, you can setState here
-      // marker.on("click", () => setSelectedMarker(activity.id));
+      marker.on("click", () => setSelectedMarker(activity.id));
     });
 
-    // Draw polyline connecting all markers (no unused variable)
+    // Draw polyline connecting all markers
     if (activitiesWithCoords.length > 1) {
       const polylinePoints = activitiesWithCoords.map((activity) => [
         activity.coordinates.lat,
         activity.coordinates.lng,
       ]);
+
       L.polyline(polylinePoints, {
         color: "#0ea5e9",
         weight: 3,
@@ -146,16 +143,46 @@ const ItineraryMap = ({ activities }) => {
       }).addTo(map.current);
     }
 
-    // Fit map to bounds
+    // Fit map to bounds with proper validation
     const bounds = calculateBounds(
       activitiesWithCoords.map((a) => a.coordinates)
     );
+
     if (bounds) {
-      const mapBounds = L.latLngBounds(
-        [bounds.bounds.minLat, bounds.bounds.minLng],
-        [bounds.bounds.maxLat, bounds.bounds.maxLng]
-      );
-      map.current.fitBounds(mapBounds, { padding: [50, 50] });
+      try {
+        const mapBounds = L.latLngBounds(
+          [bounds.bounds.minLat, bounds.bounds.minLng],
+          [bounds.bounds.maxLat, bounds.bounds.maxLng]
+        );
+
+        // Validate bounds before fitting
+        if (mapBounds.isValid()) {
+          map.current.fitBounds(mapBounds, { padding: [50, 50] });
+        } else {
+          // If bounds are invalid, center on first activity
+          if (activitiesWithCoords.length > 0) {
+            map.current.setView(
+              [
+                activitiesWithCoords[0].coordinates.lat,
+                activitiesWithCoords[0].coordinates.lng,
+              ],
+              10
+            );
+          }
+        }
+      } catch (error) {
+        console.error("Error fitting bounds:", error);
+        // Fallback: center on first activity
+        if (activitiesWithCoords.length > 0) {
+          map.current.setView(
+            [
+              activitiesWithCoords[0].coordinates.lat,
+              activitiesWithCoords[0].coordinates.lng,
+            ],
+            10
+          );
+        }
+      }
     }
   }, [isLoaded, activitiesWithCoords]);
 
@@ -183,16 +210,33 @@ const ItineraryMap = ({ activities }) => {
 
   const handleCenterRoute = () => {
     if (!map.current || activitiesWithCoords.length === 0) return;
+
     const bounds = calculateBounds(
       activitiesWithCoords.map((a) => a.coordinates)
     );
+
     if (bounds) {
-      const L = window.L;
-      const mapBounds = L.latLngBounds(
-        [bounds.bounds.minLat, bounds.bounds.minLng],
-        [bounds.bounds.maxLat, bounds.bounds.maxLng]
-      );
-      map.current.fitBounds(mapBounds, { padding: [50, 50] });
+      try {
+        const L = window.L;
+        const mapBounds = L.latLngBounds(
+          [bounds.bounds.minLat, bounds.bounds.minLng],
+          [bounds.bounds.maxLat, bounds.bounds.maxLng]
+        );
+
+        if (mapBounds.isValid()) {
+          map.current.fitBounds(mapBounds, { padding: [50, 50] });
+        } else {
+          map.current.setView(
+            [
+              activitiesWithCoords[0].coordinates.lat,
+              activitiesWithCoords[0].coordinates.lng,
+            ],
+            10
+          );
+        }
+      } catch (error) {
+        console.error("Error centering route:", error);
+      }
     }
   };
 
@@ -243,7 +287,11 @@ const ItineraryMap = ({ activities }) => {
       {activitiesWithCoords.length === 0 && (
         <div className="map-empty-state">
           <div className="empty-icon">🗺️</div>
-          <p>No activities with locations to display on the map</p>
+          <p>No activities with recognized locations to display on the map</p>
+          <p className="empty-hint">
+            Add activities with location names from the database (e.g., "Eiffel
+            Tower", "Big Ben")
+          </p>
         </div>
       )}
 
