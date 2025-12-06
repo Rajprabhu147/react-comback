@@ -1,6 +1,6 @@
 // src/components/Calendar/LocationAutocomplete.jsx
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useMemo } from "react";
 import { MapPin, X } from "lucide-react";
 import {
   getLocationSuggestions,
@@ -13,24 +13,28 @@ const LocationAutocomplete = ({
   onChange,
   placeholder = "Enter location...",
 }) => {
-  const [suggestions, setSuggestions] = useState([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [highlightedIndex, setHighlightedIndex] = useState(-1);
   const inputRef = useRef(null);
   const suggestionsRef = useRef(null);
 
-  // Get suggestions as user types
-  useEffect(() => {
+  // Compute suggestions using useMemo instead of useState in useEffect
+  const suggestions = useMemo(() => {
     if (value && value.trim().length > 0) {
-      const newSuggestions = getLocationSuggestions(value);
-      setSuggestions(newSuggestions);
+      return getLocationSuggestions(value);
+    }
+    return [];
+  }, [value]);
+
+  // Show/hide suggestions based on computed suggestions
+  useEffect(() => {
+    if (value && value.trim().length > 0 && suggestions.length > 0) {
       setShowSuggestions(true);
       setHighlightedIndex(-1);
     } else {
-      setSuggestions([]);
       setShowSuggestions(false);
     }
-  }, [value]);
+  }, [value, suggestions]);
 
   // Handle click outside
   useEffect(() => {
@@ -89,7 +93,6 @@ const LocationAutocomplete = ({
       },
     });
     setShowSuggestions(false);
-    setSuggestions([]);
   };
 
   const clearInput = () => {
@@ -99,7 +102,6 @@ const LocationAutocomplete = ({
         value: "",
       },
     });
-    setSuggestions([]);
     inputRef.current?.focus();
   };
 

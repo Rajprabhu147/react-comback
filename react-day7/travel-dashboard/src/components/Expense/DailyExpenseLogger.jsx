@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from "react";
-import { Plus, Trash2, DollarSign, TrendingUp } from "lucide-react";
+// src/components/Expense/DailyExpenseLogger.jsx
+import React, { useState } from "react";
+import { Plus, Trash2 } from "lucide-react";
 import "../../styles/daily-expense-logger.css";
 
 /**
@@ -31,50 +32,60 @@ const DailyExpenseLogger = ({ onExpenseChange }) => {
   const [expenseCategory, setExpenseCategory] = useState("food");
   const [selectedDay, setSelectedDay] = useState(1);
 
-  // Save expenses to localStorage
+  // Save expenses to localStorage and notify parent
   const saveExpenses = (newExpenses) => {
     setExpenses(newExpenses);
-    localStorage.setItem("dailyExpenses", JSON.stringify(newExpenses));
+    try {
+      localStorage.setItem("dailyExpenses", JSON.stringify(newExpenses));
+    } catch (e) {
+      console.warn("Could not save expenses to localStorage", e);
+    }
     if (onExpenseChange) {
       onExpenseChange(newExpenses);
     }
   };
 
   const handleAddExpense = () => {
-    if (expenseName.trim() && expenseAmount) {
-      const newExpense = {
-        id: Date.now(),
-        name: expenseName,
-        amount: parseFloat(expenseAmount),
-        category: expenseCategory,
-        day: selectedDay,
-        date: new Date().toISOString().split("T")[0],
-      };
-      saveExpenses([...expenses, newExpense]);
-      setExpenseName("");
-      setExpenseAmount("");
-      setExpenseCategory("food");
-    }
+    if (!expenseName.trim() || expenseAmount === "") return;
+    const newExpense = {
+      id: Date.now(),
+      name: expenseName.trim(),
+      amount: parseFloat(expenseAmount),
+      category: expenseCategory,
+      day: Number(selectedDay),
+      date: new Date().toISOString().split("T")[0],
+    };
+    saveExpenses([...expenses, newExpense]);
+    setExpenseName("");
+    setExpenseAmount("");
+    setExpenseCategory("food");
   };
 
   const handleDeleteExpense = (id) => {
     saveExpenses(expenses.filter((e) => e.id !== id));
   };
 
-  // Get unique days
-  const uniqueDays = [...new Set(expenses.map((e) => e.day))].sort(
+  // Get unique days (used for rendering day buttons). If none, fall back to 1..7
+  const uniqueDays = [...new Set(expenses.map((e) => Number(e.day)))].sort(
     (a, b) => a - b
   );
+  const daysToShow = uniqueDays.length > 0 ? uniqueDays : [1, 2, 3, 4, 5, 6, 7];
 
   // Filter expenses for selected day
-  const dayExpenses = expenses.filter((e) => e.day === selectedDay);
-  const dayTotal = dayExpenses.reduce((sum, e) => sum + e.amount, 0);
-  const totalExpenses = expenses.reduce((sum, e) => sum + e.amount, 0);
+  const dayExpenses = expenses.filter(
+    (e) => Number(e.day) === Number(selectedDay)
+  );
+  const dayTotal = dayExpenses.reduce((sum, e) => sum + (e.amount || 0), 0);
+  const totalExpenses = expenses.reduce((sum, e) => sum + (e.amount || 0), 0);
 
-  // Get category icon
-  const getCategoryIcon = (category) => {
-    const cat = EXPENSE_CATEGORIES.find((c) => c.value === category);
-    return cat ? cat.label : "📌 Other";
+  // Return emoji and label separately from category label string
+  const getCategoryParts = (categoryValue) => {
+    const cat = EXPENSE_CATEGORIES.find((c) => c.value === categoryValue);
+    if (!cat) return { emoji: "📌", text: "Other" };
+    const parts = cat.label.split(" ");
+    const emoji = parts.shift();
+    const text = parts.join(" ").trim();
+    return { emoji, text };
   };
 
   return (
@@ -90,11 +101,13 @@ const DailyExpenseLogger = ({ onExpenseChange }) => {
       {/* Day Selector */}
       <div className="day-selector">
         <div className="day-buttons">
-          {[1, 2, 3, 4, 5, 6, 7].map((day) => (
+          {daysToShow.map((day) => (
             <button
               key={day}
               onClick={() => setSelectedDay(day)}
-              className={`day-btn ${selectedDay === day ? "active" : ""}`}
+              className={`day-btn ${
+                Number(selectedDay) === Number(day) ? "active" : ""
+              }`}
             >
               Day {day}
             </button>
@@ -108,7 +121,7 @@ const DailyExpenseLogger = ({ onExpenseChange }) => {
           type="text"
           value={expenseName}
           onChange={(e) => setExpenseName(e.target.value)}
-          onKeyPress={(e) => e.key === "Enter" && handleAddExpense()}
+          onKeyDown={(e) => e.key === "Enter" && handleAddExpense()}
           placeholder="Expense name"
           className="expense-input"
         />
@@ -116,7 +129,7 @@ const DailyExpenseLogger = ({ onExpenseChange }) => {
           type="number"
           value={expenseAmount}
           onChange={(e) => setExpenseAmount(e.target.value)}
-          onKeyPress={(e) => e.key === "Enter" && handleAddExpense()}
+          onKeyDown={(e) => e.key === "Enter" && handleAddExpense()}
           placeholder="Amount"
           className="expense-input amount"
           step="0.01"
@@ -133,7 +146,11 @@ const DailyExpenseLogger = ({ onExpenseChange }) => {
             </option>
           ))}
         </select>
-        <button onClick={handleAddExpense} className="add-expense-btn">
+        <button
+          onClick={handleAddExpense}
+          className="add-expense-btn"
+          title="Add expense"
+        >
           <Plus size={16} />
         </button>
       </div>
@@ -142,28 +159,28 @@ const DailyExpenseLogger = ({ onExpenseChange }) => {
       <div className="expenses-list-container">
         {dayExpenses.length > 0 ? (
           <div className="expenses-list">
-            {dayExpenses.map((expense) => (
-              <div key={expense.id} className="expense-item">
-                <div className="expense-icon">
-                  {getCategoryIcon(expense.category).split(" ")[0]}
-                </div>
-                <div className="expense-info">
-                  <span className="expense-name">{expense.name}</span>
-                  <span className="expense-category">
-                    {getCategoryIcon(expense.category).split(" ")[1]}
+            {dayExpenses.map((expense) => {
+              const { emoji, text } = getCategoryParts(expense.category);
+              return (
+                <div key={expense.id} className="expense-item">
+                  <div className="expense-icon">{emoji}</div>
+                  <div className="expense-info">
+                    <span className="expense-name">{expense.name}</span>
+                    <span className="expense-category">{text}</span>
+                  </div>
+                  <span className="expense-amount">
+                    ${(expense.amount || 0).toFixed(2)}
                   </span>
+                  <button
+                    onClick={() => handleDeleteExpense(expense.id)}
+                    className="delete-btn"
+                    title="Delete"
+                  >
+                    <Trash2 size={14} />
+                  </button>
                 </div>
-                <span className="expense-amount">
-                  ${expense.amount.toFixed(2)}
-                </span>
-                <button
-                  onClick={() => handleDeleteExpense(expense.id)}
-                  className="delete-btn"
-                >
-                  <Trash2 size={14} />
-                </button>
-              </div>
-            ))}
+              );
+            })}
             <div className="day-total">
               <span>Day {selectedDay} Total:</span>
               <strong>${dayTotal.toFixed(2)}</strong>
