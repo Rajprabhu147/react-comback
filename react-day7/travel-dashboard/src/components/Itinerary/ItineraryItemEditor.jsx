@@ -47,12 +47,13 @@ const ItineraryItemEditor = ({ item, onSave, onClose }) => {
   );
   const [errors, setErrors] = useState({});
 
-  // FIXED: no more direct setState → functional update used
+  // Avoid synchronous setState inside effect by scheduling update asynchronously.
   useEffect(() => {
-    setFormData(() =>
-      item ? { ...DEFAULT_FORM, ...item } : { ...DEFAULT_FORM }
-    );
-    setErrors({});
+    const t = setTimeout(() => {
+      setFormData(item ? { ...DEFAULT_FORM, ...item } : { ...DEFAULT_FORM });
+      setErrors({});
+    }, 0);
+    return () => clearTimeout(t);
   }, [item]);
 
   // ---------------------------------------
@@ -69,8 +70,10 @@ const ItineraryItemEditor = ({ item, onSave, onClose }) => {
 
   const parseISO = (iso) => {
     if (!iso) return null;
-    const [y, m, d] = iso.split("-").map(Number);
-    if (!y || !m || !d) return null;
+    const parts = iso.split("-");
+    if (parts.length !== 3) return null;
+    const [y, m, d] = parts.map((p) => Number(p));
+    if (Number.isNaN(y) || Number.isNaN(m) || Number.isNaN(d)) return null;
     return { year: y, monthIndex: m - 1, day: d };
   };
 
@@ -141,11 +144,11 @@ const ItineraryItemEditor = ({ item, onSave, onClose }) => {
   const validate = () => {
     const newErrors = {};
 
-    if (!formData.activity.trim())
+    if (!String(formData.activity || "").trim())
       newErrors.activity = "Activity name is required";
     if (!formData.time) newErrors.time = "Time is required";
 
-    if (!formData.day || formData.day < 1)
+    if (!formData.day || Number(formData.day) < 1)
       newErrors.day = "Day must be 1 or greater";
 
     if (formData.date && !parseISO(formData.date)) {
