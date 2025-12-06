@@ -15,8 +15,8 @@ import {
   X,
   Calendar,
 } from "lucide-react";
-import LocationAutocomplete from "../Calendar/LocationAutocomplete";
-import ItineraryMap from "../Calendar/ItineraryMap";
+import LocationAutocomplete from "../components/Calendar/LocationAutocomplete";
+import ItineraryMap from "../components/Calendar/ItineraryMap";
 import "../../styles/trip-planner.css";
 
 const TripPlanner = () => {
