@@ -27,7 +27,7 @@ const CalendarSection = ({
   return (
     <div className="planner-calendar-section">
       <div className="planner-header">
-        <h3 className="planner-title">✈️ Trip Planner</h3>
+        <h3 className="planner-title">✈️ Trip Activity Planner</h3>
       </div>
 
       <CalendarHeader
