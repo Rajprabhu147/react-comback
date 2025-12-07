@@ -307,7 +307,7 @@
 .filter-panel {
   display: flex;
   gap: 12px;
-  margin-bottom: 20px;
+  margin: 20px;
 }
 
 .filter-input,

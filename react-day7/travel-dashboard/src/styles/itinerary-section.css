@@ -28,8 +28,7 @@
 
 .itinerary-title {
   margin: 0;
-  font-size: 28px;
-  font-weight: 800;
+  font-size: 16px;
   color: var(--text-primary);
   display: flex;
   align-items: center;
@@ -149,10 +148,8 @@
 
 .day-title {
   margin: 0;
-  font-size: 20px;
-  font-weight: 800;
+  font-size: 16px;
   color: white;
-  letter-spacing: -0.5px;
 }
 
 .activity-count {
@@ -414,6 +411,25 @@
 }
 
 /* Responsive */
+@media (max-width: 1024px) {
+  .itinerary-title {
+    font-size: 14px;
+  }
+
+  .day-title {
+    font-size: 14px;
+  }
+
+  .activity-title {
+    font-size: 17px;
+  }
+
+  .activity-category-badge {
+    font-size: 11px;
+    padding: 5px 11px;
+  }
+}
+
 @media (max-width: 768px) {
   .planner-itinerary-section {
     gap: 18px;
@@ -424,40 +440,80 @@
   }
 
   .itinerary-title {
-    font-size: 24px;
+    font-size: 12px;
+    gap: 8px;
+  }
+
+  .itinerary-count {
+    padding: 5px 14px;
+    font-size: 13px;
+  }
+
+  .day-header {
+    padding: 14px 16px;
+    gap: 12px;
+  }
+
+  .day-header-content {
+    gap: 10px;
+  }
+
+  .day-title {
+    font-size: 12px;
+  }
+
+  .activity-count {
+    padding: 5px 10px;
+    font-size: 11px;
   }
 
   .activity-card {
     padding: 14px 16px;
     grid-template-columns: auto 1fr auto;
+    gap: 12px;
   }
 
   .activity-header-row {
-    flex-direction: column;
-    gap: 6px;
+    flex-direction: row;
+    gap: 8px;
+    align-items: center;
   }
 
-  .activity-time {
-    font-size: 12px;
-    padding: 4px 10px;
+  .activity-title-section {
+    gap: 8px;
   }
 
   .activity-title {
     font-size: 16px;
   }
 
+  .activity-category-badge {
+    font-size: 11px;
+    padding: 5px 10px;
+  }
+
+  .activity-time {
+    font-size: 12px;
+    padding: 5px 10px;
+  }
+
   .activity-details-grid {
-    grid-template-columns: 1fr;
     gap: 8px;
+    padding: 10px;
   }
 
   .detail-item {
-    padding: 10px 12px;
-    gap: 4px;
+    padding: 8px;
+    gap: 8px;
+  }
+
+  .detail-label {
+    font-size: 10px;
+    min-width: 55px;
   }
 
   .detail-value {
-    font-size: 13px;
+    font-size: 12px;
   }
 
   .action-btn {
@@ -467,9 +523,51 @@
   }
 }
 
+@media (max-width: 600px) {
+  .itinerary-title {
+    font-size: 10px;
+  }
+
+  .itinerary-count {
+    padding: 4px 12px;
+    font-size: 12px;
+  }
+
+  .day-title {
+    font-size: 10px;
+  }
+
+  .activity-title {
+    font-size: 15px;
+  }
+
+  .activity-category-badge {
+    font-size: 10px;
+    padding: 4px 9px;
+  }
+
+  .activity-card {
+    padding: 12px 14px;
+  }
+
+  .activity-details-grid {
+    padding: 8px;
+  }
+
+  .detail-item {
+    padding: 7px;
+  }
+
+  .action-btn {
+    width: 34px;
+    height: 34px;
+    font-size: 14px;
+  }
+}
+
 @media (max-width: 480px) {
   .planner-itinerary-section {
-    gap: 14px;
+    gap: 12px;
   }
 
   .itinerary-header {
@@ -477,52 +575,140 @@
   }
 
   .itinerary-title {
-    font-size: 20px;
+    font-size: 8px;
+    gap: 6px;
+  }
+
+  .itinerary-count {
+    padding: 3px 10px;
+    font-size: 11px;
+  }
+
+  .itinerary-subtitle {
+    font-size: 12px;
+  }
+
+  .day-group {
+    gap: 10px;
+  }
+
+  .day-header {
+    padding: 12px 14px;
+    gap: 10px;
+  }
+
+  .day-header-content {
+    gap: 8px;
+  }
+
+  .day-title {
+    font-size: 10px;
+  }
+
+  .activity-count {
+    padding: 4px 8px;
+    font-size: 10px;
   }
 
   .activity-card {
-    padding: 12px 14px;
+    padding: 10px 12px;
     grid-template-columns: 1fr;
-    gap: 10px;
+    gap: 8px;
   }
 
   .activity-checkbox {
     align-self: flex-start;
+    width: 18px;
+    height: 18px;
   }
 
-  .activity-title {
-    font-size: 15px;
+  .checkbox-input {
+    width: 18px;
+    height: 18px;
   }
 
   .activity-header-row {
+    flex-direction: column;
     gap: 6px;
+  }
+
+  .activity-title-section {
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+
+  .activity-title {
+    font-size: 14px;
+  }
+
+  .activity-category-badge {
+    font-size: 10px;
+    padding: 4px 8px;
   }
 
   .activity-time {
     font-size: 11px;
-    padding: 3px 8px;
+    padding: 4px 8px;
   }
 
   .activity-details-grid {
     gap: 6px;
+    padding: 6px;
   }
 
   .detail-item {
-    padding: 8px 10px;
-    font-size: 12px;
+    padding: 6px;
+    gap: 6px;
   }
 
   .detail-label {
-    font-size: 10px;
+    font-size: 9px;
+    min-width: 50px;
   }
 
   .detail-value {
-    font-size: 12px;
+    font-size: 11px;
   }
 
   .action-btn {
-    width: 34px;
-    height: 34px;
+    width: 32px;
+    height: 32px;
     font-size: 14px;
+  }
+}
+
+@media (max-width: 360px) {
+  .itinerary-title {
+    font-size: 8px;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .itinerary-count {
+    width: 100%;
+    text-align: center;
+  }
+
+  .activity-card {
+    padding: 8px 10px;
+  }
+
+  .activity-title {
+    font-size: 13px;
+  }
+
+  .detail-label {
+    font-size: 8px;
+    min-width: 45px;
+  }
+
+  .detail-value {
+    font-size: 10px;
+  }
+
+  .action-btn {
+    width: 30px;
+    height: 30px;
+    font-size: 12px;
   }
 }
