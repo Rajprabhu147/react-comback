@@ -1,11 +1,11 @@
 // src/components/Expense/DailyExpenseLogger.jsx
 import React, { useState } from "react";
-import { Plus, Trash2 } from "lucide-react";
+import { Plus, Trash2, Edit2, Check, X } from "lucide-react";
 import "../../styles/daily-expense-logger.css";
 
 /**
  * DailyExpenseLogger Component
- * Logs daily expenses and tracks spending
+ * Logs daily expenses and tracks spending with edit capability
  */
 
 const EXPENSE_CATEGORIES = [
@@ -31,6 +31,11 @@ const DailyExpenseLogger = ({ onExpenseChange }) => {
   const [expenseAmount, setExpenseAmount] = useState("");
   const [expenseCategory, setExpenseCategory] = useState("food");
   const [selectedDay, setSelectedDay] = useState(1);
+
+  const [editingId, setEditingId] = useState(null);
+  const [editName, setEditName] = useState("");
+  const [editAmount, setEditAmount] = useState("");
+  const [editCategory, setEditCategory] = useState("");
 
   // Save expenses to localStorage and notify parent
   const saveExpenses = (newExpenses) => {
@@ -65,11 +70,41 @@ const DailyExpenseLogger = ({ onExpenseChange }) => {
     saveExpenses(expenses.filter((e) => e.id !== id));
   };
 
-  // Get unique days (used for rendering day buttons). If none, fall back to 1..7
-  const uniqueDays = [...new Set(expenses.map((e) => Number(e.day)))].sort(
-    (a, b) => a - b
-  );
-  const daysToShow = uniqueDays.length > 0 ? uniqueDays : [1, 2, 3, 4, 5, 6, 7];
+  const startEdit = (expense) => {
+    setEditingId(expense.id);
+    setEditName(expense.name);
+    setEditAmount(expense.amount.toString());
+    setEditCategory(expense.category);
+  };
+
+  const saveEdit = (id) => {
+    if (!editName.trim() || editAmount === "") return;
+    const updatedExpenses = expenses.map((e) =>
+      e.id === id
+        ? {
+            ...e,
+            name: editName.trim(),
+            amount: parseFloat(editAmount),
+            category: editCategory,
+          }
+        : e
+    );
+    saveExpenses(updatedExpenses);
+    setEditingId(null);
+    setEditName("");
+    setEditAmount("");
+    setEditCategory("");
+  };
+
+  const cancelEdit = () => {
+    setEditingId(null);
+    setEditName("");
+    setEditAmount("");
+    setEditCategory("");
+  };
+
+  // Always show days 1-7
+  const daysToShow = [1, 2, 3, 4, 5, 6, 7];
 
   // Filter expenses for selected day
   const dayExpenses = expenses.filter(
@@ -161,23 +196,80 @@ const DailyExpenseLogger = ({ onExpenseChange }) => {
           <div className="expenses-list">
             {dayExpenses.map((expense) => {
               const { emoji, text } = getCategoryParts(expense.category);
+              const isEditing = editingId === expense.id;
+
               return (
                 <div key={expense.id} className="expense-item">
-                  <div className="expense-icon">{emoji}</div>
-                  <div className="expense-info">
-                    <span className="expense-name">{expense.name}</span>
-                    <span className="expense-category">{text}</span>
-                  </div>
-                  <span className="expense-amount">
-                    ${(expense.amount || 0).toFixed(2)}
-                  </span>
-                  <button
-                    onClick={() => handleDeleteExpense(expense.id)}
-                    className="delete-btn"
-                    title="Delete"
-                  >
-                    <Trash2 size={14} />
-                  </button>
+                  {isEditing ? (
+                    <>
+                      <input
+                        type="text"
+                        value={editName}
+                        onChange={(e) => setEditName(e.target.value)}
+                        className="edit-input"
+                        placeholder="Expense name"
+                      />
+                      <input
+                        type="number"
+                        value={editAmount}
+                        onChange={(e) => setEditAmount(e.target.value)}
+                        className="edit-input amount"
+                        placeholder="Amount"
+                        step="0.01"
+                        min="0"
+                      />
+                      <select
+                        value={editCategory}
+                        onChange={(e) => setEditCategory(e.target.value)}
+                        className="edit-select"
+                      >
+                        {EXPENSE_CATEGORIES.map((cat) => (
+                          <option key={cat.value} value={cat.value}>
+                            {cat.label}
+                          </option>
+                        ))}
+                      </select>
+                      <button
+                        onClick={() => saveEdit(expense.id)}
+                        className="save-edit-btn"
+                        title="Save changes"
+                      >
+                        <Check size={14} />
+                      </button>
+                      <button
+                        onClick={cancelEdit}
+                        className="cancel-edit-btn"
+                        title="Cancel"
+                      >
+                        <X size={14} />
+                      </button>
+                    </>
+                  ) : (
+                    <>
+                      <div className="expense-icon">{emoji}</div>
+                      <div className="expense-info">
+                        <span className="expense-name">{expense.name}</span>
+                        <span className="expense-category">{text}</span>
+                      </div>
+                      <span className="expense-amount">
+                        ${(expense.amount || 0).toFixed(2)}
+                      </span>
+                      <button
+                        onClick={() => startEdit(expense)}
+                        className="edit-btn"
+                        title="Edit"
+                      >
+                        <Edit2 size={14} />
+                      </button>
+                      <button
+                        onClick={() => handleDeleteExpense(expense.id)}
+                        className="delete-btn"
+                        title="Delete"
+                      >
+                        <Trash2 size={14} />
+                      </button>
+                    </>
+                  )}
                 </div>
               );
             })}

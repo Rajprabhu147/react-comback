@@ -69,13 +69,13 @@ const Header = () => {
     <header className="header">
       <div className="header-container">
         {/* Mobile Menu Button */}
-        <button
+        {/* <button
           className="mobile-menu-btn"
           onClick={toggleSidebar}
           aria-label="Toggle menu"
         >
           {sidebarOpen ? "✕" : "☰"}
-        </button>
+        </button> */}
 
         <div className="header-logo" onClick={() => navigate("/")}>
           <span className="logo-icon">🗺️</span>

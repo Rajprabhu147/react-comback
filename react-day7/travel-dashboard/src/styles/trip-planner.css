@@ -42,8 +42,8 @@
 /* Grid Layout for Calendar + Itinerary */
 .planner-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 32px;
+  /* grid-template-columns: 1fr 1fr; */
+  /* gap: 32px; */
   align-items: start;
 }
 
