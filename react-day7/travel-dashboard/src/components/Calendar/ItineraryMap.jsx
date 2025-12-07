@@ -340,35 +340,37 @@ const ItineraryMap = ({ activities = [] }) => {
         </div>
       </div>
 
-      <div ref={mapContainer} className="map-container" />
+      <div className="map-wrapper">
+        <div ref={mapContainer} className="map-container" />
 
-      {activitiesWithCoords.length === 0 && (
-        <div className="map-empty-state">
-          <div className="empty-icon">🗺️</div>
-          <p>No activities with recognized locations to display on the map</p>
-          <p className="empty-hint">
-            Add activities with location names from the database (e.g., "Eiffel
-            Tower", "Big Ben")
-          </p>
-        </div>
-      )}
+        {activitiesWithCoords.length === 0 && (
+          <div className="map-empty-state">
+            <div className="empty-icon">🗺️</div>
+            <p>No activities with recognized locations to display on the map</p>
+            <p className="empty-hint">
+              Add activities with location names from the database (e.g.,
+              "Eiffel Tower", "Big Ben")
+            </p>
+          </div>
+        )}
 
-      <div className="map-legend">
-        <div className="legend-item">
-          <span className="legend-marker start">1</span>
-          <span>Start Point</span>
-        </div>
-        <div className="legend-item">
-          <span className="legend-marker mid">2</span>
-          <span>Waypoint</span>
-        </div>
-        <div className="legend-item">
-          <span className="legend-marker end">3</span>
-          <span>End Point</span>
-        </div>
-        <div className="legend-item">
-          <span className="legend-line"></span>
-          <span>Route Path</span>
+        <div className="map-legend">
+          <div className="legend-item">
+            <span className="legend-marker start">1</span>
+            <span>Start Point</span>
+          </div>
+          <div className="legend-item">
+            <span className="legend-marker mid">2</span>
+            <span>Waypoint</span>
+          </div>
+          <div className="legend-item">
+            <span className="legend-marker end">3</span>
+            <span>End Point</span>
+          </div>
+          <div className="legend-item">
+            <span className="legend-line"></span>
+            <span>Route Path</span>
+          </div>
         </div>
       </div>
     </div>
