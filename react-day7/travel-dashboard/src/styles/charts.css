@@ -531,6 +531,64 @@
   color: var(--text-secondary) !important;
   font-size: 12px !important;
 }
+/* Add this to your existing src/styles/charts.css */
+
+/* Scatter Chart Styles */
+.scatter-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  justify-content: center;
+  margin-top: 12px;
+  padding: 12px;
+  background: var(--bg-secondary, #f3f4f6);
+  border-radius: 8px;
+}
+
+.scatter-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--text-primary, #1f2937);
+  font-weight: 500;
+}
+
+.scatter-color-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  display: inline-block;
+  flex-shrink: 0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+/* Reference line for scatter chart */
+.recharts-surface {
+  overflow: visible;
+}
+
+/* Responsive for Scatter Chart */
+@media (max-width: 768px) {
+  .scatter-legend {
+    gap: 12px;
+  }
+
+  .scatter-legend-item {
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .scatter-legend {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .scatter-legend-item {
+    font-size: 11px;
+  }
+}
 
 /* ====================================
    RESPONSIVE
