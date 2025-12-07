@@ -119,12 +119,11 @@
   align-items: center;
   gap: 16px;
   padding: 16px 20px;
-  background: linear-gradient(135deg, #b3e5fc 0%, #80deea 100%);
+  background: linear-gradient(135deg, #3b82f6 0%, #0ea5e9 100%);
   border-radius: 12px;
-  box-shadow: 0 4px 16px rgba(5, 102, 141, 0.15);
+  box-shadow: 0 4px 16px rgba(59, 130, 246, 0.25);
   position: relative;
   overflow: hidden;
-  border: 1px solid rgba(5, 102, 141, 0.2);
 }
 
 .day-header::before {
@@ -152,19 +151,19 @@
   margin: 0;
   font-size: 20px;
   font-weight: 800;
-  color: #05668d;
+  color: white;
   letter-spacing: -0.5px;
 }
 
 .activity-count {
-  background: rgba(5, 102, 141, 0.15);
-  color: #05668d;
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
   padding: 6px 12px;
   border-radius: 8px;
   font-size: 12px;
   font-weight: 700;
   backdrop-filter: blur(10px);
-  border: 1px solid rgba(5, 102, 141, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
 /* Day Activities Container */
