@@ -28,7 +28,7 @@
 
 .itinerary-title {
   margin: 0;
-  font-size: 16px;
+  font-size: 18px;
   color: var(--text-primary);
   display: flex;
   align-items: center;
@@ -413,7 +413,7 @@
 /* Responsive */
 @media (max-width: 1024px) {
   .itinerary-title {
-    font-size: 14px;
+    font-size: 16px;
   }
 
   .day-title {
@@ -440,7 +440,7 @@
   }
 
   .itinerary-title {
-    font-size: 12px;
+    font-size: 14px;
     gap: 8px;
   }
 
@@ -525,7 +525,7 @@
 
 @media (max-width: 600px) {
   .itinerary-title {
-    font-size: 10px;
+    font-size: 12px;
   }
 
   .itinerary-count {
@@ -575,7 +575,7 @@
   }
 
   .itinerary-title {
-    font-size: 8px;
+    font-size: 10px;
     gap: 6px;
   }
 

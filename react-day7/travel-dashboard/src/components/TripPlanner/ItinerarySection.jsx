@@ -57,10 +57,10 @@ const ItinerarySection = ({
           <h2 className="itinerary-title">
             📋 Itinerary
             <span className="itinerary-count">{filteredActivities.length}</span>
+            <p className="itinerary-subtitle">
+              {dayKeys.length} day{dayKeys.length !== 1 ? "s" : ""} planned
+            </p>
           </h2>
-          <p className="itinerary-subtitle">
-            {dayKeys.length} day{dayKeys.length !== 1 ? "s" : ""} planned
-          </p>
         </div>
 
         {filteredActivities.length === 0 ? (
