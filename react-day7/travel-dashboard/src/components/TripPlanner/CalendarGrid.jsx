@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { WEEKDAY_NAMES, getCategoryColor } from "./constants";
-import DayActivityPopover from "./DayActivityPopover";
+import "../../styles/calendar-grid.css";
 
 const CalendarGrid = ({
   days,
@@ -86,13 +86,41 @@ const CalendarGrid = ({
                     )}
                   </div>
 
-                  {/* Activity Popover */}
+                  {/* Activity Tooltip */}
                   {hoveredDay === day && dayActivities.length > 0 && (
-                    <DayActivityPopover
-                      day={day}
-                      activities={dayActivities}
-                      onEditActivity={onEditActivity}
-                    />
+                    <div className="activity-tooltip">
+                      <div className="tooltip-header">
+                        {dayActivities.length} Activity
+                        {dayActivities.length > 1 ? "ies" : ""}
+                      </div>
+                      <div className="tooltip-activities">
+                        {dayActivities.map((activity, i) => (
+                          <div key={i} className="tooltip-activity">
+                            <div
+                              className="tooltip-activity-dot"
+                              style={{
+                                backgroundColor: getCategoryColor(
+                                  activity.category
+                                ),
+                              }}
+                            ></div>
+                            <div className="tooltip-activity-content">
+                              <div className="tooltip-activity-title">
+                                {activity.activity}
+                              </div>
+                              <div className="tooltip-activity-details">
+                                <span className="tooltip-time">
+                                  {activity.time}
+                                </span>
+                                <span className="tooltip-category">
+                                  {activity.category}
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
                   )}
                 </>
               )}
