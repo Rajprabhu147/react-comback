@@ -3,9 +3,10 @@
 .itinerary-map-container {
   position: relative;
   width: 100%;
-  height: 600px;
+  height: auto;
+  max-height: 600px;
   border-radius: 12px;
-  overflow: hidden;
+  overflow: auto;
   border: 2px solid var(--bg-secondary, #e5e7eb);
   background: var(--surface, #ffffff);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
@@ -81,9 +82,11 @@
 
 /* Map Wrapper */
 .map-wrapper {
-  flex: 1;
+  width: 100%;
+  height: 550px;
   position: relative;
   overflow: hidden;
+  flex-shrink: 0;
 }
 
 /* Map Container */
