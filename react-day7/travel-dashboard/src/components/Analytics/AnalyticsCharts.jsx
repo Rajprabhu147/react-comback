@@ -15,12 +15,11 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import DailyExpenseLogger from "../Expense/DailyExpenseLogger.jsx";
-import ItineraryMap from "../Calendar/ItineraryMap.jsx";
 import "../../styles/charts.css";
 
 /**
  * Enhanced Analytics Charts Component
- * Integrates Daily Expense Logger and Itinerary Map with expense analytics
+ * Integrates Daily Expense Logger with expense analytics
  */
 
 const COLORS = {
@@ -41,7 +40,7 @@ const EXPENSE_CATEGORY_COLORS = {
   other: "#05668d",
 };
 
-const AnalyticsCharts = ({ activities = [] }) => {
+const AnalyticsCharts = () => {
   // Load expenses from localStorage
   const [expenses, setExpenses] = useState(() => {
     try {
@@ -307,11 +306,6 @@ const AnalyticsCharts = ({ activities = [] }) => {
         ) : (
           <p className="no-data">No expense data available</p>
         )}
-      </div>
-
-      {/* ========== ITINERARY MAP - LAST ITEM ========== */}
-      <div className="chart-card chart-card-map">
-        <ItineraryMap activities={activities} />
       </div>
     </div>
   );
