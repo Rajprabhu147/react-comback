@@ -7,6 +7,8 @@ import {
   PieChart,
   Pie,
   Cell,
+  ScatterChart,
+  Scatter,
   XAxis,
   YAxis,
   CartesianGrid,
@@ -138,6 +140,20 @@ const AnalyticsCharts = () => {
     highestSpending && totalExpenses > 0
       ? (highestSpending.amount / totalExpenses) * 100
       : 0;
+
+  // Calculate overspending pattern data for scatter chart
+  const scatterData = sortedDailyExpenses.map((day) => {
+    const dayNum = parseInt(day.day.split(" ")[1]);
+    const amount = day.amount;
+    const isOverspending = amount > averageDailyExpense;
+    return {
+      day: dayNum,
+      amount: amount,
+      isOverspending: isOverspending,
+      variance: amount - averageDailyExpense,
+      fill: isOverspending ? COLORS.danger : COLORS.accent,
+    };
+  });
 
   return (
     <div className="charts-container">
@@ -303,6 +319,105 @@ const AnalyticsCharts = () => {
               />
             </LineChart>
           </ResponsiveContainer>
+        ) : (
+          <p className="no-data">No expense data available</p>
+        )}
+      </div>
+
+      {/* ========== SCATTER CHART: OVERSPENDING PATTERN ========== */}
+      <div className="chart-card">
+        <h3 className="chart-title">⚠️ Overspending Pattern Analysis</h3>
+        {scatterData.length > 0 ? (
+          <>
+            <ResponsiveContainer width="100%" height={280}>
+              <ScatterChart
+                data={scatterData}
+                margin={{ top: 20, right: 20, bottom: 20, left: 20 }}
+              >
+                <CartesianGrid
+                  strokeDasharray="3 3"
+                  stroke="var(--bg-secondary)"
+                />
+                <XAxis
+                  type="number"
+                  dataKey="day"
+                  name="Day"
+                  stroke="var(--text-secondary)"
+                  label={{
+                    value: "Day",
+                    position: "insideBottomRight",
+                    offset: -5,
+                  }}
+                />
+                <YAxis
+                  type="number"
+                  dataKey="amount"
+                  name="Amount ($)"
+                  stroke="var(--text-secondary)"
+                  label={{
+                    value: "Expense Amount ($)",
+                    angle: -90,
+                    position: "insideLeft",
+                  }}
+                />
+                <Tooltip
+                  contentStyle={{
+                    background: "var(--surface)",
+                    border: "1px solid var(--bg-secondary)",
+                    borderRadius: "var(--radius-sm)",
+                  }}
+                  formatter={(value, name) => {
+                    if (name === "amount") {
+                      return `$${value.toFixed(2)}`;
+                    }
+                    return value;
+                  }}
+                  labelFormatter={(value) => `Day ${value}`}
+                />
+                <Scatter
+                  name="Daily Expenses"
+                  data={scatterData}
+                  fill={COLORS.accent}
+                  shape="circle"
+                >
+                  {scatterData.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={entry.fill} />
+                  ))}
+                </Scatter>
+                {/* Reference line for average daily expense */}
+                {averageDailyExpense > 0 && (
+                  <line
+                    x1="0"
+                    y1={averageDailyExpense}
+                    x2="100%"
+                    y2={averageDailyExpense}
+                    stroke={COLORS.success}
+                    strokeDasharray="5 5"
+                  />
+                )}
+              </ScatterChart>
+            </ResponsiveContainer>
+            <div className="scatter-legend">
+              <div className="scatter-legend-item">
+                <span
+                  className="scatter-color-dot"
+                  style={{ backgroundColor: COLORS.accent }}
+                />
+                <span>
+                  Within Budget (≤ Avg: ${averageDailyExpense.toFixed(2)})
+                </span>
+              </div>
+              <div className="scatter-legend-item">
+                <span
+                  className="scatter-color-dot"
+                  style={{ backgroundColor: COLORS.danger }}
+                />
+                <span>
+                  Overspending (&gt; Avg: ${averageDailyExpense.toFixed(2)})
+                </span>
+              </div>
+            </div>
+          </>
         ) : (
           <p className="no-data">No expense data available</p>
         )}
