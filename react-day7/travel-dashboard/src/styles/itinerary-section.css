@@ -628,7 +628,7 @@
   }
 
   .activity-header-row {
-    flex-direction: column;
+    flex-direction: row;
     gap: 6px;
   }
 
