@@ -17,6 +17,8 @@ import "../styles/profile.css";
  * - Avatar updates in header after save
  * - Tighter spacing throughout
  * - Coordinated CSS
+ *
+ * NOTE: activity-* classes renamed to login-* to avoid collisions
  */
 const ProfileSettings = () => {
   const { user, updateUser } = useUser(); // Add updateUser if available in context
@@ -93,24 +95,6 @@ const ProfileSettings = () => {
       // Simulate upload delay
       await new Promise((resolve) => setTimeout(resolve, 1500));
 
-      /**
-       * TODO: Replace with real upload logic:
-       *
-       * const formData = new FormData();
-       * formData.append('avatar', avatarFile);
-       *
-       * const response = await fetch('/api/upload-avatar', {
-       *   method: 'POST',
-       *   body: formData
-       * });
-       *
-       * const { url } = await response.json();
-       *
-       * await supabase.auth.updateUser({
-       *   data: { avatar_url: url }
-       * });
-       */
-
       // For now, use the preview URL (in production, use uploaded URL)
       const avatarUrl = avatarPreview;
 
@@ -163,14 +147,6 @@ const ProfileSettings = () => {
     setLoading(true);
     try {
       await new Promise((resolve) => setTimeout(resolve, 1000));
-
-      /**
-       * TODO: Replace with real Supabase update:
-       *
-       * await supabase.auth.updateUser({
-       *   data: formData
-       * });
-       */
 
       toast.success("Profile updated successfully!");
       setIsEditing(false);
@@ -406,34 +382,33 @@ const ProfileSettings = () => {
           <PasswordChange />
         </div>
 
-        {/* ACTIVITY & SESSIONS */}
+        {/* LOGIN ACTIVITY & SESSIONS */}
         <div className="profile-section">
           <div className="section-header">
             <div>
-              <h2 className="section-title">Activity & Sessions</h2>
+              <h2 className="section-title">Login Activity</h2>
               <p className="section-description">
-                View your recent activity and active sessions
+                View your recent login activity and active sessions
               </p>
             </div>
           </div>
 
-          <div className="activity-list">
-            <div className="activity-item">
-              <div className="activity-icon">💻</div>
-              <div className="activity-details">
-                <div className="activity-title">Current Session</div>
-                <div className="activity-meta">
-                  Chrome on Windows • Chennai, Tamil Nadu, IN
+          <div className="login-activity">
+            <div className="login-item">
+              <div className="login-icon">💻</div>
+              <div className="login-details">
+                <div className="login-title">Current Session</div>
+                <div className="login-meta">
+                  Chrome on Windows • Chennai, Tamil Nadu, IN — Active Now
                 </div>
               </div>
-              <span className="activity-badge active">Active Now</span>
             </div>
 
-            <div className="activity-item">
-              <div className="activity-icon">📱</div>
-              <div className="activity-details">
-                <div className="activity-title">Mobile Device</div>
-                <div className="activity-meta">
+            <div className="login-item">
+              <div className="login-icon">📱</div>
+              <div className="login-details">
+                <div className="login-title">Mobile Device</div>
+                <div className="login-meta">
                   Safari on iOS • Last seen 2 hours ago
                 </div>
               </div>
