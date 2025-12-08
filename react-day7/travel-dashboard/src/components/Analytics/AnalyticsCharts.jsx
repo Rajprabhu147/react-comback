@@ -226,28 +226,32 @@ const AnalyticsCharts = () => {
       <div className="chart-card">
         <h3 className="chart-title">💰 Expense by Category</h3>
         {pieChartData.length > 0 ? (
-          <ResponsiveContainer width="100%" height={280}>
-            <PieChart>
-              <Pie
-                data={pieChartData}
-                dataKey="amount"
-                nameKey="name"
-                cx="50%"
-                cy="50%"
-                outerRadius={90}
-                label={(entry) => `${entry.name}: $${entry.amount.toFixed(0)}`}
-              >
-                {pieChartData.map((entry, index) => (
-                  <Cell
-                    key={`cell-${index}`}
-                    fill={pieColors[index % pieColors.length]}
-                  />
-                ))}
-              </Pie>
-              <Tooltip formatter={(value) => `$${value.toFixed(2)}`} />
-              <Legend />
-            </PieChart>
-          </ResponsiveContainer>
+          <div className="pie-chart-wrapper">
+            <ResponsiveContainer width="100%" height={280}>
+              <PieChart>
+                <Pie
+                  data={pieChartData}
+                  dataKey="amount"
+                  nameKey="name"
+                  cx="50%"
+                  cy="50%"
+                  outerRadius={90}
+                  label={(entry) =>
+                    `${entry.name}: $${entry.amount.toFixed(0)}`
+                  }
+                >
+                  {pieChartData.map((entry, index) => (
+                    <Cell
+                      key={`cell-${index}`}
+                      fill={pieColors[index % pieColors.length]}
+                    />
+                  ))}
+                </Pie>
+                <Tooltip formatter={(value) => `$${value.toFixed(2)}`} />
+                <Legend />
+              </PieChart>
+            </ResponsiveContainer>
+          </div>
         ) : (
           <p className="no-data">No expense data available</p>
         )}
@@ -257,32 +261,24 @@ const AnalyticsCharts = () => {
       <div className="chart-card">
         <h3 className="chart-title">📊 Expense Breakdown</h3>
         {formattedCategoryExpenses.length > 0 ? (
-          <ResponsiveContainer width="100%" height={280}>
-            <BarChart data={formattedCategoryExpenses}>
-              <CartesianGrid
-                strokeDasharray="3 3"
-                stroke="var(--bg-secondary)"
-              />
-              <XAxis dataKey="name" stroke="var(--text-secondary)" />
-              <YAxis stroke="var(--text-secondary)" />
-              <Tooltip
-                contentStyle={{
-                  background: "var(--surface)",
-                  border: "1px solid var(--bg-secondary)",
-                  borderRadius: "var(--radius-sm)",
-                }}
-                formatter={(value) => `$${value.toFixed(2)}`}
-              />
-              <Bar dataKey="amount" radius={[8, 8, 0, 0]}>
-                {formattedCategoryExpenses.map((entry, index) => (
-                  <Cell
-                    key={`cell-${index}`}
-                    fill={pieColors[index % pieColors.length]}
-                  />
-                ))}
-              </Bar>
-            </BarChart>
-          </ResponsiveContainer>
+          <div className="bar-chart-wrapper">
+            <ResponsiveContainer width="100%" height={280}>
+              <BarChart data={formattedCategoryExpenses}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="name" />
+                <YAxis />
+                <Tooltip formatter={(value) => `$${value.toFixed(2)}`} />
+                <Bar dataKey="amount" radius={[8, 8, 0, 0]}>
+                  {formattedCategoryExpenses.map((entry, index) => (
+                    <Cell
+                      key={`cell-${index}`}
+                      fill={pieColors[index % pieColors.length]}
+                    />
+                  ))}
+                </Bar>
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
         ) : (
           <p className="no-data">No expense data available</p>
         )}
@@ -292,33 +288,28 @@ const AnalyticsCharts = () => {
       <div className="chart-card">
         <h3 className="chart-title">📈 Daily Expense Trend</h3>
         {sortedDailyExpenses.length > 0 ? (
-          <ResponsiveContainer width="100%" height={280}>
-            <LineChart data={sortedDailyExpenses}>
-              <CartesianGrid
-                strokeDasharray="3 3"
-                stroke="var(--bg-secondary)"
-              />
-              <XAxis dataKey="day" stroke="var(--text-secondary)" />
-              <YAxis stroke="var(--text-secondary)" />
-              <Tooltip
-                contentStyle={{
-                  background: "var(--surface)",
-                  border: "1px solid var(--bg-secondary)",
-                  borderRadius: "var(--radius-sm)",
-                }}
-                formatter={(value) => `$${value.toFixed(2)}`}
-              />
-              <Line
-                type="monotone"
-                dataKey="amount"
-                stroke={COLORS.accent}
-                strokeWidth={3}
-                dot={{ fill: COLORS.accent, r: 5 }}
-                activeDot={{ r: 7 }}
-                name="Daily Expenses"
-              />
-            </LineChart>
-          </ResponsiveContainer>
+          <div className="line-chart-wrapper">
+            <ResponsiveContainer width="100%" height={280}>
+              <LineChart data={sortedDailyExpenses}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="day" />
+                <YAxis />
+                <Tooltip
+                  formatter={(value) => `$${value.toFixed(2)}`}
+                  contentClassName="tooltip-content"
+                />
+                <Line
+                  type="monotone"
+                  dataKey="amount"
+                  stroke={COLORS.accent}
+                  strokeWidth={3}
+                  dot={{ fill: COLORS.accent, r: 5 }}
+                  activeDot={{ r: 7 }}
+                  name="Daily Expenses"
+                />
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
         ) : (
           <p className="no-data">No expense data available</p>
         )}
@@ -329,74 +320,50 @@ const AnalyticsCharts = () => {
         <h3 className="chart-title">⚠️ Overspending Pattern Analysis</h3>
         {scatterData.length > 0 ? (
           <>
-            <ResponsiveContainer width="100%" height={280}>
-              <ScatterChart
-                data={scatterData}
-                margin={{ top: 20, right: 20, bottom: 20, left: 20 }}
-              >
-                <CartesianGrid
-                  strokeDasharray="3 3"
-                  stroke="var(--bg-secondary)"
-                />
-                <XAxis
-                  type="number"
-                  dataKey="day"
-                  name="Day"
-                  stroke="var(--text-secondary)"
-                  label={{
-                    value: "Day",
-                    position: "insideBottomRight",
-                    offset: -5,
-                  }}
-                />
-                <YAxis
-                  type="number"
-                  dataKey="amount"
-                  name="Amount ($)"
-                  stroke="var(--text-secondary)"
-                  label={{
-                    value: "Expense Amount ($)",
-                    angle: -90,
-                    position: "insideLeft",
-                  }}
-                />
-                <Tooltip
-                  contentStyle={{
-                    background: "var(--surface)",
-                    border: "1px solid var(--bg-secondary)",
-                    borderRadius: "var(--radius-sm)",
-                  }}
-                  formatter={(value, name) => {
-                    if (name === "amount") {
-                      return `$${value.toFixed(2)}`;
-                    }
-                    return value;
-                  }}
-                  labelFormatter={(value) => `Day ${value}`}
-                />
-                <Scatter
-                  name="Daily Expenses"
+            <div className="scatter-chart-wrapper">
+              <ResponsiveContainer width="100%" height={280}>
+                <ScatterChart
                   data={scatterData}
-                  fill={COLORS.accent}
-                  shape="circle"
+                  margin={{ top: 20, right: 20, bottom: 20, left: 20 }}
                 >
-                  {scatterData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={entry.fill} />
-                  ))}
-                </Scatter>
-                {/* Reference line for average daily expense */}
-                {averageDailyExpense > 0 && (
-                  <line
-                    x1="0"
-                    y1={averageDailyExpense}
-                    x2="100%"
-                    y2={averageDailyExpense}
-                    stroke={COLORS.success}
-                    strokeDasharray="5 5"
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis
+                    type="number"
+                    dataKey="day"
+                    name="Day"
+                    label={{
+                      value: "Day",
+                      position: "insideBottomRight",
+                      offset: -5,
+                    }}
                   />
-                )}
-              </ScatterChart>
-            </ResponsiveContainer>
+                  <YAxis
+                    type="number"
+                    dataKey="amount"
+                    name="Amount ($)"
+                    label={{
+                      value: "Expense Amount ($)",
+                      angle: -90,
+                      position: "insideLeft",
+                    }}
+                  />
+                  <Tooltip
+                    formatter={(value, name) => {
+                      if (name === "amount") {
+                        return `$${value.toFixed(2)}`;
+                      }
+                      return value;
+                    }}
+                    labelFormatter={(value) => `Day ${value}`}
+                  />
+                  <Scatter name="Daily Expenses" data={scatterData}>
+                    {scatterData.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={entry.fill} />
+                    ))}
+                  </Scatter>
+                </ScatterChart>
+              </ResponsiveContainer>
+            </div>
             <div className="scatter-legend">
               <div className="scatter-legend-item">
                 <span
