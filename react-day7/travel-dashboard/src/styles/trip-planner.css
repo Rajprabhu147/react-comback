@@ -190,6 +190,8 @@
   margin-top: 4px;
 }
 
+/* ========== ACTIVITY BADGE - ENHANCED WITH POPOVER ========== */
+
 .activity-badge {
   font-size: 10px;
   padding: 2px 6px;
@@ -200,18 +202,301 @@
   text-overflow: ellipsis;
   cursor: pointer;
   font-weight: 600;
+  transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+}
+
+/* OPTION 1: Scale + Glow Animation (Default) */
+.activity-badge:hover {
+  transform: scale(1.08);
+  filter: brightness(1.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+}
+
+.activity-badge:active {
+  transform: scale(0.95);
+}
+
+/* ========== OPTION 2: Pulse Animation ========== */
+.activity-badge.pulse:hover {
+  animation: badgePulse 0.6s ease-out;
+}
+
+@keyframes badgePulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.15);
+  }
+  100% {
+    transform: scale(1.08);
+  }
+}
+
+/* ========== OPTION 3: Bounce Animation ========== */
+.activity-badge.bounce:hover {
+  animation: badgeBounce 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+@keyframes badgeBounce {
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+/* ========== ACTIVITY BADGE POPOVER OVERLAY ========== */
+
+.activity-popover-wrapper {
+  position: relative;
+}
+
+/* Hidden by default, shown on hover */
+.activity-popover-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(2px);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 998;
+  padding: 20px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.activity-popover-wrapper:hover .activity-popover-overlay {
+  display: flex;
+  opacity: 1;
+}
+
+/* Popover Content Card */
+.activity-popover-card {
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-xl);
+  width: 100%;
+  max-width: 400px;
+  max-height: 500px;
+  overflow-y: auto;
+  z-index: 999;
+  animation: popoverSlideUp 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  border: 2px solid var(--primary);
+}
+
+@keyframes popoverSlideUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.popover-card-header {
+  padding: 20px;
+  border-bottom: 2px solid var(--bg-secondary);
+  background: linear-gradient(135deg, rgba(14, 165, 233, 0.05), rgba(2, 195, 154, 0.05));
+}
+
+.popover-card-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0 0 8px 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.popover-card-icon {
+  font-size: 20px;
+}
+
+.popover-card-subtitle {
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+.popover-card-body {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.popover-detail {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.popover-detail-icon {
+  font-size: 16px;
+  min-width: 20px;
+  color: var(--primary);
+  margin-top: 2px;
+}
+
+.popover-detail-content {
+  flex: 1;
+}
+
+.popover-detail-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 4px;
+}
+
+.popover-detail-value {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+  line-height: 1.4;
+  word-break: break-word;
+}
+
+.popover-detail-value.highlight {
+  color: var(--primary);
+  font-weight: 700;
+}
+
+.popover-action-buttons {
+  display: flex;
+  gap: 10px;
+  padding-top: 12px;
+  border-top: 1px solid var(--bg-secondary);
+  margin-top: 12px;
+}
+
+.popover-btn {
+  flex: 1;
+  padding: 10px 16px;
+  border: none;
+  border-radius: var(--radius-md);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
   transition: var(--transition);
 }
 
-.activity-badge:hover {
-  transform: scale(1.02);
-  opacity: 0.9;
+.popover-btn.primary {
+  background: var(--primary);
+  color: white;
 }
 
+.popover-btn.primary:hover {
+  background: #0284c7;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(14, 165, 233, 0.3);
+}
+
+.popover-btn.secondary {
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+}
+
+.popover-btn.secondary:hover {
+  background: var(--text-secondary);
+  color: white;
+}
+
+/* ========== ALTERNATIVE: Tooltip Popover (Simpler) ========== */
+
+.activity-badge-tooltip {
+  position: relative;
+}
+
+.activity-badge-tooltip-content {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-12px);
+  background: rgba(0, 0, 0, 0.95);
+  color: white;
+  padding: 12px 16px;
+  border-radius: var(--radius-md);
+  font-size: 12px;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+  z-index: 1000;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  font-weight: 500;
+}
+
+.activity-badge-tooltip-content::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-top: 6px solid rgba(0, 0, 0, 0.95);
+}
+
+.activity-badge-tooltip:hover .activity-badge-tooltip-content {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(-16px);
+}
+
+/* More Activities Badge */
 .more-activities-badge {
   font-size: 9px;
   color: var(--text-secondary);
   font-weight: 600;
+  cursor: help;
+}
+
+/* ========== ACTIVITY BADGE VARIANTS ========== */
+
+.activity-badge.food {
+  background: linear-gradient(135deg, #fbbf24, #f59e0b);
+}
+
+.activity-badge.transport {
+  background: linear-gradient(135deg, #f87171, #ef4444);
+}
+
+.activity-badge.accommodation {
+  background: linear-gradient(135deg, #06b6d4, #0891b2);
+}
+
+.activity-badge.activities {
+  background: linear-gradient(135deg, #a78bfa, #8b5cf6);
+}
+
+.activity-badge.shopping {
+  background: linear-gradient(135deg, #34d399, #10b981);
+}
+
+.activity-badge.other {
+  background: linear-gradient(135deg, #64748b, #475569);
 }
 
 /* Activity Popover */
@@ -626,7 +911,8 @@
   background: #0284c7;
 }
 
-/* Responsive */
+/* ========== RESPONSIVE ========== */
+
 @media (max-width: 1024px) {
   .planner-grid {
     grid-template-columns: 1fr;
@@ -635,6 +921,10 @@
 
   .planner-itinerary-section {
     max-height: 500px;
+  }
+
+  .activity-popover-card {
+    max-width: 350px;
   }
 }
 
@@ -671,6 +961,11 @@
   .editor-form-row {
     grid-template-columns: 1fr;
   }
+
+  .activity-popover-card {
+    max-width: 90vw;
+    max-height: 70vh;
+  }
 }
 
 @media (max-width: 480px) {
@@ -697,10 +992,20 @@
 
   .activity-badge {
     font-size: 8px;
+    padding: 1px 4px;
   }
 
   .editor-modal {
     max-width: 100%;
     max-height: 100vh;
+  }
+
+  .activity-popover-card {
+    max-width: 100%;
+  }
+
+  .activity-badge-tooltip-content {
+    font-size: 11px;
+    padding: 10px 12px;
   }
 }
