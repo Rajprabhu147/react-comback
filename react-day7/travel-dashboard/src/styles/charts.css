@@ -1,32 +1,27 @@
-/* ====================================
-   ANALYTICS CHARTS CONTAINER
-   ==================================== */
+/* src/styles/analytics-charts.css */
 
+/* ========== CONTAINER ========== */
 .charts-container {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 20px;
-  width: 100%;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 24px;
+  padding: 24px;
+  background: var(--bg-primary, #f9fafb);
 }
 
-/* ====================================
-   CHART CARD
-   ==================================== */
-
+/* ========== CHART CARDS ========== */
 .chart-card {
-  display: flex;
-  flex-direction: column;
-  background: linear-gradient(135deg, var(--surface) 0%, rgba(5, 102, 141, 0.02) 100%);
-  border: 1px solid var(--bg-secondary);
-  border-radius: var(--radius-lg);
+  background: var(--surface, #ffffff);
+  border-radius: 12px;
+  border: 1px solid var(--bg-secondary, #e5e7eb);
   padding: 20px;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
   transition: all 0.3s ease;
 }
 
 .chart-card:hover {
-  box-shadow: 0 8px 24px rgba(5, 102, 141, 0.12);
-  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border-color: var(--primary, #0ea5e9);
 }
 
 .chart-card-wide {
@@ -34,97 +29,147 @@
 }
 
 .chart-title {
-  margin: 0 0 16px 0;
+  margin: 0 0 20px 0;
   font-size: 16px;
-  font-weight: 700;
-  color: var(--text-primary);
+  font-weight: 600;
+  color: var(--text-primary, #1f2937);
   display: flex;
   align-items: center;
   gap: 8px;
 }
 
-.no-data {
-  text-align: center;
-  color: var(--text-secondary);
-  padding: 40px 20px;
-  margin: 0;
-  font-size: 14px;
+/* ========== CHART WRAPPERS ========== */
+.pie-chart-wrapper,
+.bar-chart-wrapper,
+.line-chart-wrapper,
+.scatter-chart-wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-/* ====================================
-   INFO CARDS ROW
-   ==================================== */
+/* ========== RECHARTS OVERRIDES ========== */
+.recharts-wrapper {
+  font-family: inherit;
+}
 
+.recharts-text {
+  fill: var(--text-secondary, #6b7280);
+  font-size: 12px;
+}
+
+.recharts-cartesian-axis-tick {
+  fill: var(--text-secondary, #6b7280);
+  font-size: 12px;
+}
+
+.recharts-legend-wrapper {
+  padding-top: 12px !important;
+}
+
+.recharts-legend-item-text {
+  color: var(--text-primary, #1f2937) !important;
+  font-size: 12px !important;
+}
+
+.recharts-tooltip-wrapper {
+  outline: none !important;
+}
+
+.recharts-default-tooltip {
+  background: var(--surface, #ffffff) !important;
+  border: 1px solid var(--bg-secondary, #e5e7eb) !important;
+  border-radius: 8px !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15) !important;
+}
+
+.recharts-tooltip-label {
+  color: var(--text-primary, #1f2937) !important;
+  font-weight: 600 !important;
+  font-size: 13px !important;
+}
+
+.recharts-tooltip-item {
+  color: var(--text-secondary, #6b7280) !important;
+  font-size: 12px !important;
+}
+
+/* ========== GRID LINES ========== */
+.recharts-cartesian-grid-horizontal line,
+.recharts-cartesian-grid-vertical line {
+  stroke: var(--bg-secondary, #e5e7eb) !important;
+  stroke-width: 1px !important;
+}
+
+/* ========== INFO CARDS ========== */
 .info-cards-row {
-  grid-column: 1 / -1;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 16px;
+  grid-column: 1 / -1;
 }
 
 .info-card {
-  display: flex;
-  align-items: center;
-  gap: 16px;
+  background: linear-gradient(135deg, var(--surface, #ffffff) 0%, rgba(255, 255, 255, 0.95) 100%);
+  border: 1px solid var(--bg-secondary, #e5e7eb);
+  border-radius: 12px;
   padding: 20px;
-  background: linear-gradient(135deg, var(--surface) 0%, rgba(5, 102, 141, 0.02) 100%);
-  border: 1px solid var(--bg-secondary);
-  border-radius: var(--radius-lg);
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+  display: flex;
+  gap: 16px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
   transition: all 0.3s ease;
 }
 
 .info-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 24px rgba(5, 102, 141, 0.12);
-  border-color: var(--primary);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+  border-color: var(--primary, #0ea5e9);
 }
 
 .info-card-icon {
-  font-size: 40px;
-  line-height: 1;
-  flex-shrink: 0;
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+  font-size: 32px;
+  min-width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .info-card-content {
+  flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  flex: 1;
-  min-width: 0;
+  gap: 6px;
 }
 
 .info-card-label {
   font-size: 12px;
-  font-weight: 600;
-  color: var(--text-secondary);
+  font-weight: 500;
+  color: var(--text-secondary, #6b7280);
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
 
 .info-card-value {
-  font-size: 24px;
-  font-weight: 800;
-  background: linear-gradient(135deg, var(--primary), var(--accent));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text-primary, #1f2937);
   line-height: 1.2;
 }
 
 .info-card-amount {
-  font-size: 16px;
-  font-weight: 700;
-  color: var(--primary);
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--primary, #0ea5e9);
 }
 
 .info-card-meta {
+  font-size: 12px;
+  color: var(--text-secondary, #6b7280);
   display: flex;
   align-items: center;
-  gap: 6px;
-  font-size: 11px;
-  color: var(--text-secondary);
+  gap: 4px;
 }
 
 .meta-item {
@@ -132,54 +177,106 @@
 }
 
 .meta-divider {
-  color: var(--bg-secondary);
-  font-weight: 300;
+  opacity: 0.5;
 }
 
-/* ====================================
-   PERCENTAGE BAR
-   ==================================== */
-
+/* ========== PERCENTAGE BAR ========== */
 .percentage-bar-container {
   display: flex;
   flex-direction: column;
   gap: 6px;
+  margin-top: 8px;
 }
 
 .percentage-bar {
   width: 100%;
   height: 6px;
-  background: var(--bg-secondary);
+  background: var(--bg-secondary, #e5e7eb);
   border-radius: 3px;
   overflow: hidden;
 }
 
 .percentage-fill {
   height: 100%;
-  background: linear-gradient(90deg, var(--primary), var(--accent));
+  background: linear-gradient(90deg, var(--primary, #0ea5e9), var(--accent, #02c39a));
   border-radius: 3px;
   transition: width 0.3s ease;
 }
 
 .percentage-text {
-  font-size: 10px;
-  color: var(--text-secondary);
-  text-align: center;
+  font-size: 11px;
+  color: var(--text-secondary, #6b7280);
+  font-weight: 500;
 }
 
-/* ====================================
-   RESPONSIVE
-   ==================================== */
+/* ========== SCATTER LEGEND ========== */
+.scatter-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--bg-secondary, #e5e7eb);
+}
 
-@media (max-width: 1200px) {
-  .info-cards-row {
+.scatter-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--text-secondary, #6b7280);
+}
+
+.scatter-color-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* ========== NO DATA STATE ========== */
+.no-data {
+  text-align: center;
+  color: var(--text-secondary, #6b7280);
+  padding: 40px 20px;
+  font-size: 14px;
+  margin: 0;
+}
+
+/* ========== RESPONSIVE MEDIA QUERIES ========== */
+
+/* Large Screens (Desktop) */
+@media (min-width: 1200px) {
+  .charts-container {
     grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+    padding: 24px;
+  }
+
+  .chart-card-wide {
+    grid-column: 1 / -1;
+  }
+
+  /* Two column layout for most cards */
+  .chart-card:nth-child(n + 3) {
+    grid-column: auto;
+  }
+
+  .info-cards-row {
+    grid-template-columns: repeat(3, 1fr);
   }
 }
 
-@media (max-width: 1024px) {
+/* Tablets (768px - 1199px) */
+@media (max-width: 1199px) and (min-width: 768px) {
   .charts-container {
     grid-template-columns: 1fr;
+    gap: 20px;
+    padding: 20px;
+  }
+
+  .info-cards-row {
+    grid-template-columns: repeat(2, 1fr);
     gap: 16px;
   }
 
@@ -189,73 +286,98 @@
 
   .chart-title {
     font-size: 15px;
-    margin-bottom: 12px;
+    margin-bottom: 16px;
   }
 
   .info-card {
     padding: 16px;
-    gap: 12px;
-  }
-
-  .info-card-icon {
-    font-size: 32px;
-  }
-
-  .info-card-value {
-    font-size: 20px;
-  }
-}
-
-@media (max-width: 768px) {
-  .charts-container {
-    grid-template-columns: 1fr;
-    gap: 12px;
-  }
-
-  .chart-card {
-    padding: 12px;
-  }
-
-  .chart-title {
-    font-size: 13px;
-  }
-
-  .info-cards-row {
-    grid-template-columns: 1fr;
-    gap: 12px;
-  }
-
-  .info-card {
-    padding: 12px;
-    gap: 10px;
-  }
-
-  .info-card-icon {
-    font-size: 28px;
   }
 
   .info-card-value {
     font-size: 18px;
   }
 
-  .info-card-amount {
-    font-size: 14px;
+  .info-card-icon {
+    font-size: 28px;
+    min-width: 45px;
+    height: 45px;
   }
 }
 
-@media (max-width: 480px) {
+/* Mobile (480px - 767px) */
+@media (max-width: 767px) and (min-width: 480px) {
   .charts-container {
     grid-template-columns: 1fr;
-    gap: 10px;
+    gap: 16px;
+    padding: 16px;
   }
 
   .chart-card {
-    padding: 10px;
+    padding: 14px;
+    border-radius: 8px;
   }
 
   .chart-title {
+    font-size: 14px;
+    margin-bottom: 14px;
+  }
+
+  .info-cards-row {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .info-card {
+    padding: 12px;
+    gap: 12px;
+  }
+
+  .info-card-value {
+    font-size: 16px;
+  }
+
+  .info-card-icon {
+    font-size: 24px;
+    min-width: 40px;
+    height: 40px;
+  }
+
+  .info-card-label {
+    font-size: 11px;
+  }
+
+  .info-card-meta {
+    font-size: 11px;
+  }
+
+  .scatter-legend {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .scatter-legend-item {
     font-size: 12px;
-    margin-bottom: 10px;
+  }
+}
+
+/* Small Mobile (< 480px) */
+@media (max-width: 479px) {
+  .charts-container {
+    grid-template-columns: 1fr;
+    gap: 12px;
+    padding: 12px;
+  }
+
+  .chart-card {
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid var(--bg-secondary, #e5e7eb);
+  }
+
+  .chart-title {
+    font-size: 13px;
+    margin-bottom: 12px;
+    gap: 4px;
   }
 
   .info-cards-row {
@@ -264,16 +386,24 @@
   }
 
   .info-card {
-    padding: 12px;
-    gap: 12px;
+    padding: 10px;
+    gap: 10px;
+    flex-direction: column;
+    align-items: flex-start;
   }
 
   .info-card-icon {
-    font-size: 24px;
+    font-size: 20px;
+    min-width: 35px;
+    height: 35px;
   }
 
   .info-card-value {
-    font-size: 16px;
+    font-size: 14px;
+  }
+
+  .info-card-amount {
+    font-size: 14px;
   }
 
   .info-card-label {
@@ -284,462 +414,39 @@
     font-size: 10px;
   }
 
-  .info-card-amount {
-    font-size: 12px;
-  }
-}
-
-/* ====================================
-   MAP CONTAINER
-   ==================================== */
-
-.map-container-analytics {
-  width: 100%;
-  border-radius: var(--radius-md);
-  overflow: hidden;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-}
-
-.map-container-analytics .leaflet-container {
-  border-radius: var(--radius-md);
-}
-
-/* ====================================
-   EXPENSE LOGGER
-   ==================================== */
-
-.expense-logger {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-.expense-inputs {
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-}
-
-.expense-input,
-.expense-select {
-  flex: 1;
-  min-width: 120px;
-  padding: 10px 12px;
-  border: 1px solid var(--bg-secondary);
-  border-radius: var(--radius-sm);
-  background: var(--bg-primary);
-  color: var(--text-primary);
-  font-size: 13px;
-  font-family: inherit;
-  transition: all 0.2s ease;
-}
-
-.expense-input:focus,
-.expense-select:focus {
-  outline: none;
-  border-color: var(--primary);
-  box-shadow: 0 0 0 2px rgba(5, 102, 141, 0.1);
-}
-
-.expense-input::placeholder {
-  color: var(--text-secondary);
-}
-
-.expense-add-btn {
-  padding: 10px 12px;
-  background: linear-gradient(135deg, var(--primary), var(--accent));
-  color: white;
-  border: none;
-  border-radius: var(--radius-sm);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.2s ease;
-  box-shadow: 0 2px 8px rgba(5, 102, 141, 0.2);
-}
-
-.expense-add-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(5, 102, 141, 0.3);
-}
-
-.expense-add-btn:active {
-  transform: translateY(0);
-}
-
-/* ====================================
-   EXPENSE SUMMARY
-   ==================================== */
-
-.expense-summary {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
-  padding: 16px;
-  background: linear-gradient(135deg, rgba(5, 102, 141, 0.08), rgba(2, 195, 154, 0.04));
-  border-radius: var(--radius-md);
-  border: 1px solid var(--bg-secondary);
-}
-
-.summary-item {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  text-align: center;
-}
-
-.summary-item span {
-  font-size: 11px;
-  font-weight: 600;
-  color: var(--text-secondary);
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.summary-item strong {
-  font-size: 18px;
-  font-weight: 700;
-  color: var(--primary);
-}
-
-.summary-item strong.positive {
-  color: var(--success);
-}
-
-.summary-item strong.negative {
-  color: var(--danger);
-}
-
-/* ====================================
-   EXPENSE LIST
-   ==================================== */
-
-.expense-list {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.expense-list h4 {
-  margin: 0;
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--text-primary);
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.expense-item {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  padding: 12px;
-  background: var(--bg-primary);
-  border: 1px solid var(--bg-secondary);
-  border-radius: var(--radius-sm);
-  transition: all 0.2s ease;
-}
-
-.expense-item:hover {
-  background: var(--bg-hover);
-  border-color: var(--primary);
-}
-
-.expense-details {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  flex: 1;
-}
-
-.expense-name {
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--text-primary);
-}
-
-.expense-date {
-  font-size: 11px;
-  color: var(--text-secondary);
-}
-
-.expense-actions {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.expense-value {
-  font-size: 13px;
-  font-weight: 700;
-  color: var(--primary);
-  min-width: 70px;
-  text-align: right;
-}
-
-.expense-delete-btn {
-  padding: 6px 8px;
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  color: var(--text-secondary);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.2s ease;
-  border-radius: 4px;
-}
-
-.expense-delete-btn:hover {
-  color: var(--danger);
-  background: rgba(239, 68, 68, 0.1);
-}
-
-.empty-expenses {
-  text-align: center;
-  color: var(--text-secondary);
-  font-size: 12px;
-  padding: 12px 0;
-  margin: 0;
-}
-
-/* ====================================
-   RECHARTS CUSTOMIZATION
-   ==================================== */
-
-.recharts-tooltip-wrapper {
-  outline: none;
-}
-
-.recharts-default-tooltip {
-  background: var(--surface) !important;
-  border: 1px solid var(--bg-secondary) !important;
-  border-radius: var(--radius-sm) !important;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
-  padding: 10px !important;
-}
-
-.recharts-tooltip-label {
-  color: var(--text-primary) !important;
-  font-weight: 700 !important;
-  margin-bottom: 6px !important;
-}
-
-.recharts-tooltip-item {
-  color: var(--text-secondary) !important;
-  font-size: 12px !important;
-}
-/* Add this to your existing src/styles/charts.css */
-
-/* Scatter Chart Styles */
-.scatter-legend {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 16px;
-  justify-content: center;
-  margin-top: 12px;
-  padding: 12px;
-  background: var(--bg-secondary, #f3f4f6);
-  border-radius: 8px;
-}
-
-.scatter-legend-item {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 13px;
-  color: var(--text-primary, #1f2937);
-  font-weight: 500;
-}
-
-.scatter-color-dot {
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  display: inline-block;
-  flex-shrink: 0;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
-}
-
-/* Reference line for scatter chart */
-.recharts-surface {
-  overflow: visible;
-}
-
-/* Responsive for Scatter Chart */
-@media (max-width: 768px) {
-  .scatter-legend {
-    gap: 12px;
-  }
-
-  .scatter-legend-item {
-    font-size: 12px;
-  }
-}
-
-@media (max-width: 480px) {
-  .scatter-legend {
-    flex-direction: column;
-    gap: 8px;
-  }
-
-  .scatter-legend-item {
-    font-size: 11px;
-  }
-}
-
-/* ====================================
-   RESPONSIVE
-   ==================================== */
-
-@media (max-width: 1024px) {
-  .analytics-charts-container {
-    grid-template-columns: 1fr;
-    gap: 16px;
-  }
-
-  .chart-card {
-    padding: 16px;
-  }
-
-  .chart-title {
-    font-size: 15px;
-    margin-bottom: 12px;
-  }
-
-  .expense-summary {
-    gap: 10px;
-    padding: 12px;
-  }
-
-  .summary-item strong {
-    font-size: 16px;
-  }
-}
-
-@media (max-width: 768px) {
-  .analytics-charts-container {
-    grid-template-columns: 1fr;
-    gap: 12px;
-  }
-
-  .chart-card {
-    padding: 12px;
-  }
-
-  .chart-title {
-    font-size: 13px;
-  }
-
-  .expense-inputs {
-    gap: 8px;
-  }
-
-  .expense-input,
-  .expense-select {
-    min-width: 100px;
-    padding: 8px 10px;
-    font-size: 12px;
-  }
-
-  .expense-summary {
-    grid-template-columns: 1fr;
-    gap: 8px;
-    padding: 10px;
-  }
-
-  .summary-item strong {
-    font-size: 14px;
-  }
-
-  .expense-item {
-    padding: 10px;
-    flex-wrap: wrap;
-  }
-
-  .expense-value {
-    font-size: 12px;
-  }
-
-  .expense-delete-btn {
-    padding: 4px 6px;
-  }
-}
-
-@media (max-width: 480px) {
-  .analytics-charts-container {
-    grid-template-columns: 1fr;
-    gap: 10px;
-  }
-
-  .chart-card {
-    padding: 10px;
-  }
-
-  .chart-title {
-    font-size: 12px;
-    margin-bottom: 10px;
-  }
-
-  .expense-inputs {
-    flex-direction: column;
-    gap: 6px;
-  }
-
-  .expense-input,
-  .expense-select {
-    width: 100%;
-    font-size: 11px;
-    padding: 8px;
-  }
-
-  .expense-add-btn {
-    width: 100%;
-    padding: 8px;
-  }
-
-  .expense-summary {
-    grid-template-columns: 1fr;
-    gap: 6px;
-    padding: 8px;
-  }
-
-  .summary-item {
+  .percentage-bar-container {
     gap: 4px;
   }
 
-  .summary-item span {
+  .percentage-text {
     font-size: 10px;
   }
 
-  .summary-item strong {
+  .scatter-legend {
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 12px;
+    padding-top: 12px;
+  }
+
+  .scatter-legend-item {
+    font-size: 11px;
+  }
+
+  .no-data {
+    padding: 30px 15px;
     font-size: 12px;
   }
 
-  .expense-list h4 {
-    font-size: 11px;
+  .recharts-text {
+    font-size: 10px;
   }
 
-  .expense-item {
-    padding: 8px;
-    gap: 8px;
+  .recharts-cartesian-axis-tick {
+    font-size: 10px;
   }
 
-  .expense-details {
-    gap: 2px;
-  }
-
-  .expense-name {
-    font-size: 11px;
-  }
-
-  .expense-date {
-    font-size: 9px;
-  }
-
-  .expense-value {
-    font-size: 11px;
+  .recharts-legend-item-text {
+    font-size: 10px !important;
   }
 }
