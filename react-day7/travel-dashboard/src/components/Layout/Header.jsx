@@ -3,7 +3,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { useUser } from "../../context/UserContext";
 import Button from "../Shared/Button";
 import { useNotificationStore } from "../../store/notificationStore";
-import { useUIStore } from "../../store/uiStore";
+// import { useUIStore } from "../../store/uiStore";
 import "../../styles/components.css";
 import "../../styles/header.css";
 
@@ -14,8 +14,6 @@ const Header = () => {
   const [showDropdown, setShowDropdown] = useState(false);
   const dropdownRef = useRef(null);
   const unreadCount = useNotificationStore((state) => state.unreadCount);
-  const toggleSidebar = useUIStore((state) => state.toggleSidebar);
-  const sidebarOpen = useUIStore((state) => state.sidebarOpen);
 
   useEffect(() => {
     const handleClickOutside = (event) => {

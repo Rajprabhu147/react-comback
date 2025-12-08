@@ -50,6 +50,7 @@ const PageLayout = ({
               {/* Optional "Back" button — navigates user to previous page */}
               {showBackButton && (
                 <Button
+                  id="back-button"
                   variant="secondary"
                   size="sm"
                   icon={<span>←</span>} // arrow icon
