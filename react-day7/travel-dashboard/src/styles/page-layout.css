@@ -10,24 +10,26 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 32px;
-  padding-bottom: 24px;
+  width: 90%;
+  margin: 0 auto 32px auto;
+
   border-bottom: 2px solid var(--bg-secondary);
   animation: fadeIn 0.3s ease-out;
 }
 
 .page-header-content {
-  display: flex;
-  align-items: center;
+    display: flex;
+  flex-direction: column;
   gap: 16px;
 }
 
 .back-button {
-  flex-shrink: 0;
+  display: inline-flex;
+
 }
 
 .page-title {
-  font-size: 2rem;
+  font-size: 1.75rem;
   font-weight: 700;
   color: var(--text-primary);
   margin: 0;
@@ -45,7 +47,8 @@
 
 .page-header-actions {
   display: flex;
-  gap: 12px;
+  align-items: center;
+  gap: 10px;
 }
 
 /* ====================================

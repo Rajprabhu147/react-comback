@@ -47,24 +47,23 @@ const PageLayout = ({
           <div className="page-header">
             {/* Left side: back button + title/subtitle */}
             <div className="page-header-content">
-              {/* Optional "Back" button — navigates user to previous page */}
-              {showBackButton && (
-                <Button
-                  id="back-button"
-                  variant="secondary"
-                  size="sm"
-                  icon={<span>←</span>} // arrow icon
-                  onClick={() => navigate(-1)} // go back in history
-                  className="back-button"
-                >
-                  Back
-                </Button>
-              )}
-
               {/* Title + optional subtitle */}
               <div>
                 <h1 className="page-title">{title}</h1>
                 {subtitle && <p className="page-subtitle">{subtitle}</p>}
+                {/* Optional "Back" button — navigates user to previous page */}
+                {showBackButton && (
+                  <Button
+                    id="back-button"
+                    variant="secondary"
+                    size="sm"
+                    icon={<span>←</span>} // arrow icon
+                    onClick={() => navigate(-1)} // go back in history
+                    className="back-button"
+                  >
+                    Back
+                  </Button>
+                )}
               </div>
             </div>
 
