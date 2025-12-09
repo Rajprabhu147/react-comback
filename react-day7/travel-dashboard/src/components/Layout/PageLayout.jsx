@@ -13,7 +13,7 @@ import "../../styles/page-layout.css";
 /**
  * PageLayout Component
  * ----------------------
- * A reusable layout wrapper used by most pages across the dashboard.
+ * A reusable layout wrapper u sed by most pages across the dashboard.
  * It provides:
  * - App header at the top
  * - Optional sidebar

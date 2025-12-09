@@ -2,7 +2,7 @@
 
 import React from "react";
 import Header from "../components/Layout/Header";
-import FilterBar from "../components/Layout/FilterBar";
+// import FilterBar from "../components/Layout/FilterBar";
 import AnalyticsCharts from "../components/Analytics/AnalyticsCharts";
 import {
   CalendarSection,
@@ -96,7 +96,6 @@ const Dashboard = () => {
   return (
     <div className="app">
       <Header />
-      <FilterBar />
 
       <div className="app-container">
         <main className="main-content">

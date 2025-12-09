@@ -55,7 +55,7 @@ const ProfileHeader = ({ user }) => {
     <div className="profile-header">
       {/* Banner Background */}
       <div className="profile-banner">
-        <div className="banner-gradient"></div>
+        {/* <div className="banner-gradient"></div> */}
       </div>
 
       {/* Profile Content */}
@@ -71,7 +71,7 @@ const ProfileHeader = ({ user }) => {
         </div>
 
         {/* Stats */}
-        <div className="profile-stats">
+        {/* <div className="profile-stats">
           <div className="stat-item">
             <div className="stat-value">0</div>
             <div className="stat-label">Items</div>
@@ -86,7 +86,7 @@ const ProfileHeader = ({ user }) => {
             <div className="stat-value">0</div>
             <div className="stat-label">In Progress</div>
           </div>
-        </div>
+        </div> */}
 
         {/* Meta */}
         <div className="profile-meta">
