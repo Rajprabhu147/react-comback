@@ -326,7 +326,7 @@ const ProfileSettings = () => {
             </div>
 
             {/* BIO */}
-            <div className="form-group">
+            {/* <div className="form-group">
               <label className="form-label">Bio</label>
               <textarea
                 name="bio"
@@ -342,7 +342,7 @@ const ProfileSettings = () => {
                 {formData.bio.length} / 500
               </span>
             </div>
-
+ */}
             {/* LOCATION + WEBSITE */}
             <div className="form-row">
               <Input
