@@ -2,71 +2,53 @@ import { create } from "zustand";
 
 /**
  * useNotificationStore
- * -------------------------------------------------------
- * Global Zustand store that manages:
- * - Notifications data
- * - Filtering (all, unread, items, system)
- * - Marking as read
- * - Deleting notifications
- * - Adding new in-app notifications
  *
- * This store is used throughout the dashboard to display and
- * update notification state in real-time.
+ * Global Zustand store for managing notifications
+ * - Display notifications
+ * - Mark as read
+ * - Delete notifications
+ * - Add new notifications
+ * - Filter by status (all, unread, system)
  */
+
 export const useNotificationStore = create((set) => ({
-  /* -------------------------------------------------------
-    Default Notification List (sample data for demo)
-    Each notification includes:
-    - id
-    - type (success, warning, error, info)
-    - title + message
-    - timestamp (ISO string)
-    - read status
-    - category (items/system)
-    ------------------------------------------------------- */
   notifications: [
     {
       id: "1",
       type: "success",
-      title: "Item Created",
-      message:
-        'Your new item "Beach Trip Planning" has been created successfully.',
-      timestamp: new Date(Date.now() - 1000 * 60 * 5).toISOString(), // 5 minutes ago
+      title: "System Updated",
+      message: "Your account settings have been successfully saved.",
+      timestamp: new Date(Date.now() - 1000 * 60 * 5).toISOString(),
       read: false,
-      category: "items",
+      category: "system",
     },
     {
       id: "2",
       type: "info",
-      title: "System Update",
-      message:
-        "A new version of the dashboard is available. Please refresh to update.",
-      timestamp: new Date(Date.now() - 1000 * 60 * 30).toISOString(), // 30 min ago
+      title: "New Feature Available",
+      message: "Check out our latest features and improvements.",
+      timestamp: new Date(Date.now() - 1000 * 60 * 30).toISOString(),
       read: false,
       category: "system",
     },
     {
       id: "3",
       type: "warning",
-      title: "High Priority Item",
-      message: "You have 3 high-priority items that need attention.",
-      timestamp: new Date(Date.now() - 1000 * 60 * 60 * 2).toISOString(), // 2 hours ago
+      title: "Maintenance Scheduled",
+      message: "Scheduled maintenance coming on Sunday 2:00 AM.",
+      timestamp: new Date(Date.now() - 1000 * 60 * 60 * 2).toISOString(),
       read: true,
-      category: "items",
+      category: "system",
     },
   ],
 
-  // Tracks number of unread notifications
   unreadCount: 2,
-
-  // Active filter applied on notifications (all | unread | items | system)
   filter: "all",
 
-  /* -------------------------------------------------------
+  /**
    * markAsRead(id)
-   * Marks a single notification as read
-   * Reduces unreadCount by 1 (but never below 0)
-   * ------------------------------------------------------- */
+   * Mark a single notification as read
+   */
   markAsRead: (id) =>
     set((state) => ({
       notifications: state.notifications.map((n) =>
@@ -75,25 +57,22 @@ export const useNotificationStore = create((set) => ({
       unreadCount: Math.max(0, state.unreadCount - 1),
     })),
 
-  /* -------------------------------------------------------
+  /**
    * markAllAsRead()
-   * Marks every notification as read
-   * Sets unreadCount to 0
-   * ------------------------------------------------------- */
+   * Mark all notifications as read
+   */
   markAllAsRead: () =>
     set((state) => ({
       notifications: state.notifications.map((n) => ({ ...n, read: true })),
       unreadCount: 0,
     })),
 
-  /* -------------------------------------------------------
+  /**
    * deleteNotification(id)
-   * Removes a notification from the list
-   * Reduces unreadCount only if deleted notification was unread
-   * ------------------------------------------------------- */
+   * Remove a notification from the list
+   */
   deleteNotification: (id) =>
     set((state) => {
-      // Find deleted notification to check if it was unread
       const notification = state.notifications.find((n) => n.id === id);
 
       return {
@@ -105,21 +84,16 @@ export const useNotificationStore = create((set) => ({
       };
     }),
 
-  /* -------------------------------------------------------
+  /**
    * addNotification(notification)
-   * Adds a new notification to the top of the list
-   * Automatically sets:
-   * - new id
-   * - timestamp
-   * - read = false
-   * Increases unreadCount by 1
-   * ------------------------------------------------------- */
+   * Add a new notification to the top of the list
+   */
   addNotification: (notification) =>
     set((state) => ({
       notifications: [
         {
           ...notification,
-          id: Date.now().toString(), // Unique ID
+          id: Date.now().toString(),
           timestamp: new Date().toISOString(),
           read: false,
         },
@@ -128,9 +102,9 @@ export const useNotificationStore = create((set) => ({
       unreadCount: state.unreadCount + 1,
     })),
 
-  /* -------------------------------------------------------
+  /**
    * setFilter(filter)
-   * Updates which notifications the UI should display
-   * ------------------------------------------------------- */
+   * Filter notifications by: all | unread | system
+   */
   setFilter: (filter) => set({ filter }),
 }));
