@@ -15,15 +15,15 @@ import { create } from "zustand";
  */
 export const useNotificationStore = create((set) => ({
   /* -------------------------------------------------------
-   * Default Notification List (sample data for demo)
-   * Each notification includes:
-   * - id
-   * - type (success, warning, error, info)
-   * - title + message
-   * - timestamp (ISO string)
-   * - read status
-   * - category (items/system)
-   * ------------------------------------------------------- */
+    Default Notification List (sample data for demo)
+    Each notification includes:
+    - id
+    - type (success, warning, error, info)
+    - title + message
+    - timestamp (ISO string)
+    - read status
+    - category (items/system)
+    ------------------------------------------------------- */
   notifications: [
     {
       id: "1",
