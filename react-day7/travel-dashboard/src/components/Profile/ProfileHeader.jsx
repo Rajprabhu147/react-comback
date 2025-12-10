@@ -31,8 +31,9 @@ const ProfileHeader = ({ user }) => {
   return (
     <div className="profile-header">
       <div className="profile-userinfo">
-        <h2 className="profile-name">{getDisplayName(user?.email)}</h2>
         <div className="profile-meta">
+          <p className="profile-name">{getDisplayName(user?.email)}</p>
+
           <span className="meta-item">📅 Member since {getMemberSince()}</span>
           <span className="meta-item">🌊 Travel Enthusiast</span>
         </div>
