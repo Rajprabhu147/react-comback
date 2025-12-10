@@ -13,6 +13,7 @@
 .app-container {
   display: flex;
   flex: 1;
+  
 }
 
 /* Main content area */
@@ -28,11 +29,13 @@
    ===================================================== */
 
 .page-header {
+      width: 90%;
+    margin: 0 auto;
+  padding: 10px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   margin-bottom: 24px;
-  /* gap: 16px; */
 }
 
 .page-header-content {
