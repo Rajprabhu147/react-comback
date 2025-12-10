@@ -12,8 +12,12 @@ import CalendarGrid from "./CalendarGrid";
  * - Can navigate forward/backward
  */
 const CalendarSection = ({ activities, onAddActivity, onEditActivity }) => {
-  // State: current month being displayed
+  // State: current month being displayed (synced with real calendar)
   const [currentMonth, setCurrentMonth] = useState(new Date());
+
+  // Get today's date with time reset for comparison
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
 
   /**
    * Navigate to previous month
@@ -79,6 +83,7 @@ const CalendarSection = ({ activities, onAddActivity, onEditActivity }) => {
         onAddActivity={onAddActivity}
         onEditActivity={onEditActivity}
         currentMonth={currentMonth}
+        today={today}
       />
     </div>
   );
