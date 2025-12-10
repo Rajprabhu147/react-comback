@@ -58,23 +58,6 @@
   overflow: hidden;
 }
 
-/* .profile-banner {
-  display: hidden;
-  height: 120px;
-  position: relative;
-  background: linear-gradient(135deg, var(--primary), var(--accent));
-}
-
-.banner-gradient {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    180deg,
-    transparent 0%,
-    rgba(0, 0, 0, 0.1) 100%
-  );
-} */
-
 .profile-info {
   padding: 20px 24px;
   background: var(--surface);
