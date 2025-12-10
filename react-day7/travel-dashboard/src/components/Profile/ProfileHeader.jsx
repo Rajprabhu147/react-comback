@@ -32,7 +32,7 @@ const ProfileHeader = ({ user }) => {
     <div className="profile-header">
       <div className="profile-userinfo">
         <div className="profile-meta">
-          <p className="profile-name">{getDisplayName(user?.email)}</p>
+          <h3 className="profile-name">{getDisplayName(user?.email)}</h3>
 
           <span className="meta-item">📅 Member since {getMemberSince()}</span>
           <span className="meta-item">🌊 Travel Enthusiast</span>
