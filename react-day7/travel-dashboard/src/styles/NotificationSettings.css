@@ -5,7 +5,7 @@
 .notification-settings-container {
   /* min-height: 100vh; */
   background: var(--bg-primary);
-  padding: 16px;
+  /* padding: 16px; */
   display: flex;
   justify-content: center;
   align-items: center;
