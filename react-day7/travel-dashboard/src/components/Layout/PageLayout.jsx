@@ -48,7 +48,7 @@ const PageLayout = ({
             {/* Left side: back button + title/subtitle */}
             <div className="page-header-content">
               {/* Title + optional subtitle */}
-              <div>
+              <div className="page-title-container">
                 <h1 className="page-title">{title}</h1>
                 {subtitle && <p className="page-subtitle">{subtitle}</p>}
                 {/* Optional "Back" button — navigates user to previous page */}
