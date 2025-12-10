@@ -1,5 +1,3 @@
-// src/components/TripPlanner/CalendarGrid.jsx
-
 import React, { useState } from "react";
 import { WEEKDAY_NAMES, getCategoryColor } from "./constants";
 import "../../styles/calendar-grid.css";
@@ -28,12 +26,47 @@ const CalendarGrid = ({
     );
   };
 
+  const isPastDay = (day) => {
+    if (!day) return false;
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const cellDate = new Date(
+      currentMonth.getFullYear(),
+      currentMonth.getMonth(),
+      day
+    );
+    cellDate.setHours(0, 0, 0, 0);
+
+    return cellDate < today;
+  };
+
+  const handleDayClick = (day) => {
+    if (day && isPastDay(day)) {
+      alert("You can't add activity on passed days");
+      return;
+    }
+    if (day) {
+      onAddActivity(day);
+    }
+  };
+
+  const handleActivityClick = (e, activity, isPast) => {
+    e.stopPropagation();
+    if (isPast) {
+      alert("You can't edit activity on passed days");
+      return;
+    }
+    onEditActivity(activity);
+  };
+
   return (
     <>
       {/* Weekday Headers */}
-      <div className="calendar-weekdays">
+      <div className="calendar-day-labels">
         {WEEKDAY_NAMES.map((day) => (
-          <div key={day} className="weekday-header">
+          <div key={day} className="day-label">
             {day}
           </div>
         ))}
@@ -44,51 +77,71 @@ const CalendarGrid = ({
         {days.map((day, idx) => {
           const dayActivities = day ? getActivitiesForDay(day) : [];
           const isTodayCell = day && isToday(day);
+          const isPast = day && isPastDay(day);
 
-          const cellClassName = `calendar-day-cell ${!day ? "empty-day" : ""} ${
+          const cellClassName = `calendar-day ${!day ? "empty-day" : ""} ${
             isTodayCell ? "today-day" : ""
-          } ${dayActivities.length > 0 ? "has-activities" : ""}`;
+          } ${dayActivities.length > 0 ? "has-activities" : ""} ${
+            isPast ? "past-day" : "active-day"
+          }`;
 
           return (
             <div
               key={idx}
               className={cellClassName}
-              onMouseEnter={() =>
-                day && dayActivities.length > 0 && setHoveredDay(day)
-              }
+              onMouseEnter={() => setHoveredDay(day)}
               onMouseLeave={() => setHoveredDay(null)}
-              onClick={() => day && onAddActivity(day)}
+              onClick={() => handleDayClick(day)}
+              title={isPast ? "This day has passed. No changes allowed." : ""}
             >
               {day && (
                 <>
                   <div className="day-number">{day}</div>
-                  <div className="day-activities">
-                    {dayActivities.slice(0, 2).map((activity, i) => (
-                      <div
-                        key={i}
-                        className="activity-badge"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          onEditActivity(activity);
-                        }}
-                        title={activity.activity}
-                        style={{
-                          backgroundColor: getCategoryColor(activity.category),
-                        }}
-                      >
-                        {activity.activity}
-                      </div>
-                    ))}
-                    {dayActivities.length > 2 && (
-                      <div className="more-activities-badge">
-                        +{dayActivities.length - 2} more
+
+                  {!isPast && (
+                    <button className="add-activity-btn" title="Add activity">
+                      +
+                    </button>
+                  )}
+
+                  {/* Activity Tooltip - Only show for future days */}
+                  {hoveredDay === day &&
+                    !isPast &&
+                    dayActivities.length > 0 && (
+                      <div className="activity-tooltip">
+                        <div className="tooltip-header">
+                          {dayActivities.length} Activity
+                          {dayActivities.length > 1 ? "ies" : ""}
+                        </div>
+                        <div className="tooltip-activities">
+                          {dayActivities.map((activity, i) => (
+                            <div key={i} className="tooltip-activity">
+                              <div>
+                                <div className="tooltip-activity-title">
+                                  {activity.activity}
+                                </div>
+                                <div className="tooltip-activity-time">
+                                  {activity.time}
+                                </div>
+                              </div>
+                              <button
+                                className="tooltip-remove-btn"
+                                onClick={(e) =>
+                                  handleActivityClick(e, activity, isPast)
+                                }
+                                title="Edit activity"
+                              >
+                                ✎
+                              </button>
+                            </div>
+                          ))}
+                        </div>
                       </div>
                     )}
-                  </div>
 
-                  {/* Activity Tooltip */}
-                  {hoveredDay === day && dayActivities.length > 0 && (
-                    <div className="activity-tooltip">
+                  {/* Show activities on past days - read only */}
+                  {hoveredDay === day && isPast && dayActivities.length > 0 && (
+                    <div className="activity-tooltip past-activities-tooltip">
                       <div className="tooltip-header">
                         {dayActivities.length} Activity
                         {dayActivities.length > 1 ? "ies" : ""}
@@ -96,25 +149,12 @@ const CalendarGrid = ({
                       <div className="tooltip-activities">
                         {dayActivities.map((activity, i) => (
                           <div key={i} className="tooltip-activity">
-                            <div
-                              className="tooltip-activity-dot"
-                              style={{
-                                backgroundColor: getCategoryColor(
-                                  activity.category
-                                ),
-                              }}
-                            ></div>
-                            <div className="tooltip-activity-content">
+                            <div>
                               <div className="tooltip-activity-title">
                                 {activity.activity}
                               </div>
-                              <div className="tooltip-activity-details">
-                                <span className="tooltip-time">
-                                  {activity.time}
-                                </span>
-                                <span className="tooltip-category">
-                                  {activity.category}
-                                </span>
+                              <div className="tooltip-activity-time">
+                                {activity.time}
                               </div>
                             </div>
                           </div>
