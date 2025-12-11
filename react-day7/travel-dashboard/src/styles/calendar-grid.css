@@ -2,22 +2,15 @@
    CALENDAR GRID STYLES
    ==================================== */
 
-.calendar-grid-container {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  padding: 0;
-}
-
-/* Day Labels */
-.calendar-day-labels {
+/* Weekday Headers */
+.calendar-weekdays {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   gap: 8px;
   margin-bottom: 8px;
 }
 
-.day-label {
+.weekday-header {
   text-align: center;
   font-size: 12px;
   font-weight: 700;
@@ -34,7 +27,8 @@
   gap: 8px;
 }
 
-.calendar-day {
+/* Day Cell */
+.calendar-day-cell {
   position: relative;
   aspect-ratio: 1;
   padding: 8px;
@@ -45,80 +39,54 @@
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  min-height: 100px;
+  /* min-height: 100px; */
   transition: all 0.2s ease;
-  cursor: default;
+  cursor: pointer;
 }
 
-.calendar-day.empty-day {
+/* Empty Day (prev/next month) */
+.calendar-day-cell.empty-day {
   background: transparent;
   border: none;
   cursor: default;
 }
 
-.calendar-day.active-day {
-  cursor: pointer;
-}
-
-.calendar-day.active-day:hover {
-  background: var(--bg-hover);
+/* Today Highlight */
+.calendar-day-cell.today-day {
   border-color: var(--primary);
-  box-shadow: 0 2px 8px rgba(5, 102, 141, 0.1);
+  border-width: 2px;
+  background: var(--primary-light);
 }
 
-.calendar-day.has-activities {
+/* Has Activities */
+.calendar-day-cell.has-activities {
   background: linear-gradient(135deg, rgba(2, 195, 154, 0.05), rgba(5, 102, 141, 0.05));
   border-color: rgba(2, 195, 154, 0.3);
 }
 
-.calendar-day.has-activities:hover {
+.calendar-day-cell.has-activities:hover {
   background: linear-gradient(135deg, rgba(2, 195, 154, 0.1), rgba(5, 102, 141, 0.1));
   border-color: var(--primary);
 }
 
-/* ====================================
-   PAST DAY STYLING (ADDED)
-   ==================================== */
-
-.calendar-day.past-day {
+/* Past Day (Disabled) */
+.calendar-day-cell.past-day {
   opacity: 0.5;
   background-color: var(--bg-secondary);
   cursor: not-allowed;
 }
 
-.calendar-day.past-day .day-number {
+.calendar-day-cell.past-day .day-number {
   color: var(--text-muted);
 }
 
-.calendar-day.past-day .activity-indicator {
-  opacity: 0.7;
-  cursor: not-allowed;
-}
-
-.calendar-day.past-day:hover {
+.calendar-day-cell.past-day:hover {
   background-color: var(--bg-secondary);
   border-color: var(--bg-secondary);
   box-shadow: none;
 }
 
-/* Tooltip for past days */
-.activity-tooltip.past-activities-tooltip {
-  background: var(--bg-secondary);
-  border: 1px solid rgba(107, 123, 138, 0.3);
-  opacity: 0.8;
-}
-
-.activity-tooltip.past-activities-tooltip .tooltip-header {
-  color: var(--text-muted);
-}
-
-.activity-tooltip.past-activities-tooltip .tooltip-activity {
-  opacity: 0.8;
-  pointer-events: none;
-}
-
-/* ==================================== */
-
+/* Day Number */
 .day-number {
   font-size: 14px;
   font-weight: 700;
@@ -128,117 +96,47 @@
   text-align: center;
 }
 
-/* Activity Indicators */
-.activity-indicators {
+/* Activities Container */
+.day-activities {
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
   gap: 4px;
   width: 100%;
-  justify-content: center;
   flex: 1;
-  padding: 4px 0;
 }
 
-.activity-indicator {
-  width: 20px;
-  height: 20px;
-  background: linear-gradient(135deg, var(--primary), var(--accent));
-  color: white;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 10px;
-  font-weight: 700;
-  flex-shrink: 0;
-  box-shadow: 0 2px 4px rgba(5, 102, 141, 0.2);
-}
-
-.activity-indicator.more {
-  background: rgba(5, 102, 141, 0.6);
-  font-size: 9px;
-}
-
-/* Add Activity Button */
-.add-activity-btn {
-  width: 24px;
-  height: 24px;
-  padding: 2px;
-  background: rgba(5, 102, 141, 0.1);
-  border: 1px solid rgba(5, 102, 141, 0.2);
-  border-radius: 4px;
-  color: var(--primary);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.2s ease;
-  margin-top: auto;
-}
-
-.add-activity-btn:hover {
-  background: rgba(5, 102, 141, 0.2);
-  border-color: var(--primary);
-  transform: scale(1.1);
-}
-
-/* Activity Input */
-.activity-input-wrapper {
-  width: 100%;
-  display: flex;
-  gap: 4px;
-  padding: 4px;
-  background: var(--bg-secondary);
-  border-radius: 4px;
-  margin-top: 4px;
-}
-
-.activity-input {
-  flex: 1;
-  padding: 6px 8px;
-  border: 1px solid var(--bg-secondary);
-  border-radius: 4px;
-  background: var(--bg-primary);
-  color: var(--text-primary);
+/* Activity Badge */
+.activity-badge {
   font-size: 11px;
-  font-family: inherit;
-  transition: all 0.2s ease;
-}
-
-.activity-input:focus {
-  outline: none;
-  border-color: var(--primary);
-  box-shadow: 0 0 0 2px rgba(5, 102, 141, 0.1);
-}
-
-.activity-input::placeholder {
-  color: var(--text-secondary);
-}
-
-.save-activity-btn {
-  width: 28px;
-  height: 28px;
-  padding: 4px;
-  background: linear-gradient(135deg, var(--primary), var(--accent));
-  border: none;
+  padding: 4px 6px;
   border-radius: 4px;
   color: white;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   transition: all 0.2s ease;
-  flex-shrink: 0;
+  display: block;
 }
 
-.save-activity-btn:hover {
+.activity-badge:hover {
+  opacity: 0.9;
   transform: scale(1.05);
-  box-shadow: 0 2px 8px rgba(5, 102, 141, 0.2);
 }
 
-.save-activity-btn:active {
-  transform: scale(0.98);
+/* More Activities Badge */
+.more-activities-badge {
+  font-size: 10px;
+  color: var(--text-secondary);
+  font-weight: 600;
+  padding: 2px 4px;
+  text-align: center;
 }
+
+/* ====================================
+   TOOLTIPS & POPOVERS
+   ==================================== */
 
 /* Activity Tooltip */
 .activity-tooltip {
@@ -304,7 +202,6 @@
   padding: 8px 12px;
   border-bottom: 1px solid var(--bg-secondary);
   display: flex;
-  justify-content: space-between;
   align-items: center;
   gap: 8px;
   transition: all 0.2s ease;
@@ -318,44 +215,65 @@
   background: rgba(5, 102, 141, 0.05);
 }
 
+.tooltip-activity-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.tooltip-activity-content {
+  flex: 1;
+}
+
 .tooltip-activity-title {
   font-size: 12px;
   font-weight: 600;
   color: var(--text-primary);
-  flex: 1;
+  margin-bottom: 2px;
   word-break: break-word;
 }
 
-.tooltip-activity-time {
+.tooltip-activity-details {
+  display: flex;
+  gap: 8px;
   font-size: 10px;
   color: var(--text-secondary);
-  white-space: nowrap;
 }
 
-.tooltip-remove-btn {
-  width: 20px;
-  height: 20px;
-  padding: 2px;
-  background: rgba(239, 68, 68, 0.1);
-  border: none;
+.tooltip-time {
+  font-weight: 500;
+}
+
+.tooltip-category {
+  background: var(--bg-primary);
+  padding: 2px 6px;
   border-radius: 3px;
-  color: var(--danger);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.2s ease;
-  flex-shrink: 0;
+  text-transform: capitalize;
 }
 
-.tooltip-remove-btn:hover {
-  background: rgba(239, 68, 68, 0.2);
-  transform: scale(1.1);
+/* Past Activities Tooltip - Read Only */
+.activity-tooltip.past-activities-tooltip {
+  background: var(--bg-secondary);
+  border: 1px solid rgba(107, 123, 138, 0.3);
+  opacity: 0.8;
 }
 
-/* Responsive */
+.activity-tooltip.past-activities-tooltip .tooltip-header {
+  color: var(--text-muted);
+}
+
+.activity-tooltip.past-activities-tooltip .tooltip-activity {
+  opacity: 0.8;
+  pointer-events: none;
+}
+
+/* ====================================
+   RESPONSIVE
+   ==================================== */
+
 @media (max-width: 768px) {
-  .calendar-day {
+  .calendar-day-cell {
     min-height: 80px;
     padding: 6px;
   }
@@ -364,15 +282,9 @@
     font-size: 12px;
   }
 
-  .activity-indicator {
-    width: 18px;
-    height: 18px;
-    font-size: 9px;
-  }
-
-  .add-activity-btn {
-    width: 20px;
-    height: 20px;
+  .activity-badge {
+    font-size: 10px;
+    padding: 3px 4px;
   }
 
   .activity-tooltip {
@@ -390,10 +302,9 @@
     gap: 6px;
   }
 
-  .calendar-day {
+  .calendar-day-cell {
     min-height: 70px;
     padding: 4px;
-    font-size: 10px;
   }
 
   .day-number {
@@ -401,20 +312,13 @@
     margin-bottom: 2px;
   }
 
-  .activity-indicator {
-    width: 16px;
-    height: 16px;
-    font-size: 8px;
+  .activity-badge {
+    font-size: 9px;
+    padding: 2px 3px;
   }
 
-  .add-activity-btn {
-    width: 18px;
-    height: 18px;
-  }
-
-  .activity-input {
+  .weekday-header {
     font-size: 10px;
-    padding: 4px 6px;
   }
 
   .activity-tooltip {
@@ -430,13 +334,15 @@
 
   .tooltip-activity {
     padding: 6px 10px;
+    flex-direction: column;
+    align-items: flex-start;
   }
 
   .tooltip-activity-title {
     font-size: 10px;
   }
 
-  .tooltip-activity-time {
+  .tooltip-activity-details {
     font-size: 9px;
   }
 }

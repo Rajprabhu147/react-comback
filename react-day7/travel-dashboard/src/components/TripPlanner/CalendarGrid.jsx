@@ -3,6 +3,16 @@ import DayActivityPopover from "./DayActivityPopover";
 import { WEEKDAY_NAMES, getCategoryColor } from "./constants";
 import "../../styles/calendar-grid.css";
 
+/**
+ * CalendarGrid Component
+ *
+ * Displays a calendar grid with trip activities
+ * - Shows all days of the month in 7-column grid
+ * - Displays activity badges for each day
+ * - Tooltips/popovers for activity details
+ * - Past days are grayed out and interactions blocked by parent
+ * - Today is highlighted with special styling
+ */
 const CalendarGrid = ({
   days,
   activities,
@@ -53,30 +63,19 @@ const CalendarGrid = ({
   };
 
   /**
-   * Handle day click - block past days
+   * Handle day click - pass to parent for blocking logic
    */
   const handleDayClick = (day) => {
-    if (!day) return;
-
-    if (isPastDay(day)) {
-      alert("You cannot add activity on passed days");
-      return;
+    if (day) {
+      onAddActivity(day);
     }
-
-    onAddActivity(day);
   };
 
   /**
-   * Handle activity click - block editing on past days
+   * Handle activity click - pass to parent for blocking logic
    */
   const handleActivityClick = (e, activity) => {
     e.stopPropagation();
-
-    if (isPastDay(activity.day)) {
-      alert("You cannot edit activity on passed days");
-      return;
-    }
-
     onEditActivity(activity);
   };
 
@@ -140,43 +139,15 @@ const CalendarGrid = ({
                     )}
                   </div>
 
-                  {/* Activity Tooltip - Only show for future days */}
+                  {/* Activity Popover - Only show for future days */}
                   {hoveredDay === day &&
                     !isPast &&
                     dayActivities.length > 0 && (
-                      <div className="activity-tooltip">
-                        <div className="tooltip-header">
-                          {dayActivities.length} Activity
-                          {dayActivities.length > 1 ? "ies" : ""}
-                        </div>
-                        <div className="tooltip-activities">
-                          {dayActivities.map((activity, i) => (
-                            <div key={i} className="tooltip-activity">
-                              <div
-                                className="tooltip-activity-dot"
-                                style={{
-                                  backgroundColor: getCategoryColor(
-                                    activity.category
-                                  ),
-                                }}
-                              ></div>
-                              <div className="tooltip-activity-content">
-                                <div className="tooltip-activity-title">
-                                  {activity.activity}
-                                </div>
-                                <div className="tooltip-activity-details">
-                                  <span className="tooltip-time">
-                                    {activity.time}
-                                  </span>
-                                  <span className="tooltip-category">
-                                    {activity.category}
-                                  </span>
-                                </div>
-                              </div>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
+                      <DayActivityPopover
+                        day={day}
+                        activities={dayActivities}
+                        onEditActivity={handleActivityClick}
+                      />
                     )}
 
                   {/* Tooltip for past day activities - read only */}
