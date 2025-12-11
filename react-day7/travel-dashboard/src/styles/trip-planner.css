@@ -904,6 +904,7 @@
 
 .editor-btn.submit-btn {
   background: var(--primary);
+  margin: 0;
   color: white;
 }
 
