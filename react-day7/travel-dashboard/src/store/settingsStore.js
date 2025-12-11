@@ -3,44 +3,50 @@ import { supabase } from "../lib/supabaseClient"; // adjust path as needed
 
 /**
  * useSettingsStore
- * ---------------------------------------------------
- * A global Zustand store that manages:
- * - Appearance settings (theme, compact mode)
+ * Global Zustand store for managing application settings
+ *
+ * Manages:
+ * - Appearance settings (theme, compact mode, font size, animations)
  * - Notification preferences (email, push, sound)
  * - Privacy options (show email, activity)
- * - User interface preferences (items per page, view type)
+ * - User interface preferences (items per page, view type, auto save)
  *
- * Synced with Supabase database for persistence across devices.
- * Falls back to localStorage if DB is unavailable.
+ * Features:
+ * - Synced with Supabase database for persistence across devices
+ * - Falls back to localStorage if DB is unavailable
+ * - Error handling and state tracking
  */
 
 export const useSettingsStore = create((set, get) => ({
-  /* Appearance Settings */
+  /* ===== Appearance Settings ===== */
   theme: "light",
   compactMode: false,
+  fontSize: 14,
+  animations: true,
 
-  /* Notification Settings */
+  /* ===== Notification Settings ===== */
   emailNotifications: true,
   pushNotifications: true,
   notificationSound: true,
 
-  /* Privacy Settings */
+  /* ===== Privacy Settings ===== */
   showEmail: false,
   showActivity: true,
 
-  /* User Preferences */
+  /* ===== User Preferences ===== */
   itemsPerPage: 10,
   defaultView: "grid",
   autoSave: true,
 
-  /* State tracking */
+  /* ===== State Tracking ===== */
   loading: false,
   error: null,
   synced: false,
 
   /**
-   * initializeSettings()
-   * Fetch user settings from Supabase on app load
+   * initializeSettings
+   * Fetches user settings from Supabase on app load
+   * Falls back to localStorage if user is not authenticated
    */
   initializeSettings: async () => {
     set({ loading: true, error: null });
@@ -49,6 +55,7 @@ export const useSettingsStore = create((set, get) => ({
         data: { user },
         error: authError,
       } = await supabase.auth.getUser();
+
       if (authError || !user) {
         // User not authenticated, use localStorage defaults
         const saved = localStorage.getItem("app-settings");
@@ -73,9 +80,12 @@ export const useSettingsStore = create((set, get) => ({
       }
 
       if (data) {
+        // User settings exist, load them
         set({
           theme: data.theme || "light",
           compactMode: data.compact_mode || false,
+          fontSize: data.font_size || 14,
+          animations: data.animations !== false,
           emailNotifications: data.email_notifications !== false,
           pushNotifications: data.push_notifications !== false,
           notificationSound: data.notification_sound !== false,
@@ -94,6 +104,8 @@ export const useSettingsStore = create((set, get) => ({
             user_id: user.id,
             theme: "light",
             compact_mode: false,
+            font_size: 14,
+            animations: true,
             email_notifications: true,
             push_notifications: true,
             notification_sound: true,
@@ -118,20 +130,27 @@ export const useSettingsStore = create((set, get) => ({
   },
 
   /**
-   * updateSettingInDB(field, value)
-   * Helper function to sync a single setting to database
+   * updateSettingInDB
+   * Helper function to sync a single setting to the database
+   * Maps frontend field names to database column names
    */
   updateSettingInDB: async (field, value) => {
     try {
       const {
         data: { user },
       } = await supabase.auth.getUser();
-      if (!user) return;
+
+      if (!user) {
+        console.warn("User not authenticated, settings not synced to database");
+        return;
+      }
 
       // Map frontend field names to database column names
       const dbFieldMap = {
         theme: "theme",
         compactMode: "compact_mode",
+        fontSize: "font_size",
+        animations: "animations",
         emailNotifications: "email_notifications",
         pushNotifications: "push_notifications",
         notificationSound: "notification_sound",
@@ -143,7 +162,10 @@ export const useSettingsStore = create((set, get) => ({
       };
 
       const dbField = dbFieldMap[field];
-      if (!dbField) return;
+      if (!dbField) {
+        console.warn(`Unknown setting field: ${field}`);
+        return;
+      }
 
       const { error } = await supabase
         .from("user_settings")
@@ -159,23 +181,62 @@ export const useSettingsStore = create((set, get) => ({
     }
   },
 
-  /* Appearance Setters */
+  /* ===== Appearance Setters ===== */
+
+  /**
+   * setTheme
+   * Updates theme and syncs to database
+   * Supported themes: light, dark, coastal, contrast, auto
+   */
   setTheme: (theme) => {
     set({ theme });
     get().updateSettingInDB("theme", theme);
   },
 
+  /**
+   * setCompactMode
+   * Toggles compact mode and syncs to database
+   */
   setCompactMode: (compactMode) => {
     set({ compactMode });
     get().updateSettingInDB("compactMode", compactMode);
   },
 
-  /* Notification Setters */
+  /**
+   * setFontSize
+   * Updates font size (12-20px) and syncs to database
+   */
+  setFontSize: (fontSize) => {
+    const validSize = Math.max(12, Math.min(20, fontSize));
+    set({ fontSize: validSize });
+    get().updateSettingInDB("fontSize", validSize);
+  },
+
+  /**
+   * setAnimations
+   * Toggles animations and syncs to database
+   */
+  setAnimations: (animations) => {
+    set({ animations });
+    get().updateSettingInDB("animations", animations);
+  },
+
+  /* ===== Notification Setters ===== */
+
+  /**
+   * setEmailNotifications
+   * Toggles email notifications and syncs to database
+   */
   setEmailNotifications: (emailNotifications) => {
     set({ emailNotifications });
     get().updateSettingInDB("emailNotifications", emailNotifications);
   },
 
+  /**
+   * setPushNotifications
+   * Toggles push notifications and syncs to database
+   * Requests browser permission if enabling
+   */
   setPushNotifications: (pushNotifications) => {
     set({ pushNotifications });
     get().updateSettingInDB("pushNotifications", pushNotifications);
@@ -186,46 +247,74 @@ export const useSettingsStore = create((set, get) => ({
     }
   },
 
+  /**
+   * setNotificationSound
+   * Toggles notification sound and syncs to database
+   */
   setNotificationSound: (notificationSound) => {
     set({ notificationSound });
     get().updateSettingInDB("notificationSound", notificationSound);
   },
 
-  /* Privacy Setters */
+  /* ===== Privacy Setters ===== */
+
+  /**
+   * setShowEmail
+   * Toggles email visibility on public profile and syncs to database
+   */
   setShowEmail: (showEmail) => {
     set({ showEmail });
     get().updateSettingInDB("showEmail", showEmail);
   },
 
+  /**
+   * setShowActivity
+   * Toggles activity status visibility and syncs to database
+   */
   setShowActivity: (showActivity) => {
     set({ showActivity });
     get().updateSettingInDB("showActivity", showActivity);
   },
 
-  /* Preference Setters */
+  /* ===== Preference Setters ===== */
+
+  /**
+   * setItemsPerPage
+   * Updates items per page (5, 10, 20, 50, 100) and syncs to database
+   */
   setItemsPerPage: (itemsPerPage) => {
     set({ itemsPerPage });
     get().updateSettingInDB("itemsPerPage", itemsPerPage);
   },
 
+  /**
+   * setDefaultView
+   * Updates default view type (grid, list, compact) and syncs to database
+   */
   setDefaultView: (defaultView) => {
     set({ defaultView });
     get().updateSettingInDB("defaultView", defaultView);
   },
 
+  /**
+   * setAutoSave
+   * Toggles auto-save and syncs to database
+   */
   setAutoSave: (autoSave) => {
     set({ autoSave });
     get().updateSettingInDB("autoSave", autoSave);
   },
 
   /**
-   * resetSettings()
-   * Reset all settings to defaults and sync to database
+   * resetSettings
+   * Resets all settings to their default values and syncs to database
    */
   resetSettings: async () => {
     const defaults = {
       theme: "light",
       compactMode: false,
+      fontSize: 14,
+      animations: true,
       emailNotifications: true,
       pushNotifications: true,
       notificationSound: true,
@@ -242,13 +331,19 @@ export const useSettingsStore = create((set, get) => ({
       const {
         data: { user },
       } = await supabase.auth.getUser();
-      if (!user) return;
+
+      if (!user) {
+        console.warn("User not authenticated, settings reset locally only");
+        return;
+      }
 
       const { error } = await supabase
         .from("user_settings")
         .update({
           theme: "light",
           compact_mode: false,
+          font_size: 14,
+          animations: true,
           email_notifications: true,
           push_notifications: true,
           notification_sound: true,
@@ -261,9 +356,12 @@ export const useSettingsStore = create((set, get) => ({
         .eq("user_id", user.id);
 
       if (error) throw error;
+
+      set({ error: null });
     } catch (err) {
       set({ error: err.message });
       console.error("Failed to reset settings:", err);
+      throw err;
     }
   },
 }));

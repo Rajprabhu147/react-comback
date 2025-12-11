@@ -1,112 +1,101 @@
-/* ====================================
-   THEME VARIABLES - DESIGN TOKENS
-   ==================================== */
+/* =====================================================
+   THEME CONFIGURATION - DESIGN TOKENS & COLOR SCHEMES
+   ===================================================== */
 
-:root {
-  /* ====================================
-     COLORS - COASTAL PALETTE
-     ==================================== */
-  
+/* =====================================================
+   LIGHT THEME (DEFAULT)
+   ===================================================== */
+
+html {
   /* Background Colors */
   --bg-primary: #f8fcfd;
   --bg-secondary: #eef7f9;
-  
+
   /* Surface Colors */
   --surface: #ffffff;
   --surface-hover: #f0f9fb;
   --surface-elevated: #ffffff;
-  
+
   /* Text Colors */
   --text-primary: #0a2540;
   --text-secondary: #425466;
   --text-muted: #6b7b8a;
-  
+
   /* Primary Brand Colors */
   --primary: #0ea5e9;
   --primary-hover: #0284c7;
   --primary-light: #e0f2fe;
   --primary-dark: #075985;
-  
+
   /* Accent Colors */
   --accent: #06b6d4;
   --accent-hover: #0891b2;
   --accent-light: #cffafe;
-  
+
   /* Semantic Colors */
   --success: #10b981;
   --success-hover: #059669;
   --success-light: #d1fae5;
-  
+
   --warning: #f59e0b;
   --warning-hover: #d97706;
   --warning-light: #fef3c7;
-  
+
   --danger: #ef4444;
   --danger-hover: #dc2626;
   --danger-light: #fee2e2;
-  
+
   --info: #3b82f6;
   --info-light: #dbeafe;
-  
-  /* Special Colors */
-  --sun: #f59e0b;
-  --sun-hover: #d97706;
-  --sun-light: #fef3c7;
-  
-  /* ====================================
-     SPACING & SIZING
-     ==================================== */
-  
-  /* Border Radius */
+
+  /* Spacing & Sizing */
   --radius-sm: 8px;
   --radius-md: 12px;
   --radius-lg: 16px;
   --radius-xl: 20px;
-  
+
   /* Shadows */
   --shadow-xs: 0 1px 2px rgba(10, 37, 64, 0.04);
   --shadow-sm: 0 2px 4px rgba(10, 37, 64, 0.06), 0 1px 2px rgba(10, 37, 64, 0.04);
   --shadow-md: 0 4px 8px rgba(10, 37, 64, 0.08), 0 2px 4px rgba(10, 37, 64, 0.04);
   --shadow-lg: 0 8px 16px rgba(10, 37, 64, 0.1), 0 4px 8px rgba(10, 37, 64, 0.06);
   --shadow-xl: 0 16px 32px rgba(10, 37, 64, 0.12), 0 8px 16px rgba(10, 37, 64, 0.08);
-  
-  /* ====================================
-     TRANSITIONS
-     ==================================== */
-  
+
+  /* Transitions */
   --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   --transition-fast: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
   --transition-slow: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  
-  /* ====================================
-     TYPOGRAPHY
-     ==================================== */
-  
+
+  /* Typography */
   --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
   --font-mono: 'Fira Code', source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
-  
+
   /* Font Sizes */
-  --text-xs: 0.75rem;    /* 12px */
-  --text-sm: 0.875rem;   /* 14px */
-  --text-base: 1rem;     /* 16px */
-  --text-lg: 1.125rem;   /* 18px */
-  --text-xl: 1.25rem;    /* 20px */
-  --text-2xl: 1.5rem;    /* 24px */
-  --text-3xl: 1.875rem;  /* 30px */
-  --text-4xl: 2.25rem;   /* 36px */
-  
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-lg: 1.125rem;
+  --text-xl: 1.25rem;
+  --text-2xl: 1.5rem;
+  --text-3xl: 1.875rem;
+  --text-4xl: 2.25rem;
+
   /* Line Heights */
   --leading-none: 1;
   --leading-tight: 1.25;
   --leading-normal: 1.5;
   --leading-relaxed: 1.625;
   --leading-loose: 2;
-  
-  /* ====================================
-     Z-INDEX LAYERS
-     ==================================== */
-  
+
+  /* Spacing (normal mode) */
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 12px;
+  --spacing-lg: 16px;
+  --spacing-xl: 24px;
+
+  /* Z-Index Layers */
   --z-dropdown: 1000;
   --z-sticky: 1020;
   --z-fixed: 1030;
@@ -114,69 +103,7 @@
   --z-modal: 1050;
   --z-popover: 1060;
   --z-tooltip: 1070;
-}
 
-/* ====================================
-   DARK MODE (OPTIONAL)
-   ==================================== */
-
-@media (prefers-color-scheme: dark) {
-  .dark-mode {
-    /* Background Colors */
-    --bg-primary: #0a2540;
-    --bg-secondary: #142d4c;
-    
-    /* Surface Colors */
-    --surface: #1a3650;
-    --surface-hover: #234563;
-    --surface-elevated: #2a4d6b;
-    
-    /* Text Colors */
-    --text-primary: #f8fcfd;
-    --text-secondary: #b8d4e6;
-    --text-muted: #8ba7bd;
-    
-    /* Adjust shadows for dark mode */
-    --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.2);
-    --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.3), 0 1px 2px rgba(0, 0, 0, 0.2);
-    --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.4), 0 2px 4px rgba(0, 0, 0, 0.2);
-    --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.5), 0 4px 8px rgba(0, 0, 0, 0.3);
-    --shadow-xl: 0 16px 32px rgba(0, 0, 0, 0.6), 0 8px 16px rgba(0, 0, 0, 0.4);
-  }
-}
-
-/* ====================================
-   CUSTOM PROPERTIES USAGE
-   ==================================== */
-
-/* Example:
-.my-element {
-  color: var(--text-primary);
-  background: var(--surface);
-  border-radius: var(--radius-md);
-  box-shadow: var(--shadow-md);
-  transition: var(--transition);
-}
-*//* =====================================================
-   LIGHT THEME (DEFAULT)
-   ===================================================== */
-
-:root[data-theme="light"] {
-  --bg-primary: #f8fcfd;
-  --bg-secondary: #eef7f9;
-  --surface: #ffffff;
-  --surface-hover: #f0f9fb;
-
-  --text-primary: #0a2540;
-  --text-secondary: #425466;
-  --text-muted: #6b7b8a;
-
-  --primary: #0ea5e9;
-  --primary-hover: #0284c7;
-  --primary-light: #e0f2fe;
-  --primary-dark: #075985;
-
-  --accent: #06b6d4;
   color-scheme: light;
 }
 
@@ -184,54 +111,175 @@
    DARK THEME
    ===================================================== */
 
-:root[data-theme="dark"] {
+html[data-theme="dark"] {
+  /* Background Colors */
   --bg-primary: #0f1419;
   --bg-secondary: #1a1f2e;
+
+  /* Surface Colors */
   --surface: #1e2634;
   --surface-hover: #252d3d;
+  --surface-elevated: #2a3442;
 
+  /* Text Colors */
   --text-primary: #e4e9f1;
   --text-secondary: #a8b5c8;
   --text-muted: #7a8599;
 
+  /* Primary Brand Colors */
   --primary: #06b6d4;
   --primary-hover: #0891b2;
   --primary-light: #164e63;
   --primary-dark: #06b6d4;
 
+  /* Accent Colors */
   --accent: #0ea5e9;
+  --accent-hover: #0284c7;
+  --accent-light: #1e3a8a;
+
+  /* Semantic Colors */
+  --success: #10b981;
+  --success-hover: #059669;
+  --success-light: #064e3b;
+
+  --warning: #f59e0b;
+  --warning-hover: #d97706;
+  --warning-light: #78350f;
+
+  --danger: #ef4444;
+  --danger-hover: #dc2626;
+  --danger-light: #7f1d1d;
+
+  --info: #3b82f6;
+  --info-light: #1e3a8a;
+
+  /* Shadows - darker for dark mode */
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.2);
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.3), 0 1px 2px rgba(0, 0, 0, 0.2);
+  --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.4), 0 2px 4px rgba(0, 0, 0, 0.2);
+  --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.5), 0 4px 8px rgba(0, 0, 0, 0.3);
+  --shadow-xl: 0 16px 32px rgba(0, 0, 0, 0.6), 0 8px 16px rgba(0, 0, 0, 0.4);
+
   color-scheme: dark;
 }
 
-/* Dark theme smooth transitions */
-html[data-theme="dark"],
-html[data-theme="dark"] * {
-  transition: background-color 0.3s ease, color 0.3s ease,
-    border-color 0.3s ease;
+/* =====================================================
+   COASTAL THEME
+   ===================================================== */
+
+html[data-theme="coastal"] {
+  /* Background Colors */
+  --bg-primary: #f0f9fb;
+  --bg-secondary: #e0f2f7;
+
+  /* Surface Colors */
+  --surface: #ffffff;
+  --surface-hover: #f5fbfc;
+  --surface-elevated: #ffffff;
+
+  /* Text Colors */
+  --text-primary: #0a3d54;
+  --text-secondary: #2c5966;
+  --text-muted: #5a7a8f;
+
+  /* Primary Brand Colors */
+  --primary: #0891b2;
+  --primary-hover: #0369a1;
+  --primary-light: #cffafe;
+  --primary-dark: #0c4a6e;
+
+  /* Accent Colors */
+  --accent: #06b6d4;
+  --accent-hover: #0891b2;
+  --accent-light: #cffafe;
+
+  /* Semantic Colors */
+  --success: #10b981;
+  --success-hover: #059669;
+  --success-light: #d1fae5;
+
+  --warning: #f59e0b;
+  --warning-hover: #d97706;
+  --warning-light: #fef3c7;
+
+  --danger: #ef4444;
+  --danger-hover: #dc2626;
+  --danger-light: #fee2e2;
+
+  --info: #3b82f6;
+  --info-light: #dbeafe;
+
+  /* Shadows */
+  --shadow-xs: 0 1px 2px rgba(10, 61, 84, 0.04);
+  --shadow-sm: 0 2px 4px rgba(10, 61, 84, 0.06), 0 1px 2px rgba(10, 61, 84, 0.04);
+  --shadow-md: 0 4px 8px rgba(10, 61, 84, 0.08), 0 2px 4px rgba(10, 61, 84, 0.04);
+  --shadow-lg: 0 8px 16px rgba(10, 61, 84, 0.1), 0 4px 8px rgba(10, 61, 84, 0.06);
+  --shadow-xl: 0 16px 32px rgba(10, 61, 84, 0.12), 0 8px 16px rgba(10, 61, 84, 0.08);
+
+  color-scheme: light;
+}
+
+/* =====================================================
+   CONTRAST THEME (HIGH ACCESSIBILITY)
+   ===================================================== */
+
+html[data-theme="contrast"] {
+  /* Background Colors */
+  --bg-primary: #000000;
+  --bg-secondary: #1a1a1a;
+
+  /* Surface Colors */
+  --surface: #ffffff;
+  --surface-hover: #f5f5f5;
+  --surface-elevated: #ffffff;
+
+  /* Text Colors */
+  --text-primary: #ffffff;
+  --text-secondary: #000000;
+  --text-muted: #333333;
+
+  /* Primary Brand Colors */
+  --primary: #ffff00;
+  --primary-hover: #cccc00;
+  --primary-light: #ffffcc;
+  --primary-dark: #999900;
+
+  /* Accent Colors */
+  --accent: #00ff00;
+  --accent-hover: #00cc00;
+  --accent-light: #ccffcc;
+
+  /* Semantic Colors */
+  --success: #00ff00;
+  --success-hover: #00cc00;
+  --success-light: #ccffcc;
+
+  --warning: #ffff00;
+  --warning-hover: #cccc00;
+  --warning-light: #ffffcc;
+
+  --danger: #ff0000;
+  --danger-hover: #cc0000;
+  --danger-light: #ffcccc;
+
+  --info: #0000ff;
+  --info-light: #ccccff;
+
+  /* Shadows */
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.5);
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.6), 0 1px 2px rgba(0, 0, 0, 0.5);
+  --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.7), 0 2px 4px rgba(0, 0, 0, 0.5);
+  --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.8), 0 4px 8px rgba(0, 0, 0, 0.6);
+  --shadow-xl: 0 16px 32px rgba(0, 0, 0, 0.9), 0 8px 16px rgba(0, 0, 0, 0.7);
+
+  color-scheme: dark;
 }
 
 /* =====================================================
    COMPACT MODE
+   Reduces spacing and sizing for more information density
    ===================================================== */
 
-/* Normal spacing (default) */
-:root {
-  --spacing-xs: 4px;
-  --spacing-sm: 8px;
-  --spacing-md: 12px;
-  --spacing-lg: 16px;
-  --spacing-xl: 24px;
-
-  --radius-sm: 8px;
-  --radius-md: 12px;
-  --radius-lg: 16px;
-
-  --font-size-sm: 12px;
-  --font-size-base: 14px;
-  --font-size-lg: 16px;
-}
-
-/* Compact mode - reduce all spacing by 30% */
 body.compact-mode {
   --spacing-xs: 2px;
   --spacing-sm: 6px;
@@ -243,116 +291,67 @@ body.compact-mode {
   --radius-md: 8px;
   --radius-lg: 12px;
 
-  --font-size-sm: 11px;
-  --font-size-base: 13px;
-  --font-size-lg: 15px;
-}
-
-/* Apply compact mode to common elements */
-body.compact-mode {
-  font-size: var(--font-size-base);
-}
-
-body.compact-mode h1 {
-  font-size: 28px;
-  margin: var(--spacing-md) 0;
-}
-
-body.compact-mode h2 {
-  font-size: 24px;
-  margin: var(--spacing-md) 0;
-}
-
-body.compact-mode h3 {
-  font-size: 18px;
-  margin: var(--spacing-sm) 0;
-}
-
-body.compact-mode p {
-  margin: var(--spacing-sm) 0;
-  line-height: 1.4;
-}
-
-body.compact-mode button,
-body.compact-mode input,
-body.compact-mode select,
-body.compact-mode textarea {
-  padding: var(--spacing-xs) var(--spacing-sm);
-  font-size: var(--font-size-base);
-  border-radius: var(--radius-sm);
-}
-
-body.compact-mode .card,
-body.compact-mode .dialog,
-body.compact-mode .modal {
-  padding: var(--spacing-md);
-  border-radius: var(--radius-md);
-}
-
-body.compact-mode .list-item,
-body.compact-mode .list-row {
-  padding: var(--spacing-sm) var(--spacing-md);
-  margin-bottom: var(--spacing-xs);
-}
-
-body.compact-mode .navbar {
-  padding: var(--spacing-sm) var(--spacing-md);
-  gap: var(--spacing-sm);
-}
-
-body.compact-mode .sidebar {
-  width: 220px;
-}
-
-body.compact-mode .calendar-day-cell {
-  min-height: 70px;
-  padding: var(--spacing-sm);
-}
-
-body.compact-mode .day-number {
-  font-size: var(--font-size-sm);
-  margin-bottom: 2px;
-}
-
-body.compact-mode .activity-badge {
-  font-size: 9px;
-  padding: 3px 4px;
-}
-
-body.compact-mode .tooltip-header {
-  padding: 6px 8px;
-  font-size: 10px;
-}
-
-body.compact-mode .tooltip-activity {
-  padding: 6px 8px;
-}
-
-body.compact-mode .tooltip-activity-title {
-  font-size: 11px;
+  --text-xs: 0.7rem;
+  --text-sm: 0.8rem;
+  --text-base: 0.9rem;
+  --text-lg: 1rem;
+  --text-xl: 1.1rem;
+  --text-2xl: 1.3rem;
+  --text-3xl: 1.6rem;
+  --text-4xl: 2rem;
 }
 
 /* =====================================================
-   SMOOTH TRANSITIONS FOR THEME
+   GLOBAL STYLES
    ===================================================== */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 
 html {
   scroll-behavior: smooth;
+  font-family: var(--font-sans);
+  font-size: 14px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-/* Avoid jarring transitions on theme change */
-html[data-theme] {
-  transition: background-color 0.3s ease;
-}
-
-html[data-theme] body {
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  line-height: var(--leading-normal);
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 /* =====================================================
-   DARK MODE SPECIFIC ADJUSTMENTS
+   FORM ELEMENTS STYLING
    ===================================================== */
 
+input,
+textarea,
+select {
+  font-family: inherit;
+  font-size: inherit;
+  color: var(--text-primary);
+  background-color: var(--surface);
+  border: 1px solid var(--bg-secondary);
+  border-radius: var(--radius-md);
+  padding: 8px 12px;
+  transition: var(--transition);
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(6, 181, 212, 0.1);
+}
+
+/* Dark theme form elements */
 html[data-theme="dark"] input,
 html[data-theme="dark"] textarea,
 html[data-theme="dark"] select {
@@ -362,27 +361,64 @@ html[data-theme="dark"] select {
 }
 
 html[data-theme="dark"] input:focus,
-html[data-theme="dark"] textarea:focus {
+html[data-theme="dark"] textarea:focus,
+html[data-theme="dark"] select:focus {
   border-color: var(--primary);
-  box-shadow: 0 0 0 2px rgba(6, 182, 212, 0.1);
+  box-shadow: 0 0 0 3px rgba(6, 182, 212, 0.1);
 }
 
-html[data-theme="dark"] button {
-  color: var(--text-primary);
+/* =====================================================
+   BUTTONS
+   ===================================================== */
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+  border-radius: var(--radius-md);
+  transition: var(--transition);
 }
 
-html[data-theme="dark"] a {
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* =====================================================
+   LINKS
+   ===================================================== */
+
+a {
   color: var(--primary);
+  text-decoration: none;
+  transition: var(--transition);
 }
 
-html[data-theme="dark"] a:hover {
+a:hover {
   color: var(--primary-hover);
+  text-decoration: underline;
 }
 
-/* Scrollbar styling for dark mode */
-html[data-theme="dark"] ::-webkit-scrollbar {
+/* =====================================================
+   SCROLLBAR STYLING
+   ===================================================== */
+
+::-webkit-scrollbar {
   width: 8px;
   height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-primary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--bg-secondary);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
 }
 
 html[data-theme="dark"] ::-webkit-scrollbar-track {
@@ -391,9 +427,47 @@ html[data-theme="dark"] ::-webkit-scrollbar-track {
 
 html[data-theme="dark"] ::-webkit-scrollbar-thumb {
   background: var(--bg-secondary);
-  border-radius: 4px;
 }
 
 html[data-theme="dark"] ::-webkit-scrollbar-thumb:hover {
   background: var(--text-muted);
+}
+
+/* =====================================================
+   SELECTION STYLING
+   ===================================================== */
+
+::selection {
+  background-color: var(--primary);
+  color: white;
+}
+
+::-moz-selection {
+  background-color: var(--primary);
+  color: white;
+}
+
+/* =====================================================
+   RESPONSIVE UTILITIES
+   ===================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  html:not([data-theme]) {
+    --bg-primary: #0f1419;
+    --bg-secondary: #1a1f2e;
+    --surface: #1e2634;
+    --surface-hover: #252d3d;
+    --text-primary: #e4e9f1;
+    --text-secondary: #a8b5c8;
+    --text-muted: #7a8599;
+    color-scheme: dark;
+  }
 }
