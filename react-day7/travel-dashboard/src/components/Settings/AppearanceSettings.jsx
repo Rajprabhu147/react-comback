@@ -3,7 +3,7 @@ import React, { useEffect, useRef } from "react";
 import { useSettingsStore } from "../../store/settingsStore";
 import { useUIStore } from "../../store/uiStore";
 import toast from "react-hot-toast";
-import "../styles/AppearanceSettings.css";
+import "../../styles/AppearanceSettings.css";
 
 /**
  * AppearanceSettings Component

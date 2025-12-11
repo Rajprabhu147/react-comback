@@ -1,0 +1,404 @@
+/* ====================================
+   APPEARANCE SETTINGS COMPONENT
+   ==================================== */
+
+.appearance-settings {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+/* ====================================
+   SECTION BLOCKS
+   ==================================== */
+
+.appearance-block {
+  padding-bottom: 32px;
+  border-bottom: 1px solid var(--bg-secondary);
+}
+
+.appearance-block-last {
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+.appearance-block-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0 0 4px 0;
+}
+
+.appearance-block-description {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin: 0 0 24px 0;
+}
+
+/* ====================================
+   THEME GRID & CARDS
+   ==================================== */
+
+.theme-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.theme-card {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 20px;
+  background: var(--bg-primary);
+  border: 2px solid var(--bg-secondary);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: var(--transition);
+  text-align: left;
+  font-family: inherit;
+  font-size: 1rem;
+}
+
+.theme-card:hover {
+  border-color: var(--primary);
+  background: var(--surface-hover);
+}
+
+.theme-card.active {
+  border-color: var(--primary);
+  background: var(--primary-light);
+}
+
+.theme-icon {
+  font-size: 2rem;
+  flex-shrink: 0;
+}
+
+.theme-info {
+  flex: 1;
+}
+
+.theme-label {
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 2px;
+}
+
+.theme-description {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+.theme-checkmark {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 24px;
+  height: 24px;
+  background: var(--primary);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+/* ====================================
+   THEME PREVIEW
+   ==================================== */
+
+.theme-preview {
+  margin-top: 24px;
+  padding: 20px;
+  background: var(--bg-primary);
+  border-radius: var(--radius-md);
+}
+
+.preview-label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-bottom: 12px;
+}
+
+.preview-box {
+  background: var(--surface);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+
+.preview-header {
+  display: flex;
+  gap: 8px;
+  padding: 12px;
+  background: var(--bg-secondary);
+}
+
+.preview-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--text-muted);
+}
+
+.preview-content {
+  display: flex;
+  height: 120px;
+}
+
+.preview-sidebar {
+  width: 35%;
+  background: var(--bg-primary);
+  border-right: 1px solid var(--bg-secondary);
+}
+
+.preview-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 8px;
+}
+
+.preview-card {
+  height: 48px;
+  background: var(--bg-secondary);
+  border-radius: var(--radius-sm);
+}
+
+/* ====================================
+   DISPLAY OPTIONS
+   ==================================== */
+
+.display-options {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.option-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px;
+  background: var(--bg-primary);
+  border-radius: var(--radius-md);
+  transition: var(--transition);
+}
+
+.option-item:hover {
+  background: var(--surface-hover);
+}
+
+.option-info {
+  flex: 1;
+  margin-right: 20px;
+}
+
+.option-label {
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 2px;
+}
+
+.option-description {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+/* ====================================
+   TOGGLE SWITCH
+   ==================================== */
+
+.toggle-switch {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 26px;
+}
+
+.toggle-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.toggle-slider {
+  position: absolute;
+  cursor: pointer;
+  inset: 0;
+  background: var(--bg-secondary);
+  transition: var(--transition);
+  border-radius: 26px;
+}
+
+.toggle-slider::before {
+  position: absolute;
+  content: "";
+  height: 20px;
+  width: 20px;
+  left: 3px;
+  bottom: 3px;
+  background: white;
+  transition: var(--transition);
+  border-radius: 50%;
+}
+
+.toggle-switch input:checked + .toggle-slider {
+  background: var(--primary);
+}
+
+.toggle-switch input:checked + .toggle-slider::before {
+  transform: translateX(24px);
+}
+
+/* ====================================
+   FONT SIZE CONTROLS
+   ==================================== */
+
+.font-size-controls {
+  padding: 20px;
+  background: var(--bg-primary);
+  border-radius: var(--radius-md);
+}
+
+.font-slider {
+  width: 100%;
+  height: 6px;
+  background: var(--bg-secondary);
+  border-radius: 10px;
+  outline: none;
+  margin-bottom: 16px;
+  cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.font-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  background: var(--primary);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.font-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+}
+
+.font-slider::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  background: var(--primary);
+  border-radius: 50%;
+  cursor: pointer;
+  border: none;
+  transition: var(--transition);
+}
+
+.font-slider::-moz-range-thumb:hover {
+  transform: scale(1.2);
+}
+
+.font-size-labels {
+  display: flex;
+  justify-content: space-between;
+  color: var(--text-secondary);
+  font-weight: 600;
+  font-size: 0.85rem;
+}
+
+.font-size-label {
+  color: var(--text-secondary);
+  font-weight: 600;
+}
+
+.font-size-label-medium {
+  font-size: 1.2em;
+}
+
+.font-size-label-large {
+  font-size: 1.5em;
+}
+
+/* ====================================
+   RESPONSIVE DESIGN
+   ==================================== */
+
+@media (max-width: 768px) {
+  .appearance-settings {
+    gap: 24px;
+  }
+
+  .appearance-block {
+    padding-bottom: 24px;
+  }
+
+  .theme-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .option-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .option-info {
+    margin-right: 0;
+    width: 100%;
+  }
+
+  .preview-content {
+    height: 100px;
+  }
+}
+
+@media (max-width: 640px) {
+  .appearance-block-title {
+    font-size: 1.1rem;
+  }
+
+  .theme-card {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .theme-icon {
+    margin-bottom: 8px;
+  }
+
+  .theme-label {
+    margin-bottom: 4px;
+  }
+
+  .preview-header {
+    padding: 8px;
+  }
+
+  .preview-dot {
+    width: 10px;
+    height: 10px;
+  }
+
+  .preview-sidebar {
+    width: 30%;
+  }
+
+  .preview-main {
+    padding: 6px;
+  }
+
+  .preview-card {
+    height: 40px;
+  }
+}
