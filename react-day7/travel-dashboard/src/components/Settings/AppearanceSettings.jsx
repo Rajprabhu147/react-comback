@@ -1,27 +1,39 @@
 // src/components/Settings/AppearanceSettings.jsx
 import React, { useEffect, useRef } from "react";
-// Pull values & setters for appearance-related settings from the global settings store (Zustand)
 import { useSettingsStore } from "../../store/settingsStore";
-// Pull sidebar state and toggle from UI store to let this component control sidebar visibility
 import { useUIStore } from "../../store/uiStore";
 import toast from "react-hot-toast";
+import "../styles/AppearanceSettings.css";
 
 /**
- * AppearanceSettings — updated to integrate with theme.css
+ * AppearanceSettings Component
+ * Manages theme, display options, and font size preferences
  *
- * - themes: light | dark | coastal | contrast | auto
- * - setting a theme updates document.documentElement.dataset.theme (or removes it for 'light')
- * - 'auto' follows prefers-color-scheme and reacts to changes.
+ * Features:
+ * - Multiple themes (light, dark, coastal, contrast, auto)
+ * - Compact mode toggle
+ * - Sidebar visibility control
+ * - Animations toggle
+ * - Font size adjustment
+ * - All settings persist to database via Zustand store
  */
 const AppearanceSettings = () => {
-  const { theme, compactMode, setTheme, setCompactMode } = useSettingsStore();
+  const {
+    theme,
+    compactMode,
+    fontSize,
+    animations,
+    setTheme,
+    setCompactMode,
+    setFontSize,
+    setAnimations,
+  } = useSettingsStore();
+
   const sidebarOpen = useUIStore((s) => s.sidebarOpen);
   const toggleSidebar = useUIStore((s) => s.toggleSidebar);
 
-  // keep ref to media listener so we can remove it when needed
   const mediaListenerRef = useRef(null);
 
-  // All supported themes (match your theme.css)
   const themes = [
     {
       id: "light",
@@ -29,7 +41,12 @@ const AppearanceSettings = () => {
       icon: "☀️",
       description: "Classic light theme",
     },
-    { id: "dark", label: "Dark", icon: "🌙", description: "Easy on the eyes" },
+    {
+      id: "dark",
+      label: "Dark",
+      icon: "🌙",
+      description: "Easy on the eyes",
+    },
     {
       id: "coastal",
       label: "Coastal",
@@ -50,36 +67,43 @@ const AppearanceSettings = () => {
     },
   ];
 
-  // helper: apply a concrete theme to document <html>
+  /**
+   * Applies a concrete theme by setting data-theme attribute on <html>
+   * Light theme removes the attribute to use default CSS variables
+   */
   const applyConcreteTheme = (themeId) => {
     const root = document.documentElement;
     if (!root) return;
+
     if (themeId === "light") {
       root.removeAttribute("data-theme");
     } else {
       root.setAttribute("data-theme", themeId);
     }
+
+    console.log(`Theme applied: ${themeId}`, {
+      htmlAttribute: root.getAttribute("data-theme"),
+    });
   };
 
-  // If user chooses 'auto', set theme according to system preference and add listener.
+  /**
+   * Enables auto theme detection based on system preference
+   * Listens for changes to system theme preference
+   */
   const enableAutoTheme = () => {
     const mq =
       window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)");
     if (!mq) {
-      // fallback to light if matchMedia not available
       applyConcreteTheme("light");
       return;
     }
 
-    // set initial
     applyConcreteTheme(mq.matches ? "dark" : "light");
 
-    // add listener to respond to system changes
     const listener = (e) => {
       applyConcreteTheme(e.matches ? "dark" : "light");
     };
 
-    // modern addEventListener for MediaQueryList or fallback to addListener
     if (typeof mq.addEventListener === "function") {
       mq.addEventListener("change", listener);
       mediaListenerRef.current = { mq, listener, method: "addEventListener" };
@@ -89,10 +113,13 @@ const AppearanceSettings = () => {
     }
   };
 
-  // remove any previously registered media listener
+  /**
+   * Removes the media query listener when switching away from auto theme
+   */
   const removeAutoListener = () => {
     const saved = mediaListenerRef.current;
     if (!saved) return;
+
     const { mq, listener, method } = saved;
     if (
       method === "addEventListener" &&
@@ -105,10 +132,13 @@ const AppearanceSettings = () => {
     ) {
       mq.removeListener(listener);
     }
+
     mediaListenerRef.current = null;
   };
 
-  // when the stored theme changes (from store or initial), apply it
+  /**
+   * Apply theme changes when store value updates
+   */
   useEffect(() => {
     removeAutoListener();
 
@@ -118,18 +148,36 @@ const AppearanceSettings = () => {
       applyConcreteTheme(theme || "light");
     }
 
-    // cleanup on unmount
     return () => removeAutoListener();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [theme]);
 
-  // handler used by UI: sets store then applies
-  const handleThemeChange = (newTheme) => {
-    // update store
-    setTheme(newTheme);
+  /**
+   * Apply compact mode class to body for CSS-based responsive adjustments
+   */
+  useEffect(() => {
+    if (compactMode) {
+      document.body.classList.add("compact-mode");
+    } else {
+      document.body.classList.remove("compact-mode");
+    }
+  }, [compactMode]);
 
-    // if new is auto, enable listener; otherwise remove listener and apply directly
+  /**
+   * Apply font size to document root
+   */
+  useEffect(() => {
+    const validSize = fontSize || 14;
+    document.documentElement.style.fontSize = `${validSize}px`;
+  }, [fontSize]);
+
+  /**
+   * Handles theme selection with store update and user feedback
+   */
+  const handleThemeChange = (newTheme) => {
+    setTheme(newTheme);
     removeAutoListener();
+
     if (newTheme === "auto") {
       enableAutoTheme();
       toast.success("Theme set to Auto (following system preference)");
@@ -141,16 +189,42 @@ const AppearanceSettings = () => {
     }
   };
 
+  /**
+   * Handles compact mode toggle
+   */
+  const handleCompactModeChange = (isCompact) => {
+    setCompactMode(isCompact);
+    toast.success(isCompact ? "Compact mode enabled" : "Compact mode disabled");
+  };
+
+  /**
+   * Handles font size change
+   */
+  const handleFontSizeChange = (e) => {
+    const newSize = Number(e.target.value);
+    setFontSize(newSize);
+    toast.success(`Font size set to ${newSize}px`);
+  };
+
+  /**
+   * Handles animations toggle
+   */
+  const handleAnimationsChange = (e) => {
+    setAnimations(e.target.checked);
+    toast.success(
+      e.target.checked ? "Animations enabled" : "Animations disabled"
+    );
+  };
+
   return (
-    <div className="settings-section">
-      {/* THEME SELECTION BLOCK */}
-      <div className="section-block">
-        <h3 className="section-block-title">Theme</h3>
-        <p className="section-block-description">
+    <div className="appearance-settings">
+      {/* Theme Selection Section */}
+      <div className="appearance-block">
+        <h3 className="appearance-block-title">Theme</h3>
+        <p className="appearance-block-description">
           Choose how you want the dashboard to look
         </p>
 
-        {/* Grid of theme option cards */}
         <div className="theme-grid">
           {themes.map((t) => {
             const isActive = theme === t.id;
@@ -161,15 +235,10 @@ const AppearanceSettings = () => {
                 className={`theme-card ${isActive ? "active" : ""}`}
                 onClick={() => handleThemeChange(t.id)}
                 aria-pressed={isActive}
+                aria-label={`Select ${t.label} theme: ${t.description}`}
                 title={t.description}
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 12,
-                  textAlign: "left",
-                }}
               >
-                <div className="theme-icon" aria-hidden>
+                <div className="theme-icon" aria-hidden="true">
                   {t.icon}
                 </div>
 
@@ -179,7 +248,7 @@ const AppearanceSettings = () => {
                 </div>
 
                 {isActive && (
-                  <div className="theme-checkmark" aria-hidden>
+                  <div className="theme-checkmark" aria-hidden="true">
                     ✓
                   </div>
                 )}
@@ -188,9 +257,8 @@ const AppearanceSettings = () => {
           })}
         </div>
 
-        {/* Preview box: note — preview uses the actual global theme (we change <html> directly),
-            so the preview shows live changes immediately. */}
-        <div className="theme-preview" style={{ marginTop: 18 }}>
+        {/* Theme Preview */}
+        <div className="theme-preview">
           <div className="preview-label">Preview (live)</div>
           <div className="preview-box">
             <div className="preview-header">
@@ -198,7 +266,7 @@ const AppearanceSettings = () => {
               <div className="preview-dot" />
               <div className="preview-dot" />
             </div>
-            <div className="preview-content" aria-hidden>
+            <div className="preview-content" aria-hidden="true">
               <div className="preview-sidebar" />
               <div className="preview-main">
                 <div className="preview-card" />
@@ -209,15 +277,15 @@ const AppearanceSettings = () => {
         </div>
       </div>
 
-      {/* DISPLAY OPTIONS BLOCK */}
-      <div className="section-block" style={{ marginTop: 18 }}>
-        <h3 className="section-block-title">Display Options</h3>
-        <p className="section-block-description">
+      {/* Display Options Section */}
+      <div className="appearance-block">
+        <h3 className="appearance-block-title">Display Options</h3>
+        <p className="appearance-block-description">
           Customize how content is displayed
         </p>
 
-        <div className="settings-options">
-          {/* Compact Mode toggle */}
+        <div className="display-options">
+          {/* Compact Mode Toggle */}
           <div className="option-item">
             <div className="option-info">
               <div className="option-label">Compact Mode</div>
@@ -229,13 +297,14 @@ const AppearanceSettings = () => {
               <input
                 type="checkbox"
                 checked={!!compactMode}
-                onChange={(e) => setCompactMode(!!e.target.checked)}
+                onChange={(e) => handleCompactModeChange(!!e.target.checked)}
+                aria-describedby="compact-mode-desc"
               />
               <span className="toggle-slider" />
             </label>
           </div>
 
-          {/* Sidebar visibility toggle */}
+          {/* Sidebar Visibility Toggle */}
           <div className="option-item">
             <div className="option-info">
               <div className="option-label">Sidebar Visibility</div>
@@ -243,17 +312,21 @@ const AppearanceSettings = () => {
                 Show or hide the navigation sidebar
               </div>
             </div>
-            <label className="toggle-switch" aria-label="Toggle sidebar">
+            <label
+              className="toggle-switch"
+              aria-label="Toggle sidebar visibility"
+            >
               <input
                 type="checkbox"
                 checked={!!sidebarOpen}
                 onChange={() => toggleSidebar()}
+                aria-describedby="sidebar-desc"
               />
               <span className="toggle-slider" />
             </label>
           </div>
 
-          {/* Animations toggle (UI-only) */}
+          {/* Animations Toggle */}
           <div className="option-item">
             <div className="option-info">
               <div className="option-label">Animations</div>
@@ -262,18 +335,22 @@ const AppearanceSettings = () => {
               </div>
             </div>
             <label className="toggle-switch" aria-label="Toggle animations">
-              {/* If you persist animations setting later, replace defaultChecked with store binding */}
-              <input type="checkbox" defaultChecked />
+              <input
+                type="checkbox"
+                checked={!!animations}
+                onChange={handleAnimationsChange}
+                aria-describedby="animations-desc"
+              />
               <span className="toggle-slider" />
             </label>
           </div>
         </div>
       </div>
 
-      {/* FONT SIZE BLOCK */}
-      <div className="section-block" style={{ marginTop: 18 }}>
-        <h3 className="section-block-title">Font Size</h3>
-        <p className="section-block-description">
+      {/* Font Size Section */}
+      <div className="appearance-block appearance-block-last">
+        <h3 className="appearance-block-title">Font Size</h3>
+        <p className="appearance-block-description">
           Adjust the size of text throughout the dashboard
         </p>
 
@@ -282,19 +359,19 @@ const AppearanceSettings = () => {
             type="range"
             min="12"
             max="20"
-            defaultValue="14"
+            value={fontSize || 14}
             className="font-slider"
             aria-label="Base font size"
-            onChange={(e) => {
-              // quick, immediate font-size adjustment applied to root for demo.
-              // if you want persistence, save to store instead.
-              document.documentElement.style.fontSize = `${e.target.value}px`;
-            }}
+            aria-valuemin="12"
+            aria-valuemax="20"
+            aria-valuenow={fontSize || 14}
+            aria-valuetext={`${fontSize || 14} pixels`}
+            onChange={handleFontSizeChange}
           />
           <div className="font-size-labels">
-            <span>Aa</span>
-            <span style={{ fontSize: "1.2em" }}>Aa</span>
-            <span style={{ fontSize: "1.5em" }}>Aa</span>
+            <span className="font-size-label">Aa</span>
+            <span className="font-size-label font-size-label-medium">Aa</span>
+            <span className="font-size-label font-size-label-large">Aa</span>
           </div>
         </div>
       </div>
