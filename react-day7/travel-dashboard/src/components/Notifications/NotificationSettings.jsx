@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "../../styles/NotificationSettings.css";
+import "../../styles/notificationSettings.css";
 
 /**
  * NotificationSettings Component
