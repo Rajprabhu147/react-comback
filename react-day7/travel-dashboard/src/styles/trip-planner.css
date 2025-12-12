@@ -1,27 +1,6 @@
 /* src/styles/trip-planner.css */
 
-* {
-  --primary: #0ea5e9;
-  --accent: #02c39a;
-  --danger: #ef4444;
-  --success: #10b981;
-  --warning: #ffd166;
-  --bg-primary: #f9fafb;
-  --bg-secondary: #e5e7eb;
-  --surface: #ffffff;
-  --text-primary: #1f2937;
-  --text-secondary: #6b7280;
-  --text-muted: #9ca3af;
-  --radius-sm: 6px;
-  --radius-md: 8px;
-  --radius-lg: 12px;
-  --radius-xl: 16px;
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
-  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
-  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
-  --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.1);
-  --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
+
 
 .trip-planner-wrapper {
   width: 100%;
