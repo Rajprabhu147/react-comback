@@ -27,22 +27,22 @@ const AppearanceSettings = () => {
 
   const themes = [
     {
+      id: "coastal",
+      label: "Coastal",
+      icon: "🌊",
+      description: "Soft coastal aqua",
+    },
+    {
       id: "light",
       label: "Light",
       icon: "☀️",
-      description: "Warm whitish yellow",
+      description: "Warm light beige",
     },
     {
       id: "dark",
       label: "Dark",
       icon: "🌙",
-      description: "Minimal soft grey",
-    },
-    {
-      id: "coastal",
-      label: "Coastal",
-      icon: "🌊",
-      description: "Soft coastal blues",
+      description: "Soft teal grey",
     },
   ];
 
