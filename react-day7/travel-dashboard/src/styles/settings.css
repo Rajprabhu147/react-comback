@@ -80,11 +80,10 @@
 
 .section-block {
   padding-bottom: 32px;
-  border-bottom: 1px solid var(--bg-secondary);
 }
 
 .section-block:last-child {
-  padding-bottom: 0;
+  padding: 20px;
   border-bottom: none;
 }
 
