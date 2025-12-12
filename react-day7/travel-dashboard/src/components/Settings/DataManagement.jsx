@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 // settings store (Zustand) to read/write privacy related flags
 import { useSettingsStore } from "../../store/settingsStore";
+import "../../styles/data-management.css";
 import Button from "../Shared/Button";
 import toast from "react-hot-toast";
 

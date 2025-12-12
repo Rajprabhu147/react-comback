@@ -1,0 +1,351 @@
+/* src/styles/data-management.css
+   Styles for DataManagement component
+   Scoped under .settings-section.data-management for safety
+*/
+
+.settings-section.data-management {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 24px;
+  box-sizing: border-box;
+  color: var(--text-primary, #0f172a);
+  font-family: inherit;
+}
+
+/* === Section block === */
+.settings-section.data-management .section-block {
+  background: var(--surface, #ffffff);
+  border-radius: var(--radius-lg, 12px);
+  padding: 18px;
+  border: 1px solid var(--bg-secondary, #e6eef3);
+  box-shadow: var(--shadow-sm, 0 1px 6px rgba(2, 6, 23, 0.04));
+}
+
+.settings-section.data-management .section-block-title {
+  margin: 0 0 6px 0;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text-primary, #0f172a);
+}
+
+.settings-section.data-management .section-block-description {
+  margin: 0 0 14px 0;
+  font-size: 13px;
+  color: var(--text-secondary, #475569);
+  line-height: 1.4;
+}
+
+/* === Settings options / toggles === */
+.settings-section.data-management .settings-options {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.settings-section.data-management .option-item {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: center;
+  padding: 10px;
+  border-radius: var(--radius-md, 10px);
+  transition: background 0.15s ease, transform 0.12s ease;
+}
+
+.settings-section.data-management .option-item:hover {
+  background: rgba(2, 195, 154, 0.02);
+}
+
+/* left info */
+.settings-section.data-management .option-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.settings-section.data-management .option-label {
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--text-primary, #0f172a);
+}
+
+.settings-section.data-management .option-description {
+  font-size: 12px;
+  color: var(--text-secondary, #6b7280);
+  line-height: 1.3;
+}
+
+/* Toggle switch - accessible */
+.settings-section.data-management .toggle-switch {
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+  position: relative;
+  user-select: none;
+}
+
+/* hide native checkbox but keep it accessible */
+.settings-section.data-management .toggle-switch input[type="checkbox"] {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  pointer-events: all;
+}
+
+/* slider */
+.settings-section.data-management .toggle-slider {
+  width: 46px;
+  height: 26px;
+  background: var(--bg-secondary, #e6eef3);
+  border-radius: 999px;
+  position: relative;
+  transition: background 0.18s ease, box-shadow 0.12s ease;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.5);
+}
+
+/* knob */
+.settings-section.data-management .toggle-slider::after {
+  content: "";
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #fff;
+  transition: transform 0.18s cubic-bezier(.2,.9,.2,1), box-shadow 0.12s ease;
+  box-shadow: 0 2px 6px rgba(2,6,23,0.08);
+}
+
+/* checked state */
+.settings-section.data-management .toggle-switch input:checked + .toggle-slider {
+  background: linear-gradient(90deg, var(--primary, #06b6d4), #02c39a);
+  box-shadow: 0 4px 12px rgba(2,195,154,0.12);
+}
+
+.settings-section.data-management .toggle-switch input:checked + .toggle-slider::after {
+  transform: translateX(20px);
+}
+
+/* === Data actions (export / backup) === */
+.settings-section.data-management .data-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.settings-section.data-management .data-action-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 12px;
+  border-radius: var(--radius-md, 10px);
+  border: 1px dashed var(--bg-secondary, #e6eef3);
+  background: linear-gradient(180deg, rgba(14,165,233,0.02), transparent);
+}
+
+.settings-section.data-management .data-action-info {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  min-width: 0;
+}
+
+.settings-section.data-management .data-action-icon {
+  font-size: 28px;
+  width: 44px;
+  height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  background: linear-gradient(135deg, rgba(6,182,212,0.08), rgba(2,195,154,0.06));
+  box-shadow: 0 2px 8px rgba(2,195,154,0.06);
+}
+
+.settings-section.data-management .data-action-title {
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--text-primary, #0f172a);
+}
+
+.settings-section.data-management .data-action-description {
+  font-size: 12px;
+  color: var(--text-secondary, #6b7280);
+}
+
+/* === Storage & cache summary === */
+.settings-section.data-management .storage-info {
+  display: flex;
+  gap: 18px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+
+.settings-section.data-management .storage-item {
+  min-width: 160px;
+  background: var(--surface, #fff);
+  border: 1px solid var(--bg-secondary, #e6eef3);
+  border-radius: var(--radius-md, 10px);
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.settings-section.data-management .storage-label {
+  font-size: 12px;
+  color: var(--text-secondary, #6b7280);
+}
+
+.settings-section.data-management .storage-value {
+  font-weight: 700;
+  color: var(--text-primary, #0f172a);
+  font-size: 14px;
+}
+
+/* === Sessions list === */
+.settings-section.data-management .sessions-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.settings-section.data-management .session-item {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  padding: 10px;
+  border-radius: var(--radius-md, 10px);
+  border: 1px solid var(--bg-secondary, #e6eef3);
+  background: var(--surface, #fff);
+  position: relative;
+}
+
+.settings-section.data-management .session-item.active {
+  box-shadow: 0 6px 18px rgba(2,195,154,0.08);
+  border-color: rgba(2,195,154,0.12);
+}
+
+.settings-section.data-management .session-icon {
+  font-size: 22px;
+  width: 44px;
+  height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  background: linear-gradient(135deg, rgba(14,165,233,0.06), rgba(6,182,212,0.04));
+}
+
+.settings-section.data-management .session-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.settings-section.data-management .session-title {
+  font-weight: 700;
+  color: var(--text-primary, #0f172a);
+  font-size: 14px;
+}
+
+.settings-section.data-management .session-details,
+.settings-section.data-management .session-time {
+  font-size: 12px;
+  color: var(--text-secondary, #6b7280);
+}
+
+.settings-section.data-management .session-badge {
+  font-size: 12px;
+  font-weight: 700;
+  padding: 6px 8px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--primary, #06b6d4), #02c39a);
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(2,195,154,0.12);
+}
+
+/* === Danger zone === */
+.settings-section.data-management .danger-zone {
+  border: 1px solid rgba(239, 68, 68, 0.08);
+  background: linear-gradient(180deg, rgba(239,68,68,0.03), transparent);
+  box-shadow: 0 2px 8px rgba(239,68,68,0.03);
+}
+
+.settings-section.data-management .danger-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.settings-section.data-management .danger-action-item {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 12px;
+  border-radius: var(--radius-md, 10px);
+  background: rgba(239,68,68,0.02);
+  border: 1px solid rgba(239,68,68,0.06);
+}
+
+/* make sure buttons (Button component) inherit spacing */
+.settings-section.data-management .section-block > .btn,
+.settings-section.data-management .section-block button {
+  margin: 0 !important;
+}
+
+/* === Responsive === */
+@media (max-width: 900px) {
+  .settings-section.data-management {
+    padding: 18px;
+  }
+
+  .settings-section.data-management .data-action-item,
+  .settings-section.data-management .option-item,
+  .settings-section.data-management .danger-action-item {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .settings-section.data-management .data-action-info {
+    width: 100%;
+  }
+
+  .settings-section.data-management .storage-info {
+    gap: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .settings-section.data-management {
+    padding: 12px;
+    gap: 18px;
+  }
+
+  .settings-section.data-management .storage-item {
+    min-width: 140px;
+  }
+
+  .settings-section.data-management .toggle-slider {
+    width: 40px;
+    height: 22px;
+  }
+
+  .settings-section.data-management .toggle-slider::after {
+    width: 18px;
+    height: 18px;
+    top: 2px;
+    left: 2px;
+  }
+}

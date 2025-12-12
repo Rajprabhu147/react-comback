@@ -6,6 +6,7 @@ import "../../styles/daily-expense-logger.css";
 /**
  * DailyExpenseLogger Component
  * Logs daily expenses and tracks spending with edit capability
+ * Shows day names (Mon, Tue, etc.) instead of numbers
  */
 
 const EXPENSE_CATEGORIES = [
@@ -15,6 +16,17 @@ const EXPENSE_CATEGORIES = [
   { value: "activities", label: "⚡ Activities", color: "#8b5cf6" },
   { value: "shopping", label: "🛍️ Shopping", color: "#10b981" },
   { value: "other", label: "📌 Other", color: "#05668d" },
+];
+
+// Day names mapping
+const DAY_NAMES = [
+  { id: 1, name: "Monday", short: "Mon" },
+  { id: 2, name: "Tuesday", short: "Tue" },
+  { id: 3, name: "Wednesday", short: "Wed" },
+  { id: 4, name: "Thursday", short: "Thu" },
+  { id: 5, name: "Friday", short: "Fri" },
+  { id: 6, name: "Saturday", short: "Sat" },
+  { id: 7, name: "Sunday", short: "Sun" },
 ];
 
 const DailyExpenseLogger = ({ onExpenseChange }) => {
@@ -103,8 +115,16 @@ const DailyExpenseLogger = ({ onExpenseChange }) => {
     setEditCategory("");
   };
 
-  // Always show days 1-7
-  const daysToShow = [1, 2, 3, 4, 5, 6, 7];
+  // Get day name from day number
+  const getDayName = (dayId) => {
+    const day = DAY_NAMES.find((d) => d.id === dayId);
+    return day ? day.name : "Unknown";
+  };
+
+  const getDayShort = (dayId) => {
+    const day = DAY_NAMES.find((d) => d.id === dayId);
+    return day ? day.short : "?";
+  };
 
   // Filter expenses for selected day
   const dayExpenses = expenses.filter(
@@ -129,22 +149,25 @@ const DailyExpenseLogger = ({ onExpenseChange }) => {
         <h3 className="logger-title">💳 Daily Expense Logger</h3>
         <div className="header-stats">
           <span className="stat-badge">Total: ${totalExpenses.toFixed(2)}</span>
-          <span className="stat-badge">Today: ${dayTotal.toFixed(2)}</span>
+          <span className="stat-badge">
+            {getDayName(selectedDay)}: ${dayTotal.toFixed(2)}
+          </span>
         </div>
       </div>
 
-      {/* Day Selector */}
+      {/* Day Selector - Now shows day names */}
       <div className="day-selector">
         <div className="day-buttons">
-          {daysToShow.map((day) => (
+          {DAY_NAMES.map((day) => (
             <button
-              key={day}
-              onClick={() => setSelectedDay(day)}
+              key={day.id}
+              onClick={() => setSelectedDay(day.id)}
               className={`day-btn ${
-                Number(selectedDay) === Number(day) ? "active" : ""
+                Number(selectedDay) === Number(day.id) ? "active" : ""
               }`}
+              title={day.name}
             >
-              Day {day}
+              {day.short}
             </button>
           ))}
         </div>
@@ -274,12 +297,14 @@ const DailyExpenseLogger = ({ onExpenseChange }) => {
               );
             })}
             <div className="day-total">
-              <span>Day {selectedDay} Total:</span>
+              <span>{getDayName(selectedDay)} Total:</span>
               <strong>${dayTotal.toFixed(2)}</strong>
             </div>
           </div>
         ) : (
-          <p className="empty-expenses">No expenses for Day {selectedDay}</p>
+          <p className="empty-expenses">
+            No expenses for {getDayName(selectedDay)}
+          </p>
         )}
       </div>
     </div>
