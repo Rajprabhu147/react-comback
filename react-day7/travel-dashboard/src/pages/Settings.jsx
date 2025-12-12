@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import PageLayout from "../components/Layout/PageLayout";
 // Tab content components
 import AppearanceSettings from "../components/Settings/AppearanceSettings";
-import PreferencesSettings from "../components/Settings/PreferencesSettings";
+// import PreferencesSettings from "../components/Settings/PreferencesSettings";
 import DataManagement from "../components/Settings/DataManagement";
 // Reusable button component
 import Button from "../components/Shared/Button";
