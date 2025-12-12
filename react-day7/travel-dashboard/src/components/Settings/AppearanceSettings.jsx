@@ -1,9 +1,9 @@
 // src/components/Settings/AppearanceSettings.jsx
 import React, { useEffect, useState } from "react";
 import { useSettingsStore } from "../../store/settingsStore";
-import { useUIStore } from "../../store/uiStore";
 import toast from "react-hot-toast";
 import "../../styles/appearanceSettings.css";
+import { RailSymbolIcon } from "lucide-react";
 
 /**
  * AppearanceSettings Component
@@ -20,9 +20,6 @@ const AppearanceSettings = () => {
   const animations = store.animations;
   const setAnimations = store.setAnimations;
 
-  const sidebarOpen = useUIStore((s) => s.sidebarOpen);
-  const toggleSidebar = useUIStore((s) => s.toggleSidebar);
-
   const [currentTheme, setCurrentTheme] = useState(theme);
 
   const themes = [
@@ -34,20 +31,20 @@ const AppearanceSettings = () => {
     },
     {
       id: "light",
-      label: "Light",
+      label: "Sunshine",
       icon: "☀️",
       description: "Warm cream yellow",
     },
     {
       id: "dark",
-      label: "Dark",
+      label: "Cloudy",
       icon: "🌙",
       description: "Soft grey taupe",
     },
   ];
 
   /**
-   * Apply theme directly to HTML - CRITICAL FIX
+   * Apply theme directly to HTML
    */
   const applyThemeDirect = (themeId) => {
     console.log("🎨 Applying theme:", themeId);
@@ -75,8 +72,10 @@ const AppearanceSettings = () => {
   useEffect(() => {
     if (compactMode) {
       document.body.classList.add("compact-mode");
+      console.log("📦 Compact mode enabled");
     } else {
       document.body.classList.remove("compact-mode");
+      console.log("📦 Compact mode disabled");
     }
   }, [compactMode]);
 
@@ -86,7 +85,24 @@ const AppearanceSettings = () => {
   useEffect(() => {
     const validSize = fontSize || 14;
     document.documentElement.style.fontSize = `${validSize}px`;
+    console.log("📝 Font size applied:", validSize + "px");
   }, [fontSize]);
+
+  /**
+   * Apply animations preference
+   */
+  useEffect(() => {
+    if (animations) {
+      document.documentElement.style.setProperty(
+        "--transition",
+        "all 0.2s cubic-bezier(0.4, 0, 0.2, 1)"
+      );
+      console.log("✨ Animations enabled");
+    } else {
+      document.documentElement.style.setProperty("--transition", "none");
+      console.log("✨ Animations disabled");
+    }
+  }, [animations]);
 
   /**
    * Handle theme button click
@@ -215,28 +231,6 @@ const AppearanceSettings = () => {
                 checked={!!compactMode}
                 onChange={(e) => handleCompactModeChange(!!e.target.checked)}
                 aria-describedby="compact-mode-desc"
-              />
-              <span className="toggle-slider" />
-            </label>
-          </div>
-
-          {/* Sidebar Visibility Toggle */}
-          <div className="option-item">
-            <div className="option-info">
-              <div className="option-label">Sidebar Visibility</div>
-              <div className="option-description">
-                Show or hide the navigation sidebar
-              </div>
-            </div>
-            <label
-              className="toggle-switch"
-              aria-label="Toggle sidebar visibility"
-            >
-              <input
-                type="checkbox"
-                checked={!!sidebarOpen}
-                onChange={() => toggleSidebar()}
-                aria-describedby="sidebar-desc"
               />
               <span className="toggle-slider" />
             </label>
