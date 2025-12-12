@@ -27,7 +27,7 @@ const Settings = () => {
   // Tabs metadata used to render the tab bar
   const tabs = [
     { id: "appearance", label: "Appearance", icon: "🎨" },
-    { id: "preferences", label: "Preferences", icon: "⚙️" },
+    // { id: "preferences", label: "Preferences", icon: "⚙️" },
     { id: "data", label: "Data & Privacy", icon: "🔒" },
   ];
 
@@ -144,7 +144,7 @@ const Settings = () => {
         >
           {/* Conditionally render the selected tab's component */}
           {activeTab === "appearance" && <AppearanceSettings />}
-          {activeTab === "preferences" && <PreferencesSettings />}
+          {/* {activeTab === "preferences" && <PreferencesSettings />} */}
           {activeTab === "data" && <DataManagement />}
         </div>
       </div>
