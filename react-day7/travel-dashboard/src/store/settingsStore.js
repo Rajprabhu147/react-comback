@@ -6,7 +6,7 @@ import { supabase } from "../lib/supabaseClient"; // adjust path as needed
  * Global Zustand store for managing application settings
  *
  * Manages:
- * - Appearance settings (theme, compact mode, font size, animations)
+ * - Appearance settings (theme: light/dark/coastal, compact mode, font size, animations)
  * - Notification preferences (email, push, sound)
  * - Privacy options (show email, activity)
  * - User interface preferences (items per page, view type, auto save)
@@ -19,7 +19,7 @@ import { supabase } from "../lib/supabaseClient"; // adjust path as needed
 
 export const useSettingsStore = create((set, get) => ({
   /* ===== Appearance Settings ===== */
-  theme: "light",
+  theme: "light", // light, dark, coastal
   compactMode: false,
   fontSize: 14,
   animations: true,
@@ -186,11 +186,14 @@ export const useSettingsStore = create((set, get) => ({
   /**
    * setTheme
    * Updates theme and syncs to database
-   * Supported themes: light, dark, coastal, contrast, auto
+   * Supported themes: light, dark, coastal
    */
   setTheme: (theme) => {
-    set({ theme });
-    get().updateSettingInDB("theme", theme);
+    const validTheme = ["light", "dark", "coastal"].includes(theme)
+      ? theme
+      : "light";
+    set({ theme: validTheme });
+    get().updateSettingInDB("theme", validTheme);
   },
 
   /**
