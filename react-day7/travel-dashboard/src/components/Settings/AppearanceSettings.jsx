@@ -53,17 +53,11 @@ const AppearanceSettings = () => {
     console.log("🎨 Applying theme:", themeId);
 
     const html = document.documentElement;
-
-    if (themeId === "light") {
-      html.removeAttribute("data-theme");
-      console.log("✅ Light theme applied - attribute removed");
-    } else {
-      html.setAttribute("data-theme", themeId);
-      console.log(
-        `✅ ${themeId} theme applied - attribute set to:`,
-        html.getAttribute("data-theme")
-      );
-    }
+    html.setAttribute("data-theme", themeId);
+    console.log(
+      `✅ ${themeId} theme applied - attribute set to:`,
+      html.getAttribute("data-theme")
+    );
   };
 
   /**
