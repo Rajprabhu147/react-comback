@@ -19,7 +19,7 @@ import { supabase } from "../lib/supabaseClient"; // adjust path as needed
 
 export const useSettingsStore = create((set, get) => ({
   /* ===== Appearance Settings ===== */
-  theme: "light", // light (default), dark, coastal
+  theme: "coastal", // coastal (default), light, dark
   compactMode: false,
   fontSize: 14,
   animations: true,

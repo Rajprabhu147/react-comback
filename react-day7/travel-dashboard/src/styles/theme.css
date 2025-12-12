@@ -1,16 +1,16 @@
 /* =====================================================
-   THEME CONFIGURATION - 3 MINIMAL THEMES
-   Coastal (DEFAULT) | Light | Dark (Soft Grey)
+   THEME CONFIGURATION - 3 CUSTOM THEMES
+   Coastal (DEFAULT) | Light | Dark
    ===================================================== */
 
 /* =====================================================
-   COASTAL THEME (DEFAULT)
+   COASTAL THEME (DEFAULT) - E3F4F4
    ===================================================== */
 
 html {
   /* Background Colors */
-  --bg-primary: #f0f9fb;
-  --bg-secondary: #e0f2f7;
+  --bg-primary: #E3F4F4;
+  --bg-secondary: #d4ecec;
 
   /* Surface Colors */
   --surface: #ffffff;
@@ -18,9 +18,9 @@ html {
   --surface-elevated: #ffffff;
 
   /* Text Colors */
-  --text-primary: #0a3d54;
-  --text-secondary: #2c5966;
-  --text-muted: #5a7a8f;
+  --text-primary: #1a3f42;
+  --text-secondary: #2d5a60;
+  --text-muted: #4a7a82;
 
   /* Primary Brand Colors */
   --primary: #0891b2;
@@ -56,11 +56,11 @@ html {
   --radius-xl: 20px;
 
   /* Shadows */
-  --shadow-xs: 0 1px 2px rgba(10, 61, 84, 0.04);
-  --shadow-sm: 0 2px 4px rgba(10, 61, 84, 0.06), 0 1px 2px rgba(10, 61, 84, 0.04);
-  --shadow-md: 0 4px 8px rgba(10, 61, 84, 0.08), 0 2px 4px rgba(10, 61, 84, 0.04);
-  --shadow-lg: 0 8px 16px rgba(10, 61, 84, 0.1), 0 4px 8px rgba(10, 61, 84, 0.06);
-  --shadow-xl: 0 16px 32px rgba(10, 61, 84, 0.12), 0 8px 16px rgba(10, 61, 84, 0.08);
+  --shadow-xs: 0 1px 2px rgba(26, 63, 66, 0.04);
+  --shadow-sm: 0 2px 4px rgba(26, 63, 66, 0.06), 0 1px 2px rgba(26, 63, 66, 0.04);
+  --shadow-md: 0 4px 8px rgba(26, 63, 66, 0.08), 0 2px 4px rgba(26, 63, 66, 0.04);
+  --shadow-lg: 0 8px 16px rgba(26, 63, 66, 0.1), 0 4px 8px rgba(26, 63, 66, 0.06);
+  --shadow-xl: 0 16px 32px rgba(26, 63, 66, 0.12), 0 8px 16px rgba(26, 63, 66, 0.08);
 
   /* Transitions */
   --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
@@ -109,73 +109,113 @@ html {
 }
 
 /* =====================================================
-   LIGHT THEME - WHITISH YELLOW
+   LIGHT THEME - F8F6F4
    ===================================================== */
 
 html[data-theme="light"] {
-  /* Background Colors - Warm yellow/cream tones */
-  --bg-primary: #fffef5;
-  --bg-secondary: #fef9e7;
+  /* Background Colors - Warm light beige */
+  --bg-primary: #F8F6F4;
+  --bg-secondary: #f1ede9;
 
-  /* Surface Colors - White with warm tint */
-  --surface: #fffdf9;
-  --surface-hover: #fffbf0;
-  --surface-elevated: #fffdf9;
+  /* Surface Colors */
+  --surface: #ffffff;
+  --surface-hover: #fdfbf9;
+  --surface-elevated: #ffffff;
 
   /* Text Colors - Dark warm tones */
-  --text-primary: #3d3520;
-  --text-secondary: #6b6348;
-  --text-muted: #8b8270;
+  --text-primary: #3d3530;
+  --text-secondary: #5a5148;
+  --text-muted: #7a7168;
 
-  /* Primary Brand Colors - Warm gold/amber */
-  --primary: #d97706;
-  --primary-hover: #b45309;
+  /* Primary Brand Colors - Warm brown/gold */
+  --primary: #b8860b;
+  --primary-hover: #996515;
   --primary-light: #fef3c7;
-  --primary-dark: #92400e;
+  --primary-dark: #704d1a;
 
-  /* Accent Colors - Warm orange */
-  --accent: #ea580c;
-  --accent-hover: #c2410c;
-  --accent-light: #fed7aa;
+  /* Accent Colors - Warm tan */
+  --accent: #d4a574;
+  --accent-hover: #c59664;
+  --accent-light: #f5e6d3;
+
+  /* Semantic Colors */
+  --success: #10b981;
+  --success-hover: #059669;
+  --success-light: #d1fae5;
+
+  --warning: #f59e0b;
+  --warning-hover: #d97706;
+  --warning-light: #fef3c7;
+
+  --danger: #ef4444;
+  --danger-hover: #dc2626;
+  --danger-light: #fee2e2;
+
+  --info: #3b82f6;
+  --info-light: #dbeafe;
+
+  /* Shadows */
+  --shadow-xs: 0 1px 2px rgba(61, 53, 48, 0.04);
+  --shadow-sm: 0 2px 4px rgba(61, 53, 48, 0.06), 0 1px 2px rgba(61, 53, 48, 0.04);
+  --shadow-md: 0 4px 8px rgba(61, 53, 48, 0.08), 0 2px 4px rgba(61, 53, 48, 0.04);
+  --shadow-lg: 0 8px 16px rgba(61, 53, 48, 0.1), 0 4px 8px rgba(61, 53, 48, 0.06);
+  --shadow-xl: 0 16px 32px rgba(61, 53, 48, 0.12), 0 8px 16px rgba(61, 53, 48, 0.08);
 
   color-scheme: light;
 }
 
 /* =====================================================
-   DARK THEME - MINIMAL SOFT GREY (Only backgrounds/text change)
+   DARK THEME - C4DFDF
    ===================================================== */
 
 html[data-theme="dark"] {
-  /* MINIMAL: Only background and text change */
-  --bg-primary: #f5f5f5;
-  --bg-secondary: #eeeeee;
+  /* Background Colors - Soft teal/grey-blue */
+  --bg-primary: #C4DFDF;
+  --bg-secondary: #b5d7d7;
 
-  /* Surface Colors - STAYS SAME */
+  /* Surface Colors */
   --surface: #ffffff;
-  --surface-hover: #f9f9f9;
+  --surface-hover: #f5fbfc;
   --surface-elevated: #ffffff;
 
-  /* Text Colors - Dark but not extreme */
-  --text-primary: #2d2d2d;
-  --text-secondary: #555555;
-  --text-muted: #777777;
+  /* Text Colors - Dark cool tones */
+  --text-primary: #1a3f42;
+  --text-secondary: #2d5a60;
+  --text-muted: #4a7a82;
 
-  /* Brand colors - STAY SAME (Coastal colors) */
+  /* Primary Brand Colors - Teal/Blue */
   --primary: #0891b2;
   --primary-hover: #0369a1;
   --primary-light: #cffafe;
   --primary-dark: #0c4a6e;
 
+  /* Accent Colors - Cyan */
   --accent: #06b6d4;
   --accent-hover: #0891b2;
   --accent-light: #cffafe;
 
-  /* Shadows - SAME (light) */
-  --shadow-xs: 0 1px 2px rgba(10, 61, 84, 0.04);
-  --shadow-sm: 0 2px 4px rgba(10, 61, 84, 0.06), 0 1px 2px rgba(10, 61, 84, 0.04);
-  --shadow-md: 0 4px 8px rgba(10, 61, 84, 0.08), 0 2px 4px rgba(10, 61, 84, 0.04);
-  --shadow-lg: 0 8px 16px rgba(10, 61, 84, 0.1), 0 4px 8px rgba(10, 61, 84, 0.06);
-  --shadow-xl: 0 16px 32px rgba(10, 61, 84, 0.12), 0 8px 16px rgba(10, 61, 84, 0.08);
+  /* Semantic Colors */
+  --success: #10b981;
+  --success-hover: #059669;
+  --success-light: #d1fae5;
+
+  --warning: #f59e0b;
+  --warning-hover: #d97706;
+  --warning-light: #fef3c7;
+
+  --danger: #ef4444;
+  --danger-hover: #dc2626;
+  --danger-light: #fee2e2;
+
+  --info: #3b82f6;
+  --info-light: #dbeafe;
+
+  /* Shadows */
+  --shadow-xs: 0 1px 2px rgba(26, 63, 66, 0.04);
+  --shadow-sm: 0 2px 4px rgba(26, 63, 66, 0.06), 0 1px 2px rgba(26, 63, 66, 0.04);
+  --shadow-md: 0 4px 8px rgba(26, 63, 66, 0.08), 0 2px 4px rgba(26, 63, 66, 0.04);
+  --shadow-lg: 0 8px 16px rgba(26, 63, 66, 0.1), 0 4px 8px rgba(26, 63, 66, 0.06);
+  --shadow-xl: 0 16px 32px rgba(26, 63, 66, 0.12), 0 8px 16px rgba(26, 63, 66, 0.08);
 
   color-scheme: light;
 }
@@ -234,7 +274,7 @@ textarea:focus,
 select:focus {
   outline: none;
   border-color: var(--primary) !important;
-  box-shadow: 0 0 0 3px rgba(6, 181, 212, 0.1);
+  box-shadow: 0 0 0 3px rgba(8, 145, 178, 0.1);
 }
 
 /* =====================================================

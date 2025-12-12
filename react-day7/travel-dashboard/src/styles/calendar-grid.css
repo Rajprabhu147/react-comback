@@ -296,7 +296,7 @@
 
 @media (max-width: 768px) {
   .calendar-day-cell {
-    min-height: 80px;
+    min-height: 60px;
     padding: 6px;
   }
 
@@ -325,7 +325,7 @@
   }
 
   .calendar-day-cell {
-    min-height: 70px;
+    min-height: 30px;
     padding: 4px;
   }
 
