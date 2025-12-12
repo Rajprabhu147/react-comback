@@ -1,6 +1,5 @@
-/* eslint-disable no-unused-vars */
 // src/components/Settings/AppearanceSettings.jsx
-import React, { useEffect, useRef } from "react";
+import React, { useEffect } from "react";
 import { useSettingsStore } from "../../store/settingsStore";
 import { useUIStore } from "../../store/uiStore";
 import toast from "react-hot-toast";
@@ -33,8 +32,6 @@ const AppearanceSettings = () => {
   const sidebarOpen = useUIStore((s) => s.sidebarOpen);
   const toggleSidebar = useUIStore((s) => s.toggleSidebar);
 
-  const mediaListenerRef = useRef(null);
-
   const themes = [
     {
       id: "light",
@@ -57,29 +54,27 @@ const AppearanceSettings = () => {
   ];
 
   /**
-   * Applies a concrete theme by setting data-theme attribute on <html>
-   * Light theme removes the attribute to use default CSS variables
-   */
-  const applyConcreteTheme = (themeId) => {
-    const root = document.documentElement;
-    if (!root) return;
-
-    if (themeId === "light") {
-      root.removeAttribute("data-theme");
-    } else {
-      root.setAttribute("data-theme", themeId);
-    }
-
-    console.log(`Theme applied: ${themeId}`, {
-      htmlAttribute: root.getAttribute("data-theme"),
-    });
-  };
-
-  /**
-   * Apply theme changes when store value updates
+   * Apply theme to HTML element
+   * Sets data-theme attribute directly on document.documentElement
    */
   useEffect(() => {
-    applyConcreteTheme(theme || "light");
+    const applyTheme = () => {
+      const html = document.documentElement;
+
+      if (theme === "light") {
+        // Remove attribute for light theme (uses default CSS)
+        html.removeAttribute("data-theme");
+        console.log("Theme applied: light (attribute removed)");
+      } else {
+        // Set attribute for dark or coastal
+        html.setAttribute("data-theme", theme);
+        console.log(`Theme applied: ${theme}`, {
+          htmlAttribute: html.getAttribute("data-theme"),
+        });
+      }
+    };
+
+    applyTheme();
   }, [theme]);
 
   /**
@@ -106,7 +101,6 @@ const AppearanceSettings = () => {
    */
   const handleThemeChange = (newTheme) => {
     setTheme(newTheme);
-    applyConcreteTheme(newTheme);
     toast.success(
       `${newTheme[0].toUpperCase() + newTheme.slice(1)} theme applied`
     );
