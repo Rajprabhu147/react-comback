@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 // src/components/Settings/AppearanceSettings.jsx
 import React, { useEffect, useRef } from "react";
 import { useSettingsStore } from "../../store/settingsStore";
@@ -10,7 +11,7 @@ import "../../styles/appearanceSettings.css";
  * Manages theme, display options, and font size preferences
  *
  * Features:
- * - Multiple themes (light, dark, coastal, contrast, auto)
+ * - 3 themes (light, dark, coastal)
  * - Compact mode toggle
  * - Sidebar visibility control
  * - Animations toggle
@@ -53,18 +54,6 @@ const AppearanceSettings = () => {
       icon: "🌊",
       description: "Soft coastal blues",
     },
-    {
-      id: "contrast",
-      label: "High Contrast",
-      icon: "⚫️",
-      description: "High contrast accessibility",
-    },
-    {
-      id: "auto",
-      label: "Auto",
-      icon: "🔄",
-      description: "Match system preference",
-    },
   ];
 
   /**
@@ -87,69 +76,10 @@ const AppearanceSettings = () => {
   };
 
   /**
-   * Enables auto theme detection based on system preference
-   * Listens for changes to system theme preference
-   */
-  const enableAutoTheme = () => {
-    const mq =
-      window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)");
-    if (!mq) {
-      applyConcreteTheme("light");
-      return;
-    }
-
-    applyConcreteTheme(mq.matches ? "dark" : "light");
-
-    const listener = (e) => {
-      applyConcreteTheme(e.matches ? "dark" : "light");
-    };
-
-    if (typeof mq.addEventListener === "function") {
-      mq.addEventListener("change", listener);
-      mediaListenerRef.current = { mq, listener, method: "addEventListener" };
-    } else if (typeof mq.addListener === "function") {
-      mq.addListener(listener);
-      mediaListenerRef.current = { mq, listener, method: "addListener" };
-    }
-  };
-
-  /**
-   * Removes the media query listener when switching away from auto theme
-   */
-  const removeAutoListener = () => {
-    const saved = mediaListenerRef.current;
-    if (!saved) return;
-
-    const { mq, listener, method } = saved;
-    if (
-      method === "addEventListener" &&
-      typeof mq.removeEventListener === "function"
-    ) {
-      mq.removeEventListener("change", listener);
-    } else if (
-      method === "addListener" &&
-      typeof mq.removeListener === "function"
-    ) {
-      mq.removeListener(listener);
-    }
-
-    mediaListenerRef.current = null;
-  };
-
-  /**
    * Apply theme changes when store value updates
    */
   useEffect(() => {
-    removeAutoListener();
-
-    if (theme === "auto") {
-      enableAutoTheme();
-    } else {
-      applyConcreteTheme(theme || "light");
-    }
-
-    return () => removeAutoListener();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    applyConcreteTheme(theme || "light");
   }, [theme]);
 
   /**
@@ -176,17 +106,10 @@ const AppearanceSettings = () => {
    */
   const handleThemeChange = (newTheme) => {
     setTheme(newTheme);
-    removeAutoListener();
-
-    if (newTheme === "auto") {
-      enableAutoTheme();
-      toast.success("Theme set to Auto (following system preference)");
-    } else {
-      applyConcreteTheme(newTheme);
-      toast.success(
-        `${newTheme[0].toUpperCase() + newTheme.slice(1)} theme applied`
-      );
-    }
+    applyConcreteTheme(newTheme);
+    toast.success(
+      `${newTheme[0].toUpperCase() + newTheme.slice(1)} theme applied`
+    );
   };
 
   /**
