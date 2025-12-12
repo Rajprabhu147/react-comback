@@ -1,32 +1,32 @@
 /* =====================================================
    THEME CONFIGURATION - 3 MINIMAL THEMES
-   Light | Dark | Coastal
+   Coastal (DEFAULT) | Light | Dark (Soft Grey)
    ===================================================== */
 
 /* =====================================================
-   LIGHT THEME (DEFAULT)
+   COASTAL THEME (DEFAULT)
    ===================================================== */
 
 html {
   /* Background Colors */
-  --bg-primary: #f8fcfd;
-  --bg-secondary: #eef7f9;
+  --bg-primary: #f0f9fb;
+  --bg-secondary: #e0f2f7;
 
   /* Surface Colors */
   --surface: #ffffff;
-  --surface-hover: #f0f9fb;
+  --surface-hover: #f5fbfc;
   --surface-elevated: #ffffff;
 
   /* Text Colors */
-  --text-primary: #0a2540;
-  --text-secondary: #425466;
-  --text-muted: #6b7b8a;
+  --text-primary: #0a3d54;
+  --text-secondary: #2c5966;
+  --text-muted: #5a7a8f;
 
   /* Primary Brand Colors */
-  --primary: #0ea5e9;
-  --primary-hover: #0284c7;
-  --primary-light: #e0f2fe;
-  --primary-dark: #075985;
+  --primary: #0891b2;
+  --primary-hover: #0369a1;
+  --primary-light: #cffafe;
+  --primary-dark: #0c4a6e;
 
   /* Accent Colors */
   --accent: #06b6d4;
@@ -56,11 +56,11 @@ html {
   --radius-xl: 20px;
 
   /* Shadows */
-  --shadow-xs: 0 1px 2px rgba(10, 37, 64, 0.04);
-  --shadow-sm: 0 2px 4px rgba(10, 37, 64, 0.06), 0 1px 2px rgba(10, 37, 64, 0.04);
-  --shadow-md: 0 4px 8px rgba(10, 37, 64, 0.08), 0 2px 4px rgba(10, 37, 64, 0.04);
-  --shadow-lg: 0 8px 16px rgba(10, 37, 64, 0.1), 0 4px 8px rgba(10, 37, 64, 0.06);
-  --shadow-xl: 0 16px 32px rgba(10, 37, 64, 0.12), 0 8px 16px rgba(10, 37, 64, 0.08);
+  --shadow-xs: 0 1px 2px rgba(10, 61, 84, 0.04);
+  --shadow-sm: 0 2px 4px rgba(10, 61, 84, 0.06), 0 1px 2px rgba(10, 61, 84, 0.04);
+  --shadow-md: 0 4px 8px rgba(10, 61, 84, 0.08), 0 2px 4px rgba(10, 61, 84, 0.04);
+  --shadow-lg: 0 8px 16px rgba(10, 61, 84, 0.1), 0 4px 8px rgba(10, 61, 84, 0.06);
+  --shadow-xl: 0 16px 32px rgba(10, 61, 84, 0.12), 0 8px 16px rgba(10, 61, 84, 0.08);
 
   /* Transitions */
   --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
@@ -109,108 +109,68 @@ html {
 }
 
 /* =====================================================
-   DARK THEME
+   LIGHT THEME - WHITISH YELLOW
    ===================================================== */
 
-html[data-theme="dark"] {
-  /* Background Colors */
-  --bg-primary: #0f1419;
-  --bg-secondary: #1a1f2e;
+html[data-theme="light"] {
+  /* Background Colors - Warm yellow/cream tones */
+  --bg-primary: #fffef5;
+  --bg-secondary: #fef9e7;
 
-  /* Surface Colors */
-  --surface: #1e2634;
-  --surface-hover: #252d3d;
-  --surface-elevated: #2a3442;
+  /* Surface Colors - White with warm tint */
+  --surface: #fffdf9;
+  --surface-hover: #fffbf0;
+  --surface-elevated: #fffdf9;
 
-  /* Text Colors */
-  --text-primary: #e4e9f1;
-  --text-secondary: #a8b5c8;
-  --text-muted: #7a8599;
+  /* Text Colors - Dark warm tones */
+  --text-primary: #3d3520;
+  --text-secondary: #6b6348;
+  --text-muted: #8b8270;
 
-  /* Primary Brand Colors */
-  --primary: #06b6d4;
-  --primary-hover: #0891b2;
-  --primary-light: #164e63;
-  --primary-dark: #06b6d4;
+  /* Primary Brand Colors - Warm gold/amber */
+  --primary: #d97706;
+  --primary-hover: #b45309;
+  --primary-light: #fef3c7;
+  --primary-dark: #92400e;
 
-  /* Accent Colors */
-  --accent: #0ea5e9;
-  --accent-hover: #0284c7;
-  --accent-light: #1e3a8a;
+  /* Accent Colors - Warm orange */
+  --accent: #ea580c;
+  --accent-hover: #c2410c;
+  --accent-light: #fed7aa;
 
-  /* Semantic Colors */
-  --success: #10b981;
-  --success-hover: #059669;
-  --success-light: #064e3b;
-
-  --warning: #f59e0b;
-  --warning-hover: #d97706;
-  --warning-light: #78350f;
-
-  --danger: #ef4444;
-  --danger-hover: #dc2626;
-  --danger-light: #7f1d1d;
-
-  --info: #3b82f6;
-  --info-light: #1e3a8a;
-
-  /* Shadows - darker for dark mode */
-  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.2);
-  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.3), 0 1px 2px rgba(0, 0, 0, 0.2);
-  --shadow-md: 0 4px 8px rgba(0, 0, 0, 0.4), 0 2px 4px rgba(0, 0, 0, 0.2);
-  --shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.5), 0 4px 8px rgba(0, 0, 0, 0.3);
-  --shadow-xl: 0 16px 32px rgba(0, 0, 0, 0.6), 0 8px 16px rgba(0, 0, 0, 0.4);
-
-  color-scheme: dark;
+  color-scheme: light;
 }
 
 /* =====================================================
-   COASTAL THEME
+   DARK THEME - MINIMAL SOFT GREY (Only backgrounds/text change)
    ===================================================== */
 
-html[data-theme="coastal"] {
-  /* Background Colors */
-  --bg-primary: #f0f9fb;
-  --bg-secondary: #e0f2f7;
+html[data-theme="dark"] {
+  /* MINIMAL: Only background and text change */
+  --bg-primary: #f5f5f5;
+  --bg-secondary: #eeeeee;
 
-  /* Surface Colors */
+  /* Surface Colors - STAYS SAME */
   --surface: #ffffff;
-  --surface-hover: #f5fbfc;
+  --surface-hover: #f9f9f9;
   --surface-elevated: #ffffff;
 
-  /* Text Colors */
-  --text-primary: #0a3d54;
-  --text-secondary: #2c5966;
-  --text-muted: #5a7a8f;
+  /* Text Colors - Dark but not extreme */
+  --text-primary: #2d2d2d;
+  --text-secondary: #555555;
+  --text-muted: #777777;
 
-  /* Primary Brand Colors */
+  /* Brand colors - STAY SAME (Coastal colors) */
   --primary: #0891b2;
   --primary-hover: #0369a1;
   --primary-light: #cffafe;
   --primary-dark: #0c4a6e;
 
-  /* Accent Colors */
   --accent: #06b6d4;
   --accent-hover: #0891b2;
   --accent-light: #cffafe;
 
-  /* Semantic Colors */
-  --success: #10b981;
-  --success-hover: #059669;
-  --success-light: #d1fae5;
-
-  --warning: #f59e0b;
-  --warning-hover: #d97706;
-  --warning-light: #fef3c7;
-
-  --danger: #ef4444;
-  --danger-hover: #dc2626;
-  --danger-light: #fee2e2;
-
-  --info: #3b82f6;
-  --info-light: #dbeafe;
-
-  /* Shadows */
+  /* Shadows - SAME (light) */
   --shadow-xs: 0 1px 2px rgba(10, 61, 84, 0.04);
   --shadow-sm: 0 2px 4px rgba(10, 61, 84, 0.06), 0 1px 2px rgba(10, 61, 84, 0.04);
   --shadow-md: 0 4px 8px rgba(10, 61, 84, 0.08), 0 2px 4px rgba(10, 61, 84, 0.04);
@@ -240,10 +200,16 @@ html {
 
 /* CRITICAL: Apply theme colors to body */
 body {
-  background-color: var(--bg-primary);
-  color: var(--text-primary);
+  background-color: var(--bg-primary) !important;
+  color: var(--text-primary) !important;
   line-height: var(--leading-normal);
   transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Ensure all root elements respect theme */
+#root {
+  background-color: var(--bg-primary) !important;
+  color: var(--text-primary) !important;
 }
 
 /* =====================================================
@@ -255,9 +221,9 @@ textarea,
 select {
   font-family: inherit;
   font-size: inherit;
-  color: var(--text-primary);
-  background-color: var(--surface);
-  border: 1px solid var(--bg-secondary);
+  color: var(--text-primary) !important;
+  background-color: var(--surface) !important;
+  border: 1px solid var(--bg-secondary) !important;
   border-radius: var(--radius-md);
   padding: 8px 12px;
   transition: var(--transition);
@@ -267,7 +233,7 @@ input:focus,
 textarea:focus,
 select:focus {
   outline: none;
-  border-color: var(--primary);
+  border-color: var(--primary) !important;
   box-shadow: 0 0 0 3px rgba(6, 181, 212, 0.1);
 }
 

@@ -1,5 +1,5 @@
 // src/components/Settings/AppearanceSettings.jsx
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useSettingsStore } from "../../store/settingsStore";
 import { useUIStore } from "../../store/uiStore";
 import toast from "react-hot-toast";
@@ -8,42 +8,35 @@ import "../../styles/appearanceSettings.css";
 /**
  * AppearanceSettings Component
  * Manages theme, display options, and font size preferences
- *
- * Features:
- * - 3 themes (light, dark, coastal)
- * - Compact mode toggle
- * - Sidebar visibility control
- * - Animations toggle
- * - Font size adjustment
- * - All settings persist to database via Zustand store
  */
 const AppearanceSettings = () => {
-  const {
-    theme,
-    compactMode,
-    fontSize,
-    animations,
-    setTheme,
-    setCompactMode,
-    setFontSize,
-    setAnimations,
-  } = useSettingsStore();
+  const store = useSettingsStore();
+  const theme = store.theme;
+  const setTheme = store.setTheme;
+  const compactMode = store.compactMode;
+  const setCompactMode = store.setCompactMode;
+  const fontSize = store.fontSize;
+  const setFontSize = store.setFontSize;
+  const animations = store.animations;
+  const setAnimations = store.setAnimations;
 
   const sidebarOpen = useUIStore((s) => s.sidebarOpen);
   const toggleSidebar = useUIStore((s) => s.toggleSidebar);
+
+  const [currentTheme, setCurrentTheme] = useState(theme);
 
   const themes = [
     {
       id: "light",
       label: "Light",
       icon: "☀️",
-      description: "Classic light theme",
+      description: "Warm whitish yellow",
     },
     {
       id: "dark",
       label: "Dark",
       icon: "🌙",
-      description: "Easy on the eyes",
+      description: "Minimal soft grey",
     },
     {
       id: "coastal",
@@ -54,31 +47,36 @@ const AppearanceSettings = () => {
   ];
 
   /**
-   * Apply theme to HTML element
-   * Sets data-theme attribute directly on document.documentElement
+   * Apply theme directly to HTML - CRITICAL FIX
+   */
+  const applyThemeDirect = (themeId) => {
+    console.log("🎨 Applying theme:", themeId);
+
+    const html = document.documentElement;
+
+    if (themeId === "light") {
+      html.removeAttribute("data-theme");
+      console.log("✅ Light theme applied - attribute removed");
+    } else {
+      html.setAttribute("data-theme", themeId);
+      console.log(
+        `✅ ${themeId} theme applied - attribute set to:`,
+        html.getAttribute("data-theme")
+      );
+    }
+  };
+
+  /**
+   * Watch for theme changes from store and apply immediately
    */
   useEffect(() => {
-    const applyTheme = () => {
-      const html = document.documentElement;
-
-      if (theme === "light") {
-        // Remove attribute for light theme (uses default CSS)
-        html.removeAttribute("data-theme");
-        console.log("Theme applied: light (attribute removed)");
-      } else {
-        // Set attribute for dark or coastal
-        html.setAttribute("data-theme", theme);
-        console.log(`Theme applied: ${theme}`, {
-          htmlAttribute: html.getAttribute("data-theme"),
-        });
-      }
-    };
-
-    applyTheme();
+    console.log("📌 Theme changed in store:", theme);
+    applyThemeDirect(theme);
+    setCurrentTheme(theme);
   }, [theme]);
 
   /**
-   * Apply compact mode class to body for CSS-based responsive adjustments
+   * Apply compact mode class to body
    */
   useEffect(() => {
     if (compactMode) {
@@ -97,17 +95,24 @@ const AppearanceSettings = () => {
   }, [fontSize]);
 
   /**
-   * Handles theme selection with store update and user feedback
+   * Handle theme button click
    */
   const handleThemeChange = (newTheme) => {
+    console.log("🖱️ Theme button clicked:", newTheme);
+
+    // Apply immediately
+    applyThemeDirect(newTheme);
+
+    // Update store (will also trigger useEffect above)
     setTheme(newTheme);
+
     toast.success(
       `${newTheme[0].toUpperCase() + newTheme.slice(1)} theme applied`
     );
   };
 
   /**
-   * Handles compact mode toggle
+   * Handle compact mode toggle
    */
   const handleCompactModeChange = (isCompact) => {
     setCompactMode(isCompact);
@@ -115,7 +120,7 @@ const AppearanceSettings = () => {
   };
 
   /**
-   * Handles font size change
+   * Handle font size change
    */
   const handleFontSizeChange = (e) => {
     const newSize = Number(e.target.value);
@@ -124,7 +129,7 @@ const AppearanceSettings = () => {
   };
 
   /**
-   * Handles animations toggle
+   * Handle animations toggle
    */
   const handleAnimationsChange = (e) => {
     setAnimations(e.target.checked);
@@ -144,7 +149,7 @@ const AppearanceSettings = () => {
 
         <div className="theme-grid">
           {themes.map((t) => {
-            const isActive = theme === t.id;
+            const isActive = currentTheme === t.id;
             return (
               <button
                 key={t.id}
