@@ -1,7 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import Header from "./Header";
-import Sidebar from "./Sidebar";
 import Button from "../Shared/Button";
 import "../../styles/page-layout.css";
 
@@ -10,7 +9,6 @@ import "../../styles/page-layout.css";
  * ----------------------
  * Reusable layout wrapper for dashboard pages
  * - App header at top
- * - Optional sidebar
  * - Page title + subtitle on left
  * - Back button + header action on right
  */
@@ -19,7 +17,6 @@ const PageLayout = ({
   title,
   subtitle,
   showBackButton = false,
-  showSidebar = false,
   headerAction,
 }) => {
   const navigate = useNavigate();
@@ -29,8 +26,6 @@ const PageLayout = ({
       <Header />
 
       <div className="app-container">
-        {showSidebar && <Sidebar />}
-
         <main className="main-content">
           <div className="page-header">
             {/* Left side: title + subtitle */}

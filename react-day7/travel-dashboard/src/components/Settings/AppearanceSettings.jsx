@@ -30,19 +30,19 @@ const AppearanceSettings = () => {
       id: "coastal",
       label: "Coastal",
       icon: "🌊",
-      description: "Soft coastal aqua",
+      description: "Fresh mint green aqua",
     },
     {
       id: "light",
       label: "Light",
       icon: "☀️",
-      description: "Warm light beige",
+      description: "Warm cream yellow",
     },
     {
       id: "dark",
       label: "Dark",
       icon: "🌙",
-      description: "Soft teal grey",
+      description: "Soft grey taupe",
     },
   ];
 

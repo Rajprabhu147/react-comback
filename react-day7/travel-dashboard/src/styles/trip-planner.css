@@ -561,7 +561,7 @@
 .planner-itinerary-section {
   background: var(--surface);
   border-radius: var(--radius-xl);
-  padding: 24px;
+  padding: 20px;
   box-shadow: var(--shadow-md);
   max-height: calc(100vh - 100px);
   overflow-y: auto;
@@ -571,7 +571,8 @@
 .filter-panel {
   display: flex;
   gap: 12px;
-  margin: 20px;
+  /* margin: 20px; */
+  margin-bottom: 20px;
 }
 
 .filter-input,

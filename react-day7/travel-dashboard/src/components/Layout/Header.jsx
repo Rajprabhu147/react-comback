@@ -4,7 +4,6 @@ import { useUser } from "../../context/UserContext";
 import Button from "../Shared/Button";
 import { useNotificationStore } from "../../store/notificationStore";
 // import { useUIStore } from "../../store/uiStore";
-import "../../styles/components.css";
 import "../../styles/header.css";
 
 const Header = () => {
