@@ -1,6 +1,5 @@
 import React from "react";
 import { useNotificationStore } from "../../store/notificationStore";
-import Button from "../Shared/Button";
 
 /**
  * NotificationItem
