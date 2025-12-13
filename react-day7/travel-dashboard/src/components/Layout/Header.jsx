@@ -3,9 +3,14 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { useUser } from "../../context/UserContext";
 import Button from "../Shared/Button";
 import { useNotificationStore } from "../../store/notificationStore";
-// import { useUIStore } from "../../store/uiStore";
 import "../../styles/header.css";
 
+/**
+ * Header Component
+ *
+ * Shows avatar image if available, otherwise shows initials
+ * Avatar updates in real-time from UserContext
+ */
 const Header = () => {
   const { user, signOut } = useUser();
   const navigate = useNavigate();
@@ -13,6 +18,9 @@ const Header = () => {
   const [showDropdown, setShowDropdown] = useState(false);
   const dropdownRef = useRef(null);
   const unreadCount = useNotificationStore((state) => state.unreadCount);
+
+  // Get avatar URL from user metadata
+  const avatarUrl = user?.user_metadata?.avatar_url;
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -65,15 +73,7 @@ const Header = () => {
   return (
     <header className="header">
       <div className="header-container">
-        {/* Mobile Menu Button */}
-        {/* <button
-          className="mobile-menu-btn"
-          onClick={toggleSidebar}
-          aria-label="Toggle menu"
-        >
-          {sidebarOpen ? "✕" : "☰"}
-        </button> */}
-
+        {/* Logo */}
         <div className="header-logo" onClick={() => navigate("/")}>
           <span className="logo-icon">🗺️</span>
           <span className="logo-text">Sutri</span>
@@ -100,7 +100,21 @@ const Header = () => {
               className="user-profile-btn"
               onClick={() => setShowDropdown(!showDropdown)}
             >
-              <div className="user-avatar">{getInitials(user?.email)}</div>
+              {/* Avatar - Shows image if available, otherwise initials */}
+              <div className="user-avatar">
+                {avatarUrl ? (
+                  <img
+                    src={avatarUrl}
+                    alt="User Avatar"
+                    className="avatar-image"
+                  />
+                ) : (
+                  <span className="avatar-initials">
+                    {getInitials(user?.email)}
+                  </span>
+                )}
+              </div>
+
               <div className="user-info">
                 <span className="user-name">{getDisplayName(user?.email)}</span>
                 <span className="user-email">
@@ -112,9 +126,20 @@ const Header = () => {
 
             {showDropdown && (
               <div className="user-dropdown">
+                {/* Dropdown Header with Avatar */}
                 <div className="dropdown-header">
                   <div className="dropdown-avatar">
-                    {getInitials(user?.email)}
+                    {avatarUrl ? (
+                      <img
+                        src={avatarUrl}
+                        alt="User Avatar"
+                        className="avatar-image"
+                      />
+                    ) : (
+                      <span className="avatar-initials">
+                        {getInitials(user?.email)}
+                      </span>
+                    )}
                   </div>
                   <div className="dropdown-info">
                     <div className="dropdown-name">
@@ -128,6 +153,7 @@ const Header = () => {
 
                 <div className="dropdown-divider"></div>
 
+                {/* Profile Settings */}
                 <button
                   className={`dropdown-item ${
                     location.pathname === "/profile" ? "active" : ""
@@ -138,6 +164,7 @@ const Header = () => {
                   <span>Profile Settings</span>
                 </button>
 
+                {/* Notifications */}
                 <button
                   className={`dropdown-item ${
                     location.pathname === "/notifications" ? "active" : ""
@@ -151,6 +178,7 @@ const Header = () => {
                   )}
                 </button>
 
+                {/* Settings */}
                 <button
                   className={`dropdown-item ${
                     location.pathname === "/settings" ? "active" : ""
@@ -163,6 +191,7 @@ const Header = () => {
 
                 <div className="dropdown-divider"></div>
 
+                {/* Sign Out */}
                 <button
                   className="dropdown-item danger"
                   onClick={handleSignOut}
