@@ -121,18 +121,6 @@ const DailyExpenseLogger = ({ onExpenseChange }) => {
     return day ? day.name : "Unknown";
   };
 
-  const getDayShort = (dayId) => {
-    const day = DAY_NAMES.find((d) => d.id === dayId);
-    return day ? day.short : "?";
-  };
-
-  // Filter expenses for selected day
-  const dayExpenses = expenses.filter(
-    (e) => Number(e.day) === Number(selectedDay)
-  );
-  const dayTotal = dayExpenses.reduce((sum, e) => sum + (e.amount || 0), 0);
-  const totalExpenses = expenses.reduce((sum, e) => sum + (e.amount || 0), 0);
-
   // Return emoji and label separately from category label string
   const getCategoryParts = (categoryValue) => {
     const cat = EXPENSE_CATEGORIES.find((c) => c.value === categoryValue);
@@ -142,6 +130,13 @@ const DailyExpenseLogger = ({ onExpenseChange }) => {
     const text = parts.join(" ").trim();
     return { emoji, text };
   };
+
+  // Filter expenses for selected day
+  const dayExpenses = expenses.filter(
+    (e) => Number(e.day) === Number(selectedDay)
+  );
+  const dayTotal = dayExpenses.reduce((sum, e) => sum + (e.amount || 0), 0);
+  const totalExpenses = expenses.reduce((sum, e) => sum + (e.amount || 0), 0);
 
   return (
     <div className="daily-expense-logger">
