@@ -41,7 +41,7 @@ const NotificationSettings = () => {
           Notification.requestPermission();
         }
       }
-    } catch (err) {
+    } catch (_err) {
       setError("Failed to update setting");
     }
   };
