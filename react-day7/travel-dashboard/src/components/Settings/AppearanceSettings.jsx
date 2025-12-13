@@ -1,5 +1,5 @@
 // src/components/Settings/AppearanceSettings.jsx
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useSettingsStore } from "../../store/settingsStore";
 import toast from "react-hot-toast";
 import "../../styles/appearanceSettings.css";
@@ -19,8 +19,6 @@ const AppearanceSettings = () => {
   const setFontSize = store.setFontSize;
   const animations = store.animations;
   const setAnimations = store.setAnimations;
-
-  const [currentTheme, setCurrentTheme] = useState(theme);
 
   const themes = [
     {
@@ -63,7 +61,6 @@ const AppearanceSettings = () => {
   useEffect(() => {
     console.log("📌 Theme changed in store:", theme);
     applyThemeDirect(theme);
-    setCurrentTheme(theme);
   }, [theme]);
 
   /**
@@ -159,7 +156,7 @@ const AppearanceSettings = () => {
 
         <div className="theme-grid">
           {themes.map((t) => {
-            const isActive = currentTheme === t.id;
+            const isActive = theme === t.id;
             return (
               <button
                 key={t.id}
