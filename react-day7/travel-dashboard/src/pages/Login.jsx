@@ -325,7 +325,9 @@ const Login = () => {
 
             {/* Footer */}
             <div className="login-footer">
-              {isSignUp ? "Already have an account?" : "Don't have an account?"}
+              {isSignUp
+                ? "Already have an account with us?"
+                : "Don't have an account?"}
               <button
                 type="button"
                 onClick={() => {
