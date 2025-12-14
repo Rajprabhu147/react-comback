@@ -43,7 +43,7 @@ export const INITIAL_ACTIVITIES = [
     id: 2,
     day: 15,
     time: "13:00",
-    activity: "Lunch",
+    activity: "Lunch Date",
     location: "Latin Quarter",
     category: "dining",
     budget: 40,
