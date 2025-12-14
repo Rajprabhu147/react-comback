@@ -60,7 +60,7 @@ const ProfileSettings = () => {
     if (file) {
       // Validate file type
       if (!file.type.startsWith("image/")) {
-        toast.error("Please select an image file");
+        toast.error("Please select an image file now");
         return;
       }
 
