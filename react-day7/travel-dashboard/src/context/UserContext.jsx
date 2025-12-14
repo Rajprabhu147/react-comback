@@ -4,6 +4,19 @@ import { supabase } from "../lib/supabaseClient";
 // Create context for authentication state
 const UserContext = createContext(undefined);
 
+// Get the correct origin based on environment
+const getRedirectUrl = () => {
+  // For production (Netlify)
+  if (
+    window.location.hostname !== "localhost" &&
+    window.location.hostname !== "127.0.0.1"
+  ) {
+    return window.location.origin; // This will be https://traveldashboardd7.netlify.app
+  }
+  // For local development
+  return "http://localhost:5173";
+};
+
 export const UserProvider = ({ children }) => {
   // Stores the authenticated user object
   const [user, setUser] = useState(null);
@@ -73,10 +86,11 @@ export const UserProvider = ({ children }) => {
 
   // Google OAuth login
   const signInWithGoogle = async () => {
+    const redirectUrl = getRedirectUrl();
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {
-        redirectTo: window.location.origin,
+        redirectTo: redirectUrl,
         queryParams: {
           access_type: "offline",
           prompt: "consent",
@@ -89,8 +103,9 @@ export const UserProvider = ({ children }) => {
 
   // Send password reset email
   const resetPassword = async (email) => {
+    const redirectUrl = getRedirectUrl();
     const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
-      redirectTo: `${window.location.origin}/reset-password`,
+      redirectTo: `${redirectUrl}/reset-password`,
     });
     if (error) throw error;
     return data;
