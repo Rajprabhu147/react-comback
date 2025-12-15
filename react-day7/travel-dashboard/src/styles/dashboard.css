@@ -26,6 +26,526 @@
   overflow-y: auto;
   width: 100%;
 }
+/* Profile Dashboard Container */
+.profile-dashboard-container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Header Section */
+.profile-dashboard-header {
+  margin-bottom: 2rem;
+}
+
+.profile-dashboard-user-card {
+  display: flex;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  margin-bottom: 2rem;
+}
+
+.profile-dashboard-avatar {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  border: 4px solid var(--primary);
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.profile-dashboard-user-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.profile-dashboard-name {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 0.25rem;
+}
+
+.profile-dashboard-username {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  margin-bottom: 0.75rem;
+}
+
+.profile-dashboard-contact {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+}
+
+.profile-dashboard-location {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.profile-dashboard-dot {
+  color: var(--text-secondary);
+}
+
+/* Stats Grid */
+.profile-dashboard-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.profile-dashboard-stat-card {
+  padding: 1.5rem;
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  box-shadow: var(--shadow-md);
+  border-left: 4px solid;
+}
+
+.profile-dashboard-stat-blue {
+  border-left-color: var(--primary);
+}
+
+.profile-dashboard-stat-green {
+  border-left-color: var(--success);
+}
+
+.profile-dashboard-stat-purple {
+  border-left-color: #a855f7;
+}
+
+.profile-dashboard-stat-orange {
+  border-left-color: #f97316;
+}
+
+.profile-dashboard-stat-label {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+}
+
+.profile-dashboard-stat-value {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+/* Section Styles */
+.profile-dashboard-section {
+  margin-bottom: 3rem;
+  padding: 0;
+}
+
+.profile-dashboard-section-header {
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.profile-dashboard-section-title {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.profile-dashboard-section-title h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.profile-dashboard-section-icon {
+  color: var(--text-secondary);
+}
+
+.profile-dashboard-icon-blue {
+  color: var(--primary);
+}
+
+.profile-dashboard-icon-green {
+  color: var(--success);
+}
+
+.profile-dashboard-icon-purple {
+  color: #a855f7;
+}
+
+.profile-dashboard-icon-red {
+  color: #ef4444;
+}
+
+/* Trips Grid */
+.profile-dashboard-trips-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+.profile-dashboard-trip-card {
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  box-shadow: var(--shadow-md);
+  transition: box-shadow 0.3s ease;
+}
+
+.profile-dashboard-trip-card:hover {
+  box-shadow: var(--shadow-lg);
+}
+
+.profile-dashboard-trip-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+}
+
+.profile-dashboard-trip-header h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.profile-dashboard-trip-status {
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.profile-dashboard-trip-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.profile-dashboard-trip-date {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+}
+
+.profile-dashboard-trip-budget {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.profile-dashboard-budget-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+}
+
+.profile-dashboard-budget-amount {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.profile-dashboard-progress-bar {
+  width: 100%;
+  height: 0.5rem;
+  background: var(--bg-secondary);
+  border-radius: 9999px;
+  overflow: hidden;
+}
+
+.profile-dashboard-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--primary), var(--success));
+  border-radius: 9999px;
+  transition: width 0.3s ease;
+}
+
+/* Expenses Table */
+.profile-dashboard-expenses-table {
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+}
+
+.profile-dashboard-expenses-table table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.profile-dashboard-expenses-table thead {
+  background: var(--bg-secondary);
+  border-bottom: 1px solid var(--bg-tertiary);
+}
+
+.profile-dashboard-expenses-table th {
+  padding: 1rem;
+  text-align: left;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.profile-dashboard-expenses-table tbody tr {
+  border-bottom: 1px solid var(--bg-tertiary);
+  transition: background-color 0.2s ease;
+}
+
+.profile-dashboard-expenses-table tbody tr:hover {
+  background-color: var(--bg-secondary);
+}
+
+.profile-dashboard-expenses-table td {
+  padding: 1rem;
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+}
+
+.profile-dashboard-table-trip {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.profile-dashboard-table-amount {
+  text-align: right;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+/* Itinerary Timeline */
+.profile-dashboard-itinerary {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.profile-dashboard-itinerary-item {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.profile-dashboard-itinerary-timeline {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.profile-dashboard-itinerary-day {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--primary);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.profile-dashboard-itinerary-line {
+  width: 2px;
+  height: 48px;
+  background: var(--bg-tertiary);
+  margin-top: 0.5rem;
+}
+
+.profile-dashboard-itinerary-content {
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  padding: 1rem;
+  flex: 1;
+  box-shadow: var(--shadow-md);
+  transition: box-shadow 0.3s ease;
+}
+
+.profile-dashboard-itinerary-content:hover {
+  box-shadow: var(--shadow-lg);
+}
+
+.profile-dashboard-itinerary-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.profile-dashboard-itinerary-header h4 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.profile-dashboard-itinerary-trip {
+  font-size: 0.75rem;
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+}
+
+.profile-dashboard-itinerary-place {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  margin-bottom: 0.5rem;
+}
+
+.profile-dashboard-itinerary-date {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+
+/* Places Grid */
+.profile-dashboard-places-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.profile-dashboard-place-card {
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+  transition: box-shadow 0.3s ease;
+}
+
+.profile-dashboard-place-card:hover {
+  box-shadow: var(--shadow-lg);
+}
+
+.profile-dashboard-place-image {
+  width: 100%;
+  height: 150px;
+  background: linear-gradient(135deg, #f97316 0%, #fb923c 100%);
+}
+
+.profile-dashboard-place-content {
+  padding: 1rem;
+}
+
+.profile-dashboard-place-content h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 0.5rem;
+}
+
+.profile-dashboard-place-country {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  margin-bottom: 1rem;
+}
+
+.profile-dashboard-place-details {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.profile-dashboard-place-label {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.profile-dashboard-place-rating {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.profile-dashboard-stars {
+  color: #fbbf24;
+  letter-spacing: 0.1rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .profile-dashboard-user-card {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .profile-dashboard-name {
+    font-size: 1.5rem;
+  }
+
+  .profile-dashboard-stats {
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  }
+
+  .profile-dashboard-stat-card {
+    padding: 1rem;
+  }
+
+  .profile-dashboard-stat-value {
+    font-size: 1.5rem;
+  }
+
+  .profile-dashboard-trips-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .profile-dashboard-places-grid {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  }
+
+  .profile-dashboard-expenses-table {
+    font-size: 0.75rem;
+  }
+
+  .profile-dashboard-expenses-table th,
+  .profile-dashboard-expenses-table td {
+    padding: 0.75rem 0.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .profile-dashboard-container {
+    padding: 0;
+  }
+
+  .profile-dashboard-stats {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+  }
+
+  .profile-dashboard-stat-label {
+    font-size: 0.75rem;
+  }
+
+  .profile-dashboard-stat-value {
+    font-size: 1.25rem;
+  }
+
+  .profile-dashboard-section-title h2 {
+    font-size: 1.25rem;
+  }
+
+  .profile-dashboard-places-grid {
+    grid-template-columns: 1fr;
+  }
+}
 
 /* ====================================
    DASHBOARD LAYOUT - THREE COLUMN
