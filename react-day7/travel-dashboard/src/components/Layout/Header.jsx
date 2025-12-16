@@ -10,6 +10,12 @@ import "../../styles/header.css";
  *
  * Shows avatar image if available, otherwise shows initials
  * Avatar updates in real-time from UserContext
+ *
+ * Navigation:
+ * - /profile → My Profile (view credentials, expenses, trips, itinerary)
+ * - /profile/settings → Profile Settings (edit account, change password)
+ * - /notifications → Notifications
+ * - /settings → App Settings
  */
 const Header = () => {
   const { user, signOut } = useUser();
@@ -69,6 +75,9 @@ const Header = () => {
     setShowDropdown(false);
     navigate(path);
   };
+
+  const isProfileActive = location.pathname === "/profile";
+  const isProfileSettingsActive = location.pathname === "/profile/settings";
 
   return (
     <header className="header">
@@ -153,15 +162,26 @@ const Header = () => {
 
                 <div className="dropdown-divider"></div>
 
-                {/* Profile Settings */}
+                {/* My Profile - VIEW PROFILE DATA */}
                 <button
-                  className={`dropdown-item ${
-                    location.pathname === "/profile" ? "active" : ""
-                  }`}
+                  className={`dropdown-item ${isProfileActive ? "active" : ""}`}
                   onClick={() => handleNavigation("/profile")}
                 >
-                  <span className="item-icon">👤</span>
-                  <span>Profile Settings</span>
+                  <span className="item-icon">📊</span>
+                  <span>My Profile</span>
+                  <span className="item-subtitle">View trips & expenses</span>
+                </button>
+
+                {/* Profile Settings - EDIT ACCOUNT */}
+                <button
+                  className={`dropdown-item ${
+                    isProfileSettingsActive ? "active" : ""
+                  }`}
+                  onClick={() => handleNavigation("/profile/settings")}
+                >
+                  <span className="item-icon">⚙️</span>
+                  <span>Account Settings</span>
+                  <span className="item-subtitle">Edit profile & password</span>
                 </button>
 
                 {/* Notifications */}
@@ -178,15 +198,16 @@ const Header = () => {
                   )}
                 </button>
 
-                {/* Settings */}
+                {/* App Settings */}
                 <button
                   className={`dropdown-item ${
                     location.pathname === "/settings" ? "active" : ""
                   }`}
                   onClick={() => handleNavigation("/settings")}
                 >
-                  <span className="item-icon">⚙️</span>
-                  <span>Settings</span>
+                  <span className="item-icon">🛠️</span>
+                  <span>App Settings</span>
+                  <span className="item-subtitle">Preferences & theme</span>
                 </button>
 
                 <div className="dropdown-divider"></div>
