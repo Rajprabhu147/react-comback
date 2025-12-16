@@ -5,6 +5,7 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { Toaster } from "react-hot-toast";
 import { UserProvider, useUser } from "./context/UserContext";
 import Dashboard from "./pages/Dashboard";
+import Profile from "./pages/Profile";
 import ProfileSettings from "./pages/ProfileSettings";
 import Notifications from "./pages/Notifications";
 import Settings from "./pages/Settings";
@@ -24,6 +25,7 @@ import "./styles/animations.css";
 // Layout & Components Styles
 import "./App.css";
 import "./styles/charts.css";
+import "./styles/dashboard.css";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -115,14 +117,26 @@ function App() {
                 </ProtectedRoute>
               }
             />
+
+            {/* Profile Routes */}
             <Route
               path="/profile"
+              element={
+                <ProtectedRoute>
+                  <Profile />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/profile/settings"
               element={
                 <ProtectedRoute>
                   <ProfileSettings />
                 </ProtectedRoute>
               }
             />
+
+            {/* Other Protected Routes */}
             <Route
               path="/notifications"
               element={
