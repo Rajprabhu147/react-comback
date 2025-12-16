@@ -193,6 +193,8 @@ const Header = () => {
                 >
                   <span className="item-icon">🔔</span>
                   <span>Notifications</span>
+                  <span className="item-subtitle">View Notifications</span>
+
                   {unreadCount > 0 && (
                     <span className="dropdown-badge">{unreadCount}</span>
                   )}
