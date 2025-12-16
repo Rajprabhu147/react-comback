@@ -6,7 +6,7 @@ const Profile = () => {
   return (
     <PageLayout
       title="My Profile"
-      subtitle="View your travel history and expenses"
+      subtitle="View your travel complete history and expenses"
       showBackButton={true}
     >
       <ProfileDashboard />
