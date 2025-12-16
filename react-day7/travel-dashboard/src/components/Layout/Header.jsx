@@ -192,7 +192,7 @@ const Header = () => {
                   onClick={() => handleNavigation("/notifications")}
                 >
                   <span className="item-icon">🔔</span>
-                  <span>Notifications</span>
+                  <span>Notifications Settings</span>
                   <span className="item-subtitle">View Notifications</span>
 
                   {unreadCount > 0 && (
