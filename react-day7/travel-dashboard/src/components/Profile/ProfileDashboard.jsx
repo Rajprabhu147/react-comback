@@ -7,7 +7,7 @@ import "../../styles/dashboard.css";
 const ProfileDashboard = () => {
   const { user } = useUser();
 
-  const [userData, setUserData] = useState({
+  const [userData] = useState({
     fullName: user?.user_metadata?.full_name || "User",
     email: user?.email || "",
     username: user?.user_metadata?.username || "username",
@@ -22,7 +22,6 @@ const ProfileDashboard = () => {
 
   const [trips, setTrips] = useState([]);
   const [items, setItems] = useState([]);
-  const [itemEvents, setItemEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -57,15 +56,6 @@ const ProfileDashboard = () => {
 
         if (itemsError) throw itemsError;
         setItems(itemsData || []);
-
-        // Fetch item events (activity log)
-        const { data: eventsData, error: eventsError } = await supabase
-          .from("item_events")
-          .select("*")
-          .order("created_at", { ascending: false });
-
-        if (eventsError) throw eventsError;
-        setItemEvents(eventsData || []);
       } catch (err) {
         console.error("Error fetching data:", err);
         setError("Failed to load data. Please try again.");
@@ -131,33 +121,10 @@ const ProfileDashboard = () => {
       )
       .subscribe();
 
-    // Subscribe to item events changes
-    const eventsSubscription = supabase
-      .channel("item_events_channel")
-      .on(
-        "postgres_changes",
-        { event: "*", schema: "public", table: "item_events" },
-        (payload) => {
-          if (payload.eventType === "DELETE") {
-            setItemEvents((prev) =>
-              prev.filter((e) => e.id !== payload.old.id)
-            );
-          } else if (payload.eventType === "INSERT") {
-            setItemEvents((prev) => [payload.new, ...prev]);
-          } else if (payload.eventType === "UPDATE") {
-            setItemEvents((prev) =>
-              prev.map((e) => (e.id === payload.new.id ? payload.new : e))
-            );
-          }
-        }
-      )
-      .subscribe();
-
     // Cleanup subscriptions
     return () => {
       supabase.removeChannel(tripsSubscription);
       supabase.removeChannel(itemsSubscription);
-      supabase.removeChannel(eventsSubscription);
     };
   }, [user?.id]);
 
