@@ -15,13 +15,14 @@ const ProfileDashboard = () => {
     avatar:
       user?.user_metadata?.avatar_url ||
       "https://api.dicebear.com/7.x/avataaars/svg?seed=User",
-    joinDate: "2024-01-15",
+    joinDate: user?.created_at
+      ? new Date(user.created_at).toLocaleDateString()
+      : "Not set",
   });
 
   const [trips, setTrips] = useState([]);
-  const [expenses, setExpenses] = useState([]);
-  const [visitedPlaces, setVisitedPlaces] = useState([]);
-  const [itinerary, setItinerary] = useState([]);
+  const [items, setItems] = useState([]);
+  const [itemEvents, setItemEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -41,39 +42,30 @@ const ProfileDashboard = () => {
         const { data: tripsData, error: tripsError } = await supabase
           .from("trips")
           .select("*")
-          .eq("user_id", user.id);
+          .eq("user_id", user.id)
+          .order("created_at", { ascending: false });
 
         if (tripsError) throw tripsError;
         setTrips(tripsData || []);
 
-        // Fetch expenses
-        const { data: expensesData, error: expensesError } = await supabase
-          .from("expenses")
+        // Fetch items (expenses/places)
+        const { data: itemsData, error: itemsError } = await supabase
+          .from("items")
           .select("*")
           .eq("user_id", user.id)
-          .order("date", { ascending: false });
+          .order("created_at", { ascending: false });
 
-        if (expensesError) throw expensesError;
-        setExpenses(expensesData || []);
+        if (itemsError) throw itemsError;
+        setItems(itemsData || []);
 
-        // Fetch visited places
-        const { data: placesData, error: placesError } = await supabase
-          .from("visited_places")
+        // Fetch item events (activity log)
+        const { data: eventsData, error: eventsError } = await supabase
+          .from("item_events")
           .select("*")
-          .eq("user_id", user.id);
+          .order("created_at", { ascending: false });
 
-        if (placesError) throw placesError;
-        setVisitedPlaces(placesData || []);
-
-        // Fetch itinerary
-        const { data: itineraryData, error: itineraryError } = await supabase
-          .from("itinerary")
-          .select("*")
-          .eq("user_id", user.id)
-          .order("date", { ascending: true });
-
-        if (itineraryError) throw itineraryError;
-        setItinerary(itineraryData || []);
+        if (eventsError) throw eventsError;
+        setItemEvents(eventsData || []);
       } catch (err) {
         console.error("Error fetching data:", err);
         setError("Failed to load data. Please try again.");
@@ -114,81 +106,47 @@ const ProfileDashboard = () => {
       )
       .subscribe();
 
-    // Subscribe to expenses changes
-    const expensesSubscription = supabase
-      .channel("expenses_channel")
+    // Subscribe to items changes
+    const itemsSubscription = supabase
+      .channel("items_channel")
       .on(
         "postgres_changes",
         {
           event: "*",
           schema: "public",
-          table: "expenses",
+          table: "items",
           filter: `user_id=eq.${user.id}`,
         },
         (payload) => {
           if (payload.eventType === "DELETE") {
-            setExpenses((prev) => prev.filter((e) => e.id !== payload.old.id));
+            setItems((prev) => prev.filter((i) => i.id !== payload.old.id));
           } else if (payload.eventType === "INSERT") {
-            setExpenses((prev) => [payload.new, ...prev]);
+            setItems((prev) => [payload.new, ...prev]);
           } else if (payload.eventType === "UPDATE") {
-            setExpenses((prev) =>
-              prev.map((e) => (e.id === payload.new.id ? payload.new : e))
-            );
-          }
-        }
-      )
-      .subscribe();
-
-    // Subscribe to visited places changes
-    const placesSubscription = supabase
-      .channel("places_channel")
-      .on(
-        "postgres_changes",
-        {
-          event: "*",
-          schema: "public",
-          table: "visited_places",
-          filter: `user_id=eq.${user.id}`,
-        },
-        (payload) => {
-          if (payload.eventType === "DELETE") {
-            setVisitedPlaces((prev) =>
-              prev.filter((p) => p.id !== payload.old.id)
-            );
-          } else if (payload.eventType === "INSERT") {
-            setVisitedPlaces((prev) => [payload.new, ...prev]);
-          } else if (payload.eventType === "UPDATE") {
-            setVisitedPlaces((prev) =>
-              prev.map((p) => (p.id === payload.new.id ? payload.new : p))
-            );
-          }
-        }
-      )
-      .subscribe();
-
-    // Subscribe to itinerary changes
-    const itinerarySubscription = supabase
-      .channel("itinerary_channel")
-      .on(
-        "postgres_changes",
-        {
-          event: "*",
-          schema: "public",
-          table: "itinerary",
-          filter: `user_id=eq.${user.id}`,
-        },
-        (payload) => {
-          if (payload.eventType === "DELETE") {
-            setItinerary((prev) => prev.filter((i) => i.id !== payload.old.id));
-          } else if (payload.eventType === "INSERT") {
-            setItinerary((prev) =>
-              [payload.new, ...prev].sort(
-                (a, b) => new Date(a.date) - new Date(b.date)
-              )
-            );
-          } else if (payload.eventType === "UPDATE") {
-            setItinerary((prev) =>
+            setItems((prev) =>
               prev.map((i) => (i.id === payload.new.id ? payload.new : i))
+            );
+          }
+        }
+      )
+      .subscribe();
+
+    // Subscribe to item events changes
+    const eventsSubscription = supabase
+      .channel("item_events_channel")
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "item_events" },
+        (payload) => {
+          if (payload.eventType === "DELETE") {
+            setItemEvents((prev) =>
+              prev.filter((e) => e.id !== payload.old.id)
+            );
+          } else if (payload.eventType === "INSERT") {
+            setItemEvents((prev) => [payload.new, ...prev]);
+          } else if (payload.eventType === "UPDATE") {
+            setItemEvents((prev) =>
+              prev.map((e) => (e.id === payload.new.id ? payload.new : e))
             );
           }
         }
@@ -198,20 +156,25 @@ const ProfileDashboard = () => {
     // Cleanup subscriptions
     return () => {
       supabase.removeChannel(tripsSubscription);
-      supabase.removeChannel(expensesSubscription);
-      supabase.removeChannel(placesSubscription);
-      supabase.removeChannel(itinerarySubscription);
+      supabase.removeChannel(itemsSubscription);
+      supabase.removeChannel(eventsSubscription);
     };
   }, [user?.id]);
 
+  // Calculate stats
+  const expenses = items.filter((item) => item.type === "expense");
+  const places = items.filter((item) => item.type === "place");
+
   const totalSpent = expenses.reduce((sum, exp) => sum + (exp.amount || 0), 0);
   const totalBudget = trips.reduce((sum, trip) => sum + (trip.budget || 0), 0);
-  const totalPlacesVisited = visitedPlaces.length;
+  const totalPlacesVisited = places.length;
 
   const getStatusColor = (status) => {
     return status === "completed"
       ? "bg-green-100 text-green-800"
-      : "bg-blue-100 text-blue-800";
+      : status === "ongoing"
+      ? "bg-blue-100 text-blue-800"
+      : "bg-gray-100 text-gray-800";
   };
 
   if (loading) {
@@ -303,7 +266,17 @@ const ProfileDashboard = () => {
         <div className="profile-dashboard-trips-grid">
           {trips.length > 0 ? (
             trips.map((trip) => {
-              const progress = (trip.spent / trip.budget) * 100;
+              const tripExpenses = expenses.filter(
+                (e) => e.trip_id === trip.id
+              );
+              const tripSpent = tripExpenses.reduce(
+                (sum, e) => sum + (e.amount || 0),
+                0
+              );
+              const progress = trip.budget
+                ? (tripSpent / trip.budget) * 100
+                : 0;
+
               return (
                 <div key={trip.id} className="profile-dashboard-trip-card">
                   <div className="profile-dashboard-trip-header">
@@ -313,21 +286,26 @@ const ProfileDashboard = () => {
                         trip.status
                       )}`}
                     >
-                      {trip.status.charAt(0).toUpperCase() +
-                        trip.status.slice(1)}
+                      {trip.status?.charAt(0).toUpperCase() +
+                        trip.status?.slice(1) || "Planned"}
                     </span>
                   </div>
                   <div className="profile-dashboard-trip-content">
                     <div className="profile-dashboard-trip-date">
                       <Calendar size={16} />
-                      {new Date(trip.start_date).toLocaleDateString()} -{" "}
-                      {new Date(trip.end_date).toLocaleDateString()}
+                      {trip.start_date
+                        ? new Date(trip.start_date).toLocaleDateString()
+                        : "TBD"}{" "}
+                      -{" "}
+                      {trip.end_date
+                        ? new Date(trip.end_date).toLocaleDateString()
+                        : "TBD"}
                     </div>
                     <div className="profile-dashboard-trip-budget">
                       <div className="profile-dashboard-budget-label">
                         <span>Budget vs Spent</span>
                         <span className="profile-dashboard-budget-amount">
-                          ${trip.spent} / ${trip.budget}
+                          ${tripSpent} / ${trip.budget || 0}
                         </span>
                       </div>
                       <div className="profile-dashboard-progress-bar">
@@ -370,18 +348,27 @@ const ProfileDashboard = () => {
                 </tr>
               </thead>
               <tbody>
-                {expenses.map((expense) => (
-                  <tr key={expense.id}>
-                    <td className="profile-dashboard-table-trip">
-                      {expense.trip_name}
-                    </td>
-                    <td>{expense.category}</td>
-                    <td>{new Date(expense.date).toLocaleDateString()}</td>
-                    <td className="profile-dashboard-table-amount">
-                      ${expense.amount}
-                    </td>
-                  </tr>
-                ))}
+                {expenses.map((expense) => {
+                  const tripName =
+                    trips.find((t) => t.id === expense.trip_id)?.name ||
+                    "Unknown";
+                  return (
+                    <tr key={expense.id}>
+                      <td className="profile-dashboard-table-trip">
+                        {tripName}
+                      </td>
+                      <td>{expense.category || "Other"}</td>
+                      <td>
+                        {expense.created_at
+                          ? new Date(expense.created_at).toLocaleDateString()
+                          : "N/A"}
+                      </td>
+                      <td className="profile-dashboard-table-amount">
+                        ${expense.amount}
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           ) : (
@@ -390,53 +377,7 @@ const ProfileDashboard = () => {
         </div>
       </div>
 
-      {/* ITINERARY SECTION */}
-      <div className="profile-dashboard-section">
-        <div className="profile-dashboard-section-header">
-          <div className="profile-dashboard-section-title">
-            <Calendar
-              size={24}
-              className="profile-dashboard-section-icon profile-dashboard-icon-purple"
-            />
-            <h2>Upcoming Plan</h2>
-          </div>
-        </div>
-        <div className="profile-dashboard-itinerary">
-          {itinerary.length > 0 ? (
-            itinerary.map((item, idx) => (
-              <div key={item.id} className="profile-dashboard-itinerary-item">
-                <div className="profile-dashboard-itinerary-timeline">
-                  <div className="profile-dashboard-itinerary-day">
-                    {item.day}
-                  </div>
-                  {idx !== itinerary.length - 1 && (
-                    <div className="profile-dashboard-itinerary-line" />
-                  )}
-                </div>
-                <div className="profile-dashboard-itinerary-content">
-                  <div className="profile-dashboard-itinerary-header">
-                    <h4>{item.activity}</h4>
-                    <span className="profile-dashboard-itinerary-trip">
-                      {item.trip_name}
-                    </span>
-                  </div>
-                  <p className="profile-dashboard-itinerary-place">
-                    <MapPin size={14} />
-                    {item.place}
-                  </p>
-                  <p className="profile-dashboard-itinerary-date">
-                    {new Date(item.date).toLocaleDateString()}
-                  </p>
-                </div>
-              </div>
-            ))
-          ) : (
-            <p>No itinerary planned yet.</p>
-          )}
-        </div>
-      </div>
-
-      {/* VISITED PLACES SECTION */}
+      {/* PLACES SECTION */}
       <div className="profile-dashboard-section">
         <div className="profile-dashboard-section-header">
           <div className="profile-dashboard-section-title">
@@ -448,41 +389,50 @@ const ProfileDashboard = () => {
           </div>
         </div>
         <div className="profile-dashboard-places-grid">
-          {visitedPlaces.length > 0 ? (
-            visitedPlaces.map((place) => (
-              <div key={place.id} className="profile-dashboard-place-card">
-                <div className="profile-dashboard-place-image" />
-                <div className="profile-dashboard-place-content">
-                  <h3>{place.name}</h3>
-                  <p className="profile-dashboard-place-country">
-                    <MapPin size={14} />
-                    {place.country}
-                  </p>
-                  <div className="profile-dashboard-place-details">
-                    <p>
-                      <span className="profile-dashboard-place-label">
-                        Trip:
-                      </span>{" "}
-                      {place.trip_name}
+          {places.length > 0 ? (
+            places.map((place) => {
+              const tripName =
+                trips.find((t) => t.id === place.trip_id)?.name ||
+                "Unknown Trip";
+              return (
+                <div key={place.id} className="profile-dashboard-place-card">
+                  <div className="profile-dashboard-place-image" />
+                  <div className="profile-dashboard-place-content">
+                    <h3>{place.name}</h3>
+                    <p className="profile-dashboard-place-country">
+                      <MapPin size={14} />
+                      {place.country || "Unknown"}
                     </p>
-                    <p>
-                      <span className="profile-dashboard-place-label">
-                        Date:
-                      </span>{" "}
-                      {new Date(place.date).toLocaleDateString()}
-                    </p>
-                    <div className="profile-dashboard-place-rating">
-                      <span className="profile-dashboard-place-label">
-                        Rating:
-                      </span>
-                      <span className="profile-dashboard-stars">
-                        {"★".repeat(place.rating)}
-                      </span>
+                    <div className="profile-dashboard-place-details">
+                      <p>
+                        <span className="profile-dashboard-place-label">
+                          Trip:
+                        </span>{" "}
+                        {tripName}
+                      </p>
+                      <p>
+                        <span className="profile-dashboard-place-label">
+                          Date:
+                        </span>{" "}
+                        {place.created_at
+                          ? new Date(place.created_at).toLocaleDateString()
+                          : "N/A"}
+                      </p>
+                      {place.rating && (
+                        <div className="profile-dashboard-place-rating">
+                          <span className="profile-dashboard-place-label">
+                            Rating:
+                          </span>
+                          <span className="profile-dashboard-stars">
+                            {"★".repeat(place.rating)}
+                          </span>
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>
-              </div>
-            ))
+              );
+            })
           ) : (
             <p>No places visited yet.</p>
           )}
