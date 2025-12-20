@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import DayActivityPopover from "./DayActivityPopover";
 import { WEEKDAY_NAMES, getCategoryColor } from "./constants";
 import "../../styles/calendar-grid.css";
-
 /**
  * CalendarGrid Component
  *
